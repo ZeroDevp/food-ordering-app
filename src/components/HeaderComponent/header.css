@@ -1,0 +1,131 @@
+.header {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-weight: 600;
+}
+
+li {
+  list-style: none;
+  margin-left: 26px;
+}
+
+.right-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-header {
+  width: 90px; /* Adjust the logo size */
+  height: 90px; /* Adjust the height */
+  margin-left: 100px;
+}
+
+.header-center {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333; /* Màu mặc định là đen */
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px; /* Khoảng cách của gạch dưới */
+  width: 0;
+  height: 2px;
+  background-color: #e74c3c; /* Màu của gạch dưới */
+  transition: width 0.3s ease;
+}
+
+/* Hover vào các mục chưa active */
+.nav-link:not(.active):hover {
+  color: #e74c3c; /* Màu đỏ khi hover */
+}
+
+.nav-link:not(.active):hover::after {
+  width: 100%; /* Hiển thị gạch dưới khi hover */
+}
+
+/* Mục active */
+.nav-link.active {
+  color: #e74c3c; /* Màu đỏ cho mục active */
+}
+
+.nav-link.active::after {
+  width: 100%; /* Gạch dưới cho mục active */
+}
+
+/* Đảm bảo rằng khi hover vào mục active, nó không thay đổi */
+.nav-link.active:hover {
+  color: #e74c3c; /* Giữ nguyên màu đỏ khi hover vào mục active */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.language-btn,
+.download-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.language-btn {
+  color: #000;
+  font-weight: 600;
+}
+
+.download-btn {
+  background-color: #ff585d;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 5px;
+}
+
+.menu-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  font-size: 18px;
+  color: #333;
+}
+
+.icon:hover {
+  background-color: #ddd;
+}
