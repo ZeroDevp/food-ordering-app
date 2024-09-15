@@ -99,9 +99,8 @@ const FooterComponent = () => {
         </div>
       </div>
       <div className="copyright">
-        <p>
-          &copy; <strong>2024 NTTU All Rights Reserved</strong> Site by
-          TrongHieu
+        <p style={{ textTransform: "uppercase", paddingTop: "10px" }}>
+          &copy; <strong> 2024 Graduation thesis</strong> Site by Trọng Hiếu
         </p>
       </div>
     </footer>

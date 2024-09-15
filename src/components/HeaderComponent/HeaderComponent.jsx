@@ -8,6 +8,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+import ToggleDropdown from "./toggleDropdown";
 
 const HeaderComponent = () => {
   //Set active tab cho menuTab
@@ -45,7 +46,7 @@ const HeaderComponent = () => {
           activeClassName="active"
           onClick={() => handleTabClick("product")}
         >
-          ĐẶT HÀNG
+          THỰC ĐƠN
         </NavLink>
 
         <NavLink
@@ -55,7 +56,7 @@ const HeaderComponent = () => {
           activeClassName="active"
           onClick={() => handleTabClick("blog")}
         >
-          BÀI VIẾT
+          TIN TỨC
         </NavLink>
 
         <NavLink
@@ -69,7 +70,7 @@ const HeaderComponent = () => {
         </NavLink>
       </nav>
       <div className="right-content">
-        <button className="language-btn">Tiếng Việt</button>
+        <ToggleDropdown />
         <button className="download-btn">Download App</button>
         <ul className="menu-account">
           <li>
