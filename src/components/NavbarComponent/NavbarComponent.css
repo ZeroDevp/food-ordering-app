@@ -1,15 +1,18 @@
 .category {
+  background-color: #ffece8;
+  border-radius: 10px;
   display: flex;
+  font-size: 18px;
   justify-content: center;
   grid-column: auto;
   font-weight: 600;
   text-transform: uppercase;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   color: #a87f7f;
-  border-bottom: 1px solid #a87f7f;
+  /* border-bottom: 1px solid #a87f7f; */
 }
 
 .list-cate {
-  margin: 0px 40px 10px 40px;
+  margin: 15px 40px 10px 40px;
   cursor: pointer;
 }

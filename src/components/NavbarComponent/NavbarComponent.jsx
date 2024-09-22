@@ -18,17 +18,19 @@ const NavbarComponent = () => {
     }
   };
   return (
-    <div className="category">
-      {renderCategory("text", [
-        "Thức uống",
-        "Thức ăn nhẹ",
-        "Cơm - Mì ý",
-        "Phần ăn nhóm",
-        "Gà rán phần",
-        "Gà rán",
-        "Burger",
-      ])}
-    </div>
+    <>
+      <div className="category">
+        {renderCategory("text", [
+          "Thức uống",
+          "Thức ăn nhẹ",
+          "Cơm - Mì ý",
+          "Phần ăn nhóm",
+          "Gà rán phần",
+          "Gà rán",
+          "Burger",
+        ])}
+      </div>
+    </>
   );
 };
 
