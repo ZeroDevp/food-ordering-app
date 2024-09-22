@@ -73,28 +73,28 @@ const HeaderComponent = () => {
         <ToggleDropdown />
         <button className="download-btn">Download App</button>
         <ul className="menu-account">
-          <li>
+          <li className="left-header">
             <a href="/">
               <span className="icon">
                 <FontAwesomeIcon icon={faLocationDot} />
               </span>
             </a>
           </li>
-          <li>
+          <li className="left-header">
             <a href="/">
               <span className="icon">
                 <FontAwesomeIcon icon={faUser} />
               </span>
             </a>
           </li>
-          <li>
+          <li className="left-header">
             <a href="/">
               <span className="icon">
                 <FontAwesomeIcon icon={faBell} />
               </span>
             </a>
           </li>
-          <li>
+          <li className="left-header">
             <a href="/">
               <span className="icon">
                 <FontAwesomeIcon icon={faBagShopping} />

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./homePage.css";
 import { NavLink } from "react-router-dom";
 import { Carousel, Pagination } from "antd";
-import CardComponent from "./CardComponent";
+import CardComponent from "../../components/CardComponent/CardComponent";
 import BackToTop from "../../components/BackToTopComponent/BackToTopComponent";
 
 const HomePage = () => {
@@ -100,7 +100,7 @@ const HomePage = () => {
           </div>
           <div className="pagination">
             <Pagination
-              defaultCurrent={1}
+              defaultCurrent={2}
               total={50}
               itemRender={itemRender}
               className="custom-pagination"
@@ -155,7 +155,7 @@ const HomePage = () => {
           </div>
           <div className="pagination">
             <Pagination
-              defaultCurrent={1}
+              defaultCurrent={2}
               total={50}
               itemRender={itemRender}
               className="custom-pagination"
