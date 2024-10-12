@@ -1,6 +1,6 @@
 .category {
-  background-color: #ffece8;
-  border-radius: 10px;
+  /* background-color: #ffece8;
+  border-radius: 10px; */
   display: flex;
   font-size: 18px;
   justify-content: center;
@@ -15,4 +15,9 @@
 .list-cate {
   margin: 15px 40px 10px 40px;
   cursor: pointer;
+}
+
+.custom-pagination {
+  justify-content: center;
+  margin-bottom: 20px;
 }

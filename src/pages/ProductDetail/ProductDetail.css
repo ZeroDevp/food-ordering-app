@@ -1,0 +1,130 @@
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.NameProduct,
+.price {
+  color: rgb(36, 36, 36);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  word-break: break-all;
+}
+
+.price {
+  color: #ff5b6a;
+}
+
+.description {
+  border-top: 1px dashed #c4c4c4;
+  padding-top: 16px;
+  margin-bottom: 10px;
+}
+
+.item {
+  color: #6b6c6c !important;
+  font-size: 20px;
+}
+
+.include {
+  color: #ff5b6a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.plus {
+  width: 44px;
+  height: 44px;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: #fff;
+  background-color: #ff969a;
+  float: left;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.minus {
+  width: 44px;
+  height: 44px;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: #fff;
+  background-color: #ff969a;
+  float: left;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.number {
+  background-color: #ffeae3;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  border: none;
+  float: left;
+  margin: 0 5px;
+  font-size: 16px;
+  padding: 10px 0 0;
+  display: block;
+}
+
+.btn-total {
+  font-weight: 700;
+  padding: 10px 25px;
+  background-color: #ff5b6a;
+  /* border-color: #ff5b6a; */
+  border: 1px solid #ff5b6a;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 15px;
+}
+
+.add-items {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quantity,
+.more {
+  color: #ff5b6a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.more {
+  margin-bottom: 20px;
+}
+
+.field-back {
+  margin-bottom: 30px;
+  text-align: right;
+}
+
+.btn-back {
+  text-decoration: none;
+  border: none;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  border-radius: 40px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  color: #ff5b6a;
+  display: inline-block;
+  font-weight: 700;
+  padding: 5px 17px;
+  font-size: 16px;
+}
