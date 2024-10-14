@@ -9,8 +9,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import ToggleDropdown from "./toggleDropdown";
+import { Modal } from "antd";
+import SignIn from "../../pages/SignIn/SignIn";
 
 const HeaderComponent = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   //Set active tab cho menuTab
   const [setActiveItem] = useState("home");
 
@@ -80,12 +96,10 @@ const HeaderComponent = () => {
               </span>
             </a>
           </li>
-          <li className="left-header">
-            <a href="/">
-              <span className="icon">
-                <FontAwesomeIcon icon={faUser} />
-              </span>
-            </a>
+          <li className="left-header" onClick={showModal}>
+            <span className="icon" style={{ cursor: "pointer" }}>
+              <FontAwesomeIcon icon={faUser} />
+            </span>
           </li>
           <li className="left-header">
             <a href="/">
@@ -103,6 +117,18 @@ const HeaderComponent = () => {
           </li>
         </ul>
       </div>
+      <Modal
+        title=""
+        open={isModalOpen}
+        centered={true}
+        footer={null}
+        width={800}
+        height={445}
+        onCancel={handleCancel}
+        className="modal-content"
+      >
+        <SignIn />
+      </Modal>
     </header>
   );
 };

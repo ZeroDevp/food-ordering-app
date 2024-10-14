@@ -1,0 +1,13 @@
+.btn-login {
+  font-weight: 500;
+  padding: 10px 25px;
+  background-color: #ff5b6a;
+  /* border-color: #ff5b6a; */
+  border: 1px solid #ff5b6a;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  margin-top: 26px;
+  margin-bottom: 10px;
+  width: 100%;
+}
