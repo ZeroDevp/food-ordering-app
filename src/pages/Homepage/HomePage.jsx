@@ -21,7 +21,7 @@ const HomePage = () => {
 
   return (
     <div className="main-content">
-      <product />
+      {/* <product /> */}
       <Carousel autoplay>
         <div>
           <img
@@ -43,10 +43,10 @@ const HomePage = () => {
         <div className="menu-bar">
           <div className="swipper">
             <NavLink
-              className="menu-item"
-              exact
+              className={({ isActive }) =>
+                isActive ? "menu-item active" : "menu-item"
+              }
               to="/Product"
-              activeClassName="active"
               onClick={() => handleTabClick("product")}
             >
               <img
@@ -56,8 +56,9 @@ const HomePage = () => {
               <span>Thực đơn</span>
             </NavLink>
             <NavLink
-              className="menu-item"
-              exact
+              className={({ isActive }) =>
+                isActive ? "menu-item active" : "menu-item"
+              }
               to="/Blog"
               onClick={() => handleTabClick("blog")}
             >
@@ -65,8 +66,9 @@ const HomePage = () => {
               <span>Tin Tức</span>
             </NavLink>
             <NavLink
-              className="menu-item"
-              exact
+              className={({ isActive }) =>
+                isActive ? "menu-item active" : "menu-item"
+              }
               to="/Contact"
               onClick={() => handleTabClick("contact")}
             >
@@ -121,10 +123,10 @@ const HomePage = () => {
                 thức nhé!
               </p>
               <NavLink
-                className="menu-item"
-                exact
+                className={({ isActive }) =>
+                  isActive ? "menu-item active" : "menu-item"
+                }
                 to="/Product"
-                activeClassName="active"
                 onClick={() => handleTabClick("product")}
               >
                 <button className="btn-order">Đặt hàng ngay</button>

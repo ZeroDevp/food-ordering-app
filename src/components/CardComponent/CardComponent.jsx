@@ -8,11 +8,7 @@ const { Title, Text } = Typography;
 
 const CardComponent = () => {
   return (
-    <NavLink
-      exact
-      to="/Product/ProductDetail"
-      style={{ textDecoration: "none" }}
-    >
+    <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>
       <Card
         hoverable
         style={{

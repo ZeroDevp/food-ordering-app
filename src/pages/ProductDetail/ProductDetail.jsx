@@ -1,22 +1,23 @@
-import { Image, Pagination } from "antd";
+import { Image } from "antd";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import imgProduct from "../../assets/img/chicken.png";
 import "./ProductDetail.css";
-import CardComponent from "../../components/CardComponent/CardComponent";
+// import CardComponent from "../../components/CardComponent/CardComponent";
 
 const ProductDetail = () => {
-  const itemRender = (current, type, originalElement) => {
-    if (type === "page") {
-      return <div className={`dot ${current === 1 ? "active" : ""}`}></div>;
-    }
-    return originalElement;
-  };
+  // const itemRender = (current, type, originalElement) => {
+  //   if (type === "page") {
+  //     return <div className={`dot ${current === 1 ? "active" : ""}`}></div>;
+  //   }
+  //   return originalElement;
+  // };
+
   return (
     <div className="container">
       <div className="row">
         <div className="field-back">
-          <NavLink className="btn-back" exact to="/Product">
+          <NavLink className="btn-back" to="/Product">
             <span>&larr;</span> Quay lại
           </NavLink>
         </div>
@@ -45,18 +46,18 @@ const ProductDetail = () => {
           <div className="add-items">
             <div>
               <button className="plus">+</button>
-              <input maxlength="2" class="number pt-0" value="2" />
+              <input maxLength="2" className="number pt-0" defaultValue="2" />
               <button className="minus">-</button>
             </div>
             <div>
-              <button type="button" class="btn-total">
+              <button type="button" className="btn-total">
                 Thêm vào giỏ hàng
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <span className="more">CÁC MÓN ĂN KHÁC</span>
         <div className="row" style={{ marginBottom: "20px" }}>
           <div className="col-md-3">
@@ -80,7 +81,7 @@ const ProductDetail = () => {
             className="custom-pagination"
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

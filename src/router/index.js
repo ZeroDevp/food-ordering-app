@@ -5,6 +5,8 @@ import NotFoundPage from "../pages/NotFoundPage/notFoundPage";
 import OrderPage from "../pages/Orderpage/OrderPage";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
 import ProductPage from "../pages/Productpage/ProductPage";
+import SignIn from "../pages/SignIn/SignIn";
+import SignUp from "../pages/SignUp/SignUp";
 
 export const routes = [
 
@@ -48,6 +50,18 @@ export const routes = [
         path: "/Contact",
         page: contact,
         isShowheader: true,
+    },
+
+    {
+        path: "/SignIn",
+        page: SignIn,
+        isShowheader: false,
+    },
+
+    {
+        path: "/SignUp",
+        page: SignUp,
+        isShowheader: false,
     },
 
     // 404

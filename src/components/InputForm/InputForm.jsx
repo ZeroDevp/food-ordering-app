@@ -1,17 +1,21 @@
 import { Input } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import "./InputForm.css";
+
 const InputForm = (props) => {
-  const { valueInput } = useState("");
-  const { placeholder = "Nhập email của bạn", ...rests } = props;
+  const { placeholder = "Nhập text", ...rests } = props;
+  const handleOnchangeInput = (e) => {
+    props.onChange(e.target.value);
+  };
   return (
     <Input
       size="large"
       status="error"
       placeholder={placeholder}
-      valueInput={valueInput}
+      value={props.value}
       className="custom-input"
       {...rests}
+      onChange={handleOnchangeInput}
     />
   );
 };

@@ -7,25 +7,15 @@ import {
   faLocationDot,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
+import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
+import { NavLink, useNavigate } from "react-router-dom";
 import ToggleDropdown from "./toggleDropdown";
-import { Modal } from "antd";
-import SignIn from "../../pages/SignIn/SignIn";
+import { useSelector } from "react-redux";
 
 const HeaderComponent = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const user = useSelector((state) => state.user);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  // const handleOk = () => {
-  //   setIsModalOpen(false);
-  // };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  console.log("user", user);
 
   //Set active tab cho menuTab
   const [setActiveItem] = useState("home");
@@ -34,10 +24,15 @@ const HeaderComponent = () => {
     setActiveItem(item);
   };
 
+  const navigate = useNavigate();
+  const handleNavigateLogin = () => {
+    navigate("/SignIn");
+  };
+
   return (
     <header className="header">
       <div className="header-left">
-        <NavLink exact to="/">
+        <NavLink to="/">
           <img
             src={require("../../assets/img/TrongHieu-hearder.png")} // Replace this with your logo
             alt="Logo"
@@ -47,39 +42,31 @@ const HeaderComponent = () => {
       </div>
       <nav className="header-center">
         <NavLink
-          className="nav-link"
-          exact
           to="/"
-          activeClassName="active"
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           onClick={() => handleTabClick("home")}
         >
           TRANG CHỦ
         </NavLink>
         <NavLink
-          className="nav-link"
-          exact
           to="/Product"
-          activeClassName="active"
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           onClick={() => handleTabClick("product")}
         >
           THỰC ĐƠN
         </NavLink>
 
         <NavLink
-          className="nav-link"
-          exact
           to="/Blog"
-          activeClassName="active"
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           onClick={() => handleTabClick("blog")}
         >
           TIN TỨC
         </NavLink>
 
         <NavLink
-          className="nav-link"
-          exact
           to="/Contact"
-          activeClassName="active"
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           onClick={() => handleTabClick("contact")}
         >
           LIÊN HỆ
@@ -96,9 +83,17 @@ const HeaderComponent = () => {
               </span>
             </a>
           </li>
-          <li className="left-header" onClick={showModal}>
+          <li className="left-header">
             <span className="icon" style={{ cursor: "pointer" }}>
-              <FontAwesomeIcon icon={faUser} />
+              {user?.HoTen ? (
+                // <div>{user.HoTen}</div>
+                <FontAwesomeIcon icon={faUser} />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faUserRegular}
+                  onClick={handleNavigateLogin}
+                />
+              )}
             </span>
           </li>
           <li className="left-header">
@@ -117,18 +112,6 @@ const HeaderComponent = () => {
           </li>
         </ul>
       </div>
-      <Modal
-        title=""
-        open={isModalOpen}
-        centered={true}
-        footer={null}
-        width={800}
-        height={445}
-        onCancel={handleCancel}
-        className="modal-content"
-      >
-        <SignIn />
-      </Modal>
     </header>
   );
 };
