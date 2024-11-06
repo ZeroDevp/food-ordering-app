@@ -39,48 +39,31 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
 
   const handleGetDetailsUser = useCallback(
     async (id, token) => {
-      const res = await UserService.getDetailUser(id, token);
-      dispatch(updateUser({ ...res?.data, access_token: token }));
+      if (!token) return;
+      try {
+        const res = await UserService.getDetailUser(id, token);
+        dispatch(updateUser({ ...res?.data, access_token: token }));
+      } catch (error) {
+        console.error("Lỗi khi lấy chi tiết người dùng:", error);
+      }
     },
-    [dispatch] // Nếu có thêm các dependency cần thiết, hãy thêm vào đây
+    [dispatch]
   );
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate("/");
-      localStorage.setItem("access_token", data?.access_token);
-
-      if (data?.access_token) {
-        const decoded = jwtDecode(data?.access_token);
-        console.log("decoded", decoded);
-
+    if (isSuccess && data?.access_token) {
+      try {
+        const decoded = jwtDecode(data.access_token);
         if (decoded?.id) {
-          handleGetDetailsUser(decoded?.id, data?.access_token);
+          handleGetDetailsUser(decoded.id, data.access_token);
         }
+        navigate("/");
+        localStorage.setItem("access_token", JSON.stringify(data.access_token));
+      } catch (error) {
+        console.error("Lỗi khi giải mã token:", error);
       }
     }
-  }, [isSuccess, navigate, data, handleGetDetailsUser]);
-
-  // const handleGetDetailsUser = async (id, token) => {
-  //   const res = await UserService.getDetailUser(id, token);
-  //   dispatch(updateUser({ ...res?.data, access_token: token }));
-  // };
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     navigate("/");
-  //     localStorage.setItem("access_token", data?.access_token);
-
-  //     if (data?.access_token) {
-  //       const decoded = jwtDecode(data?.access_token);
-  //       console.log("decoded", decoded);
-
-  //       if (decoded?.id) {
-  //         handleGetDetailsUser(decoded?.id, data?.access_token);
-  //       }
-  //     }
-  //   }
-  // }, [isSuccess, navigate, data]);
+  }, [isSuccess, data, handleGetDetailsUser, navigate]);
 
   // Hàm lấy giá trị Email
   const handleOnchangeEmail = (value) => {

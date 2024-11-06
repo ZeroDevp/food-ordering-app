@@ -5,6 +5,7 @@ import NotFoundPage from "../pages/NotFoundPage/notFoundPage";
 import OrderPage from "../pages/Orderpage/OrderPage";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
 import ProductPage from "../pages/Productpage/ProductPage";
+import ProfilePage from "../pages/Profile/ProfilePage";
 import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
 
@@ -52,16 +53,25 @@ export const routes = [
         isShowheader: true,
     },
 
+    //trang Dang Nhap
     {
         path: "/SignIn",
         page: SignIn,
         isShowheader: false,
     },
 
+    //Trang Dang ky
     {
         path: "/SignUp",
         page: SignUp,
         isShowheader: false,
+    },
+
+    //Trang thong tin nguoi dung
+    {
+        path: "/Profile-User",
+        page: ProfilePage,
+        isShowheader: true,
     },
 
     // 404

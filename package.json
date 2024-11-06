@@ -32,6 +32,7 @@
     "react-script": "^2.0.5",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
+    "vn-local-plus": "^1.1.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -57,5 +58,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:3001"
 }

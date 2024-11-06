@@ -10,12 +10,27 @@ import {
 import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import ToggleDropdown from "./toggleDropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Popover } from "antd";
+import * as UserService from "../../service/UserService";
+import { resetUser } from "../../redux/userSlide";
 
 const HeaderComponent = () => {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  console.log("user", user);
+  const handleLogout = async () => {
+    await UserService.logoutUser();
+    dispatch(resetUser());
+    handleNavigateLogin();
+  };
+
+  const content = (
+    <div className="user-menu">
+      <p onClick={() => navigate("/Profile-User")}>Thông tin người dùng</p>
+      <p onClick={handleLogout}>Đăng xuất </p>
+    </div>
+  );
 
   //Set active tab cho menuTab
   const [setActiveItem] = useState("home");
@@ -83,11 +98,15 @@ const HeaderComponent = () => {
               </span>
             </a>
           </li>
+
           <li className="left-header">
             <span className="icon" style={{ cursor: "pointer" }}>
               {user?.HoTen ? (
-                // <div>{user.HoTen}</div>
-                <FontAwesomeIcon icon={faUser} />
+                <>
+                  <Popover placement="bottom" content={content}>
+                    <FontAwesomeIcon icon={faUser} />
+                  </Popover>
+                </>
               ) : (
                 <FontAwesomeIcon
                   icon={faUserRegular}

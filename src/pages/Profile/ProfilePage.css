@@ -1,0 +1,108 @@
+.user-profile-container {
+  display: flex;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #ff6d6d;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.user-info {
+  text-align: center;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+  color: #ff6d6d;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.menu li {
+  padding: 10px 0;
+  text-align: left;
+  padding-left: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+.menu li:hover {
+  background-color: #ff5757;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.content h2 {
+  color: #333;
+}
+
+.personal-info {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.personal-info label {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.personal-info input {
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid #ff6d6d;
+  border-radius: 4px;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.delete-button {
+  background-color: white;
+  color: #ff6d6d;
+  border: 1px solid #ff6d6d;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.delete-button:hover {
+  background-color: #ffe6e6;
+}
+
+.save-button {
+  background-color: #ff6d6d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #ff5757;
+}
