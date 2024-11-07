@@ -6,18 +6,28 @@ import {
   faBell,
   faLocationDot,
   faUser,
+  faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import ToggleDropdown from "./toggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { Popover } from "antd";
+import { Button, Modal, Popover } from "antd";
 import * as UserService from "../../service/UserService";
 import { resetUser } from "../../redux/userSlide";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import customImage from "../../assets/img/logout.png";
 
 const HeaderComponent = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
+
+  const showLogoutModal = () => {
+    setIsLogoutModalVisible(true);
+  };
 
   const handleLogout = async () => {
     await UserService.logoutUser();
@@ -25,10 +35,31 @@ const HeaderComponent = () => {
     handleNavigateLogin();
   };
 
+  const handleCancelLogout = () => {
+    setIsLogoutModalVisible(false);
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    setIsLogoutModalVisible(false);
+  };
+
   const content = (
     <div className="user-menu">
-      <p onClick={() => navigate("/Profile-User")}>Thông tin người dùng</p>
-      <p onClick={handleLogout}>Đăng xuất </p>
+      <p onClick={() => navigate("/Profile-User")}>
+        {" "}
+        <UserOutlined /> Thông tin người dùng
+      </p>
+      {user?.isAdmin && (
+        <p onClick={() => navigate("/system/Admin")}>
+          {" "}
+          <FontAwesomeIcon icon={faUserGear} /> Quản lý hệ thống{" "}
+        </p>
+      )}
+      <p onClick={showLogoutModal}>
+        {" "}
+        <LogoutOutlined /> Đăng xuất{" "}
+      </p>
     </div>
   );
 
@@ -39,7 +70,6 @@ const HeaderComponent = () => {
     setActiveItem(item);
   };
 
-  const navigate = useNavigate();
   const handleNavigateLogin = () => {
     navigate("/SignIn");
   };
@@ -131,6 +161,56 @@ const HeaderComponent = () => {
           </li>
         </ul>
       </div>
+      <Modal
+        open={isLogoutModalVisible}
+        onOk={confirmLogout}
+        onCancel={handleCancelLogout}
+        footer={null}
+        centered
+        style={{
+          padding: "20px",
+          textAlign: "center",
+          borderRadius: "10px",
+        }}
+        wrapClassName="custom-logout-modal"
+      >
+        <img
+          src={customImage}
+          alt="Custom Icon"
+          style={{ width: "400px", marginBottom: "0px" }}
+        />
+
+        {/* Container for the text and buttons */}
+        <div style={{ marginTop: "20px" }}>
+          <p style={{ fontSize: "18px", marginBottom: "20px" }}>
+            Bạn muốn đăng xuất?
+          </p>
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <Button
+              onClick={handleCancelLogout}
+              style={{
+                backgroundColor: "#f2f2f2",
+                borderColor: "#f2f2f2",
+                color: "#ff6666",
+              }}
+            >
+              Hủy
+            </Button>
+            <Button
+              onClick={handleLogout}
+              style={{
+                backgroundColor: "#ff6666",
+                borderColor: "#ff6666",
+                color: "#fff",
+              }}
+            >
+              Ok
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </header>
   );
 };

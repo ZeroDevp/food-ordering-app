@@ -1,12 +1,14 @@
-import { Spin } from "antd";
 import React from "react";
 
-const Loading = ({ children, isLoading, delay = 200 }) => {
-  return (
-    <Spin spinning={isLoading} delay={delay}>
-      {children}
-    </Spin>
-  );
+const Loading = ({ isLoading, children }) => {
+  if (isLoading) {
+    return (
+      <div id="preloder">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+  return <>{children}</>;
 };
 
 export default Loading;

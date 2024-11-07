@@ -1,12 +1,14 @@
 import React from "react";
 import { Card, Button, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, StarFilled } from "@ant-design/icons";
 import "./Card.css";
 import { NavLink } from "react-router-dom";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const CardComponent = () => {
+const CardComponent = (props) => {
+  const { DaBan, GiaMonAn, GiamGia, TenMonAn, DanhGia, MoTa } = props;
+  //HinhAnh,id
   return (
     <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>
       <Card
@@ -28,21 +30,37 @@ const CardComponent = () => {
           />
         }
       >
-        <Title level={4}>TRUNG THU 1</Title>
-        <Text>01 Gà rán</Text>
-        <br />
-        <Text>01 Khoai tây lắc vị phô mai</Text>
+        <Title level={4}>{TenMonAn}</Title>
+        <span style={{ fontSize: "16px", color: "#ccc" }}>{MoTa}</span>
 
         <div className="card-footer">
           <div className="price-info">
-            <Title level={3} style={{ color: "#e74c3c" }}>
-              79.000 ₫
-            </Title>
-            <Text delete>95.000 ₫</Text>
+            <span
+              style={{
+                marginRight: "4px",
+                fontSize: "25px",
+                color: "#ff5b6a",
+                fontWeight: "700",
+              }}
+            >
+              {GiaMonAn}
+            </span>
+            <span
+              style={{ color: "#ccc", marginRight: "4px", fontSize: "20px" }}
+            >
+              {GiamGia || 5} %
+            </span>
+            <span style={{ marginRight: "4px" }}>
+              <span>{DanhGia}</span>{" "}
+              <StarFilled
+                style={{ fontSize: "16px", color: "rgb(253,216,54" }}
+              />
+              <span> | Đã bán {DaBan || 1000}</span>
+            </span>
           </div>
           <Button
             type="primary"
-            shape="circle"
+            shape="square"
             icon={<PlusOutlined />}
             style={{ backgroundColor: "#ff4d4f", borderColor: "#ff4d4f" }}
           />

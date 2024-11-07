@@ -1,16 +1,17 @@
-import React, { Fragment, useCallback, useEffect } from "react";
+import React, { Fragment, useCallback, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routes } from "./router";
 import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
 import { isJsonString } from "./utils";
 import { jwtDecode } from "jwt-decode";
 import * as UserService from "./service/UserService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "./redux/userSlide";
+import Loading from "./components/LoadingComponent/Loading";
 function App() {
 
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => state.user)
 
   const handleGetDetailsUser = useCallback(async (id, token) => {
     try {
@@ -63,21 +64,25 @@ function App() {
 
   return (
     <div>
-      <Router>
-        <Routes>
-          {routes.map((route) => {
-            const Page = route.page
-            const Layout = route.isShowheader ? DefaultComponent : Fragment
-            return (
-              <Route key={route.path} path={route.path} element={
-                <Layout>
-                  <Page />
-                </Layout>
-              } />
-            )
-          })}
-        </Routes>
-      </Router>
+      <Suspense fallback={<Loading />}>
+        <Router>
+          <Routes>
+            {routes.map((route) => {
+              const Page = route.page
+              const isCheckAuth = !route.isPrivate || user.isAdmin
+              const Layout = route.isShowheader ? DefaultComponent : Fragment
+              return (
+                <Route key={route.path}
+                  path={isCheckAuth ? route.path : ""} element={
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  } />
+              )
+            })}
+          </Routes>
+        </Router>
+      </Suspense>
     </div>
   )
 }
