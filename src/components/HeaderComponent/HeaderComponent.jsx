@@ -206,7 +206,7 @@ const HeaderComponent = () => {
                 color: "#fff",
               }}
             >
-              Ok
+              OK
             </Button>
           </div>
         </div>

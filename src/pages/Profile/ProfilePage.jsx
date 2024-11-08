@@ -381,7 +381,7 @@ const ProfilePage = () => {
                             color: "#fff",
                           }}
                         >
-                          Ok
+                          OK
                         </Button>
                       </div>
                     </div>

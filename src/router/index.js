@@ -9,7 +9,10 @@ import ProfilePage from "../pages/Profile/ProfilePage";
 import MyOrderPage from "../pages/Profile/MyOrderPage";
 import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
-import AdminPage from "../pages/SystemManager/AdminPage/AdminPage";
+import Dashboard from "../pages/SystemManager/AdminPage/DashBoard";
+import FoodAdmin from "../pages/SystemManager/AdminPage/FoodAdmin";
+import UserAdmin from "../pages/SystemManager/AdminPage/UserAdmin";
+import OrderAdmin from "../pages/SystemManager/AdminPage/OrderAdmin";
 
 export const routes = [
 
@@ -83,10 +86,34 @@ export const routes = [
         isShowheader: true,
     },
 
-    //Trang quản trị hệ thống
+    //Trang DashBoard
     {
         path: "/system/Admin",
-        page: AdminPage,
+        page: Dashboard,
+        isShowheader: false,
+        isPrivate: true
+    },
+
+    //Trang QL Food
+    {
+        path: "/system/FoodAdmin",
+        page: FoodAdmin,
+        isShowheader: false,
+        isPrivate: true
+    },
+
+    //Trang QL User
+    {
+        path: "/system/UserAdmin",
+        page: UserAdmin,
+        isShowheader: false,
+        isPrivate: true
+    },
+
+    //Trang QL Order
+    {
+        path: "/system/OrderAdmin",
+        page: OrderAdmin,
         isShowheader: false,
         isPrivate: true
     },

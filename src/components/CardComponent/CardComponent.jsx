@@ -7,8 +7,8 @@ import { NavLink } from "react-router-dom";
 const { Title } = Typography;
 
 const CardComponent = (props) => {
-  const { DaBan, GiaMonAn, GiamGia, TenMonAn, DanhGia, MoTa } = props;
-  //HinhAnh,id
+  const { DaBan, GiaMonAn, GiamGia, TenMonAn, DanhGia, MoTa, HinhAnh } = props;
+  //HinhAnh,id, LoaiMonAn
   return (
     <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>
       <Card
@@ -21,20 +21,38 @@ const CardComponent = (props) => {
         }}
         cover={
           <img
-            src={require("../../assets/img/trungthu-1.jpg")}
+            src={HinhAnh}
             alt="trungthu-1"
             style={{
+              height: "300px",
+              width: "308px",
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
             }}
           />
         }
       >
-        <Title level={4}>{TenMonAn}</Title>
-        <span style={{ fontSize: "16px", color: "#ccc" }}>{MoTa}</span>
+        <Title level={4} style={{ fontWeight: "bold" }}>
+          {TenMonAn}
+        </Title>
+        {/* <span
+          style={{
+            fontSize: "14px",
+            color: "#000",
+            fontStyle: "italic",
+            fontWeight: "600",
+          }}
+        >
+          {LoaiMonAn}
+        </span> */}
 
         <div className="card-footer">
           <div className="price-info">
+            <span
+              style={{ fontSize: "16px", color: "#ccc", fontWeight: "600" }}
+            >
+              {MoTa}
+            </span>
             <span
               style={{
                 marginRight: "4px",
@@ -43,15 +61,17 @@ const CardComponent = (props) => {
                 fontWeight: "700",
               }}
             >
-              {GiaMonAn}
+              <span>{GiaMonAn}</span>
+              <span> - {GiamGia || 5}%</span>
             </span>
             <span
-              style={{ color: "#ccc", marginRight: "4px", fontSize: "20px" }}
+              style={{
+                marginRight: "4px",
+                fontSize: "16px",
+                fontWeight: "500",
+              }}
             >
-              {GiamGia || 5} %
-            </span>
-            <span style={{ marginRight: "4px" }}>
-              <span>{DanhGia}</span>{" "}
+              <span> {DanhGia}</span>{" "}
               <StarFilled
                 style={{ fontSize: "16px", color: "rgb(253,216,54" }}
               />
@@ -59,10 +79,19 @@ const CardComponent = (props) => {
             </span>
           </div>
           <Button
+            size="large"
             type="primary"
             shape="square"
-            icon={<PlusOutlined />}
-            style={{ backgroundColor: "#ff4d4f", borderColor: "#ff4d4f" }}
+            icon={
+              <PlusOutlined style={{ fontWeight: "700", fontSize: "20px" }} />
+            }
+            style={{
+              backgroundColor: "#ff4d4f",
+              borderColor: "#ff4d4f",
+              marginTop: "50px",
+              width: "50px",
+              height: "50px",
+            }}
           />
         </div>
       </Card>
