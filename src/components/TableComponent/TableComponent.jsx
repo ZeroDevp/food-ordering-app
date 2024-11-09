@@ -20,6 +20,7 @@ const TableComponent = (props) => {
 
   return (
     <Table
+      style={{ fontWeight: "500", fontFamily: "sans-serif" }}
       rowSelection={{
         type: selectionType,
         ...rowSelection,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -9,19 +9,25 @@ import { Button, Form, Image, Layout, Modal, theme, Upload } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
 import InputComponent from "../../../components/InputComponent/InputComponent";
-import { getbase64 } from "../../../utils";
+import { converPrice, getbase64, truncateDescription } from "../../../utils";
 import * as FoodService from "../../../service/FoodService";
 import { useMutationHooks } from "../../../hook/useMutationHook";
 import Loading from "../../../components/LoadingComponent/Loading";
 import * as Message from "../../../components/Message/Message";
+import TableComponent from "../../../components/TableComponent/TableComponent";
+import { useQuery } from "@tanstack/react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const { Header, Content } = Layout;
 
 const FoodAdmin = () => {
+  const [rowSelected, setRowSelected] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state) => state?.user);
   const [marginLeft, setMarginLeft] = useState(280);
   const [collapsed, setCollapsed] = useState(false);
+  const [form] = Form.useForm();
 
   const [stateFood, setStateFood] = useState({
     TenMonAn: "",
@@ -32,6 +38,7 @@ const FoodAdmin = () => {
     MoTa: "",
   });
 
+  //hàm đóng mở sidebar
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
     setMarginLeft(collapsed ? 280 : 80);
@@ -54,23 +61,21 @@ const FoodAdmin = () => {
     return res;
   });
 
+  //Hàm getAllFood từ API
+  const getAllFood = async () => {
+    const res = await FoodService.getAllFood();
+    return res;
+  };
+
   const { data, isLoading, isSuccess, isError } = mutation;
-  console.log("dataa", data);
-  //Xử lý sự kiện khi thêm món ăn thành công
-  useEffect(() => {
-    if (isSuccess && data?.status === "OK") {
-      Message.success();
-      handleCancel();
-    } else if (isError) {
-      Message.error();
-    }
-  }, [isSuccess, data?.status, isError]);
+  const { isLoading: isLoadingFood, data: foods } = useQuery({
+    queryKey: ["foods"],
+    queryFn: getAllFood,
+  });
+  console.log("foods", foods);
 
-  // const handleOk = () => {
-  //   onFinish();
-  // };
-
-  const handleCancel = () => {
+  //Hàm cancel khi 0 muốn tạo món ăn
+  const handleCancel = useCallback(() => {
     setIsModalOpen(false);
     setStateFood({
       TenMonAn: "",
@@ -80,8 +85,20 @@ const FoodAdmin = () => {
       DanhGia: "",
       MoTa: "",
     });
-  };
+    form.resetFields();
+  }, [form]);
 
+  //Xử lý sự kiện khi thêm món ăn thành công
+  useEffect(() => {
+    if (isSuccess && data?.status === "OK") {
+      Message.success();
+      handleCancel();
+    } else if (isError) {
+      Message.error();
+    }
+  }, [isSuccess, data?.status, isError, handleCancel]);
+
+  //Hàm xác nhận ok khi thêm
   const onFinish = () => {
     mutation.mutate(stateFood);
     console.log("finish", stateFood);
@@ -106,6 +123,75 @@ const FoodAdmin = () => {
       HinhAnh: file ? file.preview : null,
     });
   };
+
+  //Ham render chọn action
+  const renderAction = () => {
+    return (
+      <div
+        style={{
+          fontSize: "20px",
+          padding: "5px 5px",
+          display: "flex",
+          justifyContent: "space-evenly",
+
+          cursor: "pointer",
+        }}
+      >
+        <FontAwesomeIcon icon={faPenToSquare} />
+        <FontAwesomeIcon icon={faTrash} />
+      </div>
+    );
+  };
+
+  //Hàm chứa các cột trong dataTable
+  const columns = [
+    {
+      title: <div style={{ textAlign: "center" }}>Tên món ăn</div>,
+      dataIndex: "TenMonAn",
+      width: "20%",
+      responsive: ["lg"],
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Mô tả</div>,
+      dataIndex: "MoTa",
+      width: "40%",
+      responsive: ["lg"],
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Giá món ăn</div>,
+      dataIndex: "GiaMonAn",
+      width: "10%",
+      align: "center",
+      responsive: ["md"],
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Phân loại</div>,
+      dataIndex: "LoaiMonAn",
+      width: "10%",
+      responsive: ["lg"],
+    },
+
+    {
+      title: <div style={{ textAlign: "center" }}>Chức năng</div>,
+      dataIndex: "Action",
+      width: "10%",
+      responsive: ["md"],
+
+      render: renderAction,
+    },
+  ];
+
+  //Hàm này chứa dữ liệu các món ăn trong bảng
+  const dataTable =
+    foods?.data?.length &&
+    foods?.data?.map((foods) => {
+      return {
+        ...foods,
+        key: foods._id,
+        price: converPrice(foods.GiaMonAn),
+        description: truncateDescription(foods.MoTa, 100),
+      };
+    });
 
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
@@ -167,6 +253,23 @@ const FoodAdmin = () => {
             borderRadius: borderRadiusLG,
           }}
         >
+          <TableComponent
+            columns={columns}
+            isLoading={isLoadingFood}
+            pagination={{
+              position: ["bottomCenter"],
+              pageSize: 5,
+            }}
+            data={dataTable}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setRowSelected(record._id);
+                },
+              };
+            }}
+          />
+
           <Modal
             title="Thêm Mới món ăn"
             open={isModalOpen}
@@ -177,19 +280,17 @@ const FoodAdmin = () => {
               <Form
                 name="basic"
                 labelCol={{
-                  span: 8,
+                  span: 6,
                 }}
                 wrapperCol={{
-                  span: 16,
+                  span: 18,
                 }}
                 style={{
                   maxWidth: 600,
                 }}
-                initialValues={{
-                  remember: true,
-                }}
                 onFinish={onFinish}
-                autoComplete="off"
+                autoComplete="on"
+                form={form}
               >
                 <Form.Item
                   label="Tên món ăn"
@@ -226,7 +327,7 @@ const FoodAdmin = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Phân loại món ăn"
+                  label="Phân loại "
                   name="LoaiMonAn"
                   rules={[
                     {
@@ -260,7 +361,7 @@ const FoodAdmin = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Đánh giá món ăn"
+                  label="Đánh giá"
                   name="DanhGia"
                   rules={[
                     {
@@ -309,14 +410,12 @@ const FoodAdmin = () => {
                   )}
                 </Form.Item>
 
-                <Form.Item
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
-                >
+                <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
                   <Button type="primary" htmlType="submit">
                     Submit
+                  </Button>
+                  <Button style={{ marginLeft: 8 }} onClick={handleCancel}>
+                    Cancel
                   </Button>
                 </Form.Item>
               </Form>
