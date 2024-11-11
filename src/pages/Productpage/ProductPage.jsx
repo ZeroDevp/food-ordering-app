@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pagination } from "antd";
 import CardComponent from "../../components/CardComponent/CardComponent";
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
@@ -8,7 +8,7 @@ import * as FoodService from "../../service/FoodService";
 import { useQuery } from "@tanstack/react-query";
 
 const ProductPage = () => {
-  const fetchFoodAll = async () => {
+  const fetchFoodAll = async (context) => {
     const res = await FoodService.getAllFood();
     return res;
   };
@@ -18,6 +18,7 @@ const ProductPage = () => {
     queryFn: fetchFoodAll,
     retry: 3,
     retryDelay: 1000,
+    keepPreviousData: true,
   });
 
   const itemRender = (current, type, originalElement) => {
@@ -30,11 +31,11 @@ const ProductPage = () => {
     <>
       <div className="container">
         <NavbarComponent />
-        <div className="row d-flex flex-wrap">
+        <div className="row ">
           {foods?.data?.map((food) => (
             <div
               key={food._id}
-              className="col-md-3"
+              className=" col"
               style={{ marginBottom: "20px" }}
             >
               <CardComponent

@@ -20,3 +20,10 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.truncated-title {
+  overflow: hidden; /* Hide overflow */
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Show ellipsis when text is too long */
+  max-width: 100%; /* Ensure it doesn't exceed the container width */
+}

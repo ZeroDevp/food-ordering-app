@@ -31,3 +31,4 @@ export const truncateDescription = (description, maxLength = 100) => {
     }
     return description.slice(0, maxLength) + "...";
 };
+

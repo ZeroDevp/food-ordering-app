@@ -411,6 +411,16 @@ const ProfilePage = () => {
                 THÔNG TIN TÀI KHOẢN
               </h2>
               <Form layout="vertical">
+                <Form.Item label="Email">
+                  <Input
+                    type="text"
+                    size="large"
+                    placeholder="Email"
+                    prefix={<MailOutlined />}
+                    value={Email}
+                    disabled={true}
+                  />
+                </Form.Item>
                 <Form.Item label="Họ tên">
                   <Input
                     type="text"
@@ -431,16 +441,6 @@ const ProfilePage = () => {
                     prefix={<PhoneOutlined />}
                     onChange={handleOnchangePhone}
                     value={DienThoai}
-                    disabled={!editMode}
-                  />
-                </Form.Item>
-                <Form.Item label="Email">
-                  <Input
-                    type="text"
-                    size="large"
-                    placeholder="Email"
-                    prefix={<MailOutlined />}
-                    value={Email}
                     disabled={!editMode}
                   />
                 </Form.Item>

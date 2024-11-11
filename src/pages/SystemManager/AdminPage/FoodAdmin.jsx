@@ -1,11 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  DollarOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  PercentageOutlined,
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Image, Layout, Modal, theme, Upload } from "antd";
+import {
+  Button,
+  Drawer,
+  Form,
+  Image,
+  InputNumber,
+  Layout,
+  theme,
+  Upload,
+} from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
 import InputComponent from "../../../components/InputComponent/InputComponent";
@@ -18,25 +29,35 @@ import TableComponent from "../../../components/TableComponent/TableComponent";
 import { useQuery } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import TextArea from "antd/es/input/TextArea";
+import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 
 const { Header, Content } = Layout;
 
 const FoodAdmin = () => {
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+  const [loadingDrawer, setLoadingDrawer] = useState(true);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state) => state?.user);
-  const [marginLeft, setMarginLeft] = useState(280);
-  const [collapsed, setCollapsed] = useState(false);
+  const [marginLeft, setMarginLeft] = useState(80);
+  const [collapsed, setCollapsed] = useState(true);
   const [form] = Form.useForm();
 
-  const [stateFood, setStateFood] = useState({
+  const inittial = () => ({
     TenMonAn: "",
     LoaiMonAn: "",
     HinhAnh: null,
     GiaMonAn: "",
     DanhGia: "",
     MoTa: "",
+    GiamGia: "",
   });
+
+  const [stateFood, setStateFood] = useState(inittial());
+
+  const [stateFoodDetails, setStateFoodDetails] = useState(inittial());
 
   //hàm đóng mở sidebar
   const toggleCollapsed = () => {
@@ -49,7 +70,8 @@ const FoodAdmin = () => {
 
   //Hàm gọi API createFood
   const mutation = useMutationHooks((data) => {
-    const { TenMonAn, LoaiMonAn, HinhAnh, GiaMonAn, DanhGia, MoTa } = data;
+    const { TenMonAn, LoaiMonAn, HinhAnh, GiaMonAn, DanhGia, MoTa, GiamGia } =
+      data;
     const res = FoodService.createFood({
       TenMonAn,
       LoaiMonAn,
@@ -57,7 +79,23 @@ const FoodAdmin = () => {
       GiaMonAn,
       DanhGia,
       MoTa,
+      GiamGia,
     });
+    return res;
+  });
+
+  const mutationUpdate = useMutationHooks((data) => {
+    const { id, token, ...rests } = data;
+    const res = FoodService.updateFood(id, token, {
+      ...rests,
+      GiamGia: rests.GiamGia,
+    });
+    return res;
+  });
+
+  const mutationDelete = useMutationHooks((data) => {
+    const { id, token } = data;
+    const res = FoodService.deleteFood(id, token);
     return res;
   });
 
@@ -68,11 +106,23 @@ const FoodAdmin = () => {
   };
 
   const { data, isLoading, isSuccess, isError } = mutation;
-  const { isLoading: isLoadingFood, data: foods } = useQuery({
+  const {
+    data: dataUpdated,
+    isSuccess: isSuccessUpdated,
+    isError: isErrorUpdated,
+  } = mutationUpdate;
+  const {
+    data: dataDeleted,
+    isSuccess: isSuccessDeleted,
+    isError: isErrorDeleted,
+  } = mutationDelete;
+
+  const queryFood = useQuery({
     queryKey: ["foods"],
     queryFn: getAllFood,
   });
-  console.log("foods", foods);
+
+  const { isLoading: isLoadingFood, data: foods } = queryFood;
 
   //Hàm cancel khi 0 muốn tạo món ăn
   const handleCancel = useCallback(() => {
@@ -84,9 +134,15 @@ const FoodAdmin = () => {
       GiaMonAn: "",
       DanhGia: "",
       MoTa: "",
+      GiamGia: "",
     });
     form.resetFields();
   }, [form]);
+
+  const handleCloseDrawer = useCallback(() => {
+    setIsOpenDrawer(false);
+    // Do not reset stateFoodDetails here
+  }, []);
 
   //Xử lý sự kiện khi thêm món ăn thành công
   useEffect(() => {
@@ -98,16 +154,81 @@ const FoodAdmin = () => {
     }
   }, [isSuccess, data?.status, isError, handleCancel]);
 
+  //Xử lý sự kiện khi update món ăn thành công
+  useEffect(() => {
+    if (isSuccessUpdated && dataUpdated?.status === "OK") {
+      Message.success();
+      handleCloseDrawer();
+    } else if (isErrorUpdated) {
+      Message.error();
+    }
+  }, [
+    isSuccessUpdated,
+    dataUpdated?.status,
+    isErrorUpdated,
+    handleCloseDrawer,
+  ]);
+
+  //Xử lý sự kiện khi delete món ăn thành công
+  useEffect(() => {
+    if (isSuccessDeleted && dataDeleted?.status === "OK") {
+      Message.success();
+      handleCancelDelete();
+    } else if (isErrorDeleted) {
+      Message.error();
+    }
+  }, [isSuccessDeleted, dataDeleted?.status, isErrorDeleted, handleCancel]);
+
+  const onClose = () => {
+    setIsOpenDrawer(false);
+  };
+
   //Hàm xác nhận ok khi thêm
   const onFinish = () => {
-    mutation.mutate(stateFood);
-    console.log("finish", stateFood);
+    mutation.mutate(stateFood, {
+      onSettled: () => {
+        queryFood.refetch();
+      },
+    });
   };
 
   //hàm nhập dữ liệu cho từng thuộc tính
   const handleOnchange = (e) => {
-    setStateFood({
-      ...stateFood,
+    const { name, value } = e.target;
+    if (name in stateFood) {
+      setStateFood((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    } else if (name in stateFoodDetails) {
+      setStateFoodDetails((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+  //Hàm cancel Delete
+  const handleCancelDelete = () => {
+    setIsModalOpenDelete(false);
+  };
+
+  //Hàm xác nhận xóa món ăn
+  const handleDeleteFood = () => {
+    mutationDelete.mutate(
+      { id: rowSelected, token: user?.access_token },
+      {
+        onSettled: () => {
+          queryFood.refetch();
+        },
+      }
+    );
+  };
+
+  //hàm chứa chi tiết món ăn
+  const handleOnchangeDetails = (e) => {
+    setStateFoodDetails({
+      ...stateFoodDetails,
       [e.target.name]: e.target.value,
     });
   };
@@ -124,6 +245,76 @@ const FoodAdmin = () => {
     });
   };
 
+  //Hàm lấy hình ảnh chi tiết
+  const handleOnchangeAvatarDetails = async ({ fileList }) => {
+    const file = fileList[0];
+    if (file && !file.url && !file.preview) {
+      file.preview = await getbase64(file.originFileObj);
+    }
+    setStateFoodDetails({
+      ...stateFoodDetails,
+      HinhAnh: file ? file.preview : null,
+    });
+  };
+
+  const onUpdateFoods = () => {
+    mutationUpdate.mutate(
+      { id: rowSelected, token: user?.access_token, ...stateFoodDetails },
+      {
+        onSettled: () => {
+          queryFood.refetch();
+        },
+      }
+    );
+  };
+
+  //Hàm lấy chi tiết món ăn từ API
+  const fetchgetDetailsFood = async (rowSelected) => {
+    const res = await FoodService.getDetailsFood(rowSelected);
+    if (res?.data) {
+      setStateFoodDetails({
+        TenMonAn: res?.data?.TenMonAn,
+        LoaiMonAn: res?.data?.LoaiMonAn,
+        HinhAnh: res?.data?.HinhAnh,
+        GiaMonAn: res?.data?.GiaMonAn,
+        DanhGia: res?.data?.DanhGia,
+        MoTa: res?.data?.MoTa,
+        GiamGia: res?.data?.GiamGia,
+      });
+    }
+    // setisLoadingUpdate(false);
+  };
+
+  // useEffect(() => {
+  //   if (!isModalOpen) {
+  //     form.setFieldsValue(stateFoodDetails);
+  //   } else {
+  //     form.setFieldsValue(inittial());
+  //   }
+  // }, [form, stateFoodDetails, isModalOpen]);
+
+  useEffect(() => {
+    if (isOpenDrawer) {
+      form.setFieldsValue(stateFoodDetails); // Set form values when the drawer opens
+    }
+  }, [isOpenDrawer, stateFoodDetails, form]);
+
+  useEffect(() => {
+    if (rowSelected) {
+      fetchgetDetailsFood(rowSelected);
+    }
+    // setIsOpenDrawer(true);
+  }, [rowSelected]);
+
+  //Hàm lấy lấy chi tiết món ăn khi click vào món ăn
+  const handleDetailsFood = () => {
+    setLoadingDrawer(true);
+    setIsOpenDrawer(true);
+    setTimeout(() => {
+      setLoadingDrawer(false);
+    }, 1000);
+  };
+
   //Ham render chọn action
   const renderAction = () => {
     return (
@@ -137,8 +328,17 @@ const FoodAdmin = () => {
           cursor: "pointer",
         }}
       >
-        <FontAwesomeIcon icon={faPenToSquare} />
-        <FontAwesomeIcon icon={faTrash} />
+        <div>
+          <FontAwesomeIcon icon={faPenToSquare} onClick={handleDetailsFood} />
+        </div>
+        <div>
+          <FontAwesomeIcon
+            icon={faTrash}
+            onClick={() => {
+              setIsModalOpenDelete(true);
+            }}
+          />
+        </div>
       </div>
     );
   };
@@ -150,6 +350,7 @@ const FoodAdmin = () => {
       dataIndex: "TenMonAn",
       width: "20%",
       responsive: ["lg"],
+      sorter: (a, b) => a.TenMonAn.length - b.TenMonAn.length,
     },
     {
       title: <div style={{ textAlign: "center" }}>Mô tả</div>,
@@ -157,6 +358,7 @@ const FoodAdmin = () => {
       width: "40%",
       responsive: ["lg"],
     },
+
     {
       title: <div style={{ textAlign: "center" }}>Giá món ăn</div>,
       dataIndex: "GiaMonAn",
@@ -164,11 +366,14 @@ const FoodAdmin = () => {
       align: "center",
       responsive: ["md"],
     },
+
     {
       title: <div style={{ textAlign: "center" }}>Phân loại</div>,
       dataIndex: "LoaiMonAn",
+      align: "center",
       width: "10%",
       responsive: ["lg"],
+      // sorter: (a, b) => a.LoaiMonAn - b.LoaiMonAn,
     },
 
     {
@@ -184,12 +389,13 @@ const FoodAdmin = () => {
   //Hàm này chứa dữ liệu các món ăn trong bảng
   const dataTable =
     foods?.data?.length &&
-    foods?.data?.map((foods) => {
+    foods?.data?.map((food) => {
       return {
-        ...foods,
-        key: foods._id,
-        price: converPrice(foods.GiaMonAn),
-        description: truncateDescription(foods.MoTa, 100),
+        ...food,
+        key: food._id,
+        GiaMonAn: converPrice(food.GiaMonAn),
+        MoTa: truncateDescription(food.MoTa, 100),
+        GiamGia: food.GiamGia,
       };
     });
 
@@ -253,24 +459,26 @@ const FoodAdmin = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <TableComponent
-            columns={columns}
-            isLoading={isLoadingFood}
-            pagination={{
-              position: ["bottomCenter"],
-              pageSize: 5,
-            }}
-            data={dataTable}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setRowSelected(record._id);
-                },
-              };
-            }}
-          />
-
-          <Modal
+          <Loading isLoading={isLoadingFood}>
+            <TableComponent
+              columns={columns}
+              isLoading={isLoadingFood}
+              pagination={{
+                position: ["bottomCenter"],
+                pageSize: 6,
+              }}
+              data={dataTable}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    setRowSelected(record._id);
+                  },
+                };
+              }}
+            />
+          </Loading>
+          <ModalComponent
+            forceRender
             title="Thêm Mới món ăn"
             open={isModalOpen}
             footer={null}
@@ -278,7 +486,7 @@ const FoodAdmin = () => {
           >
             <Loading isLoading={isLoading}>
               <Form
-                name="basic"
+                name="addFood"
                 labelCol={{
                   span: 6,
                 }}
@@ -319,7 +527,8 @@ const FoodAdmin = () => {
                     },
                   ]}
                 >
-                  <InputComponent
+                  <TextArea
+                    rows={4}
                     value={stateFood.MoTa}
                     onChange={handleOnchange}
                     name="MoTa"
@@ -353,11 +562,58 @@ const FoodAdmin = () => {
                     },
                   ]}
                 >
-                  <InputComponent
+                  <InputNumber
+                    min={0}
+                    step={1000}
+                    prefix={<DollarOutlined />}
+                    value={stateFood.GiaMonAn}
+                    formatter={(value) =>
+                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    onChange={(value) =>
+                      handleOnchange({ target: { name: "GiaMonAn", value } })
+                    }
+                    name="GiaMonAn"
+                    style={{ width: "100%" }}
+                  />
+                  {/* <InputComponent
                     value={stateFood.GiaMonAn}
                     onChange={handleOnchange}
                     name="GiaMonAn"
+                  /> */}
+                </Form.Item>
+
+                <Form.Item
+                  label="Giảm giá"
+                  name="GiamGia"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy nhập giảm giá cho món ăn!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    step={1000}
+                    prefix={<PercentageOutlined />}
+                    value={stateFood.GiamGia}
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    onChange={(value) =>
+                      handleOnchange({ target: { name: "GiamGia", value } })
+                    }
+                    name="GiamGia"
+                    style={{ width: "100%" }}
                   />
+                  {/* <InputComponent
+                    value={stateFood.GiamGia}
+                    onChange={handleOnchange}
+                    name="GiamGia"
+                  /> */}
                 </Form.Item>
 
                 <Form.Item
@@ -392,6 +648,11 @@ const FoodAdmin = () => {
                     className="ant-upload-list-item-name"
                     onChange={handleOnchangeAvatar}
                     showUploadList={false}
+                    fileList={
+                      stateFood.HinhAnh
+                        ? [{ uid: "-1", url: stateFood.HinhAnh }]
+                        : []
+                    }
                   >
                     <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
                   </Upload>
@@ -420,7 +681,229 @@ const FoodAdmin = () => {
                 </Form.Item>
               </Form>
             </Loading>
-          </Modal>
+          </ModalComponent>
+          <Drawer
+            title="Cập nhật Món ăn"
+            onClose={onClose}
+            open={isOpenDrawer}
+            loading={loadingDrawer}
+            width="40%"
+          >
+            <Loading isLoading={isLoadingFood}>
+              <Form
+                name="updateFood"
+                labelCol={{
+                  span: 6,
+                }}
+                wrapperCol={{
+                  span: 18,
+                }}
+                style={{
+                  maxWidth: 600,
+                }}
+                onFinish={onUpdateFoods}
+                autoComplete="on"
+                form={form}
+              >
+                <Form.Item
+                  label="Tên món ăn"
+                  name="TenMonAn"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy nhập tên món ăn!",
+                    },
+                  ]}
+                >
+                  <InputComponent
+                    value={stateFoodDetails.TenMonAn}
+                    onChange={handleOnchangeDetails}
+                    name="TenMonAn"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Mô tả món ăn"
+                  name="MoTa"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy nhập mô tả của món ăn!",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    rows={4}
+                    value={stateFoodDetails.MoTa}
+                    onChange={handleOnchangeDetails}
+                    name="MoTa"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Phân loại "
+                  name="LoaiMonAn"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy phân loại món ăn!",
+                    },
+                  ]}
+                >
+                  <InputComponent
+                    value={stateFoodDetails.LoaiMonAn}
+                    onChange={handleOnchangeDetails}
+                    name="LoaiMonAn"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Giá món ăn"
+                  name="GiaMonAn"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy ra giá món ăn!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    step={1000}
+                    prefix={<DollarOutlined />}
+                    value={stateFoodDetails.GiaMonAn}
+                    formatter={(value) =>
+                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    onChange={(value) =>
+                      setStateFoodDetails((prevState) => ({
+                        ...prevState,
+                        GiaMonAn: value,
+                      }))
+                    }
+                    name="GiaMonAn"
+                    style={{ width: "100%" }}
+                  />
+                  {/* <InputComponent
+                    value={stateFoodDetails.GiaMonAn}
+                    onChange={handleOnchangeDetails}
+                    name="GiaMonAn"
+                  /> */}
+                </Form.Item>
+
+                <Form.Item
+                  label="Giảm giá"
+                  name="GiamGia"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy nhập giảm giá cho món ăn!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    step={1000}
+                    prefix={<PercentageOutlined />}
+                    value={stateFoodDetails.GiamGia}
+                    formatter={(value) =>
+                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    onChange={(value) =>
+                      setStateFoodDetails((prevState) => ({
+                        ...prevState,
+                        GiamGia: value,
+                      }))
+                    }
+                    name="GiaMonAn"
+                    style={{ width: "100%" }}
+                  />
+                  {/* <InputComponent
+                    value={stateFoodDetails.GiamGia}
+                    onChange={handleOnchangeDetails}
+                    name="GiamGia"
+                  /> */}
+                </Form.Item>
+
+                <Form.Item
+                  label="Đánh giá"
+                  name="DanhGia"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy đánh giá món ăn!",
+                    },
+                  ]}
+                >
+                  <InputComponent
+                    value={stateFoodDetails.DanhGia}
+                    onChange={handleOnchangeDetails}
+                    name="DanhGia"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Ảnh món ăn"
+                  name="HinhAnh"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Hãy thêm hình ảnh cho món ăn!",
+                    },
+                  ]}
+                >
+                  <div>
+                    <Upload
+                      maxCount={1}
+                      className="ant-upload-list-item-name"
+                      onChange={handleOnchangeAvatarDetails}
+                      showUploadList={false}
+                      ileList={
+                        stateFoodDetails.HinhAnh
+                          ? [{ uid: "-1", url: stateFoodDetails.HinhAnh }]
+                          : []
+                      }
+                    >
+                      <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+                    </Upload>
+                    {stateFoodDetails?.HinhAnh && (
+                      <Image
+                        src={stateFoodDetails?.HinhAnh}
+                        alt="Ảnh đại diện"
+                        style={{
+                          height: "60px",
+                          width: "60px",
+                          marginLeft: "10px",
+                          borderRadius: "10%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                  </div>
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 20, span: 20 }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ width: "90%" }}
+                  >
+                    Cập nhật
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Loading>
+          </Drawer>
+          <ModalComponent
+            title="Xóa món ăn"
+            open={isModalOpenDelete}
+            onCancel={handleCancelDelete}
+            onOk={handleDeleteFood}
+          >
+            <div>Bạn có chắc xóa món {stateFoodDetails.TenMonAn} này không</div>
+          </ModalComponent>
         </Content>
       </Layout>
     </Layout>

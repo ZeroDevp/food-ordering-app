@@ -1,25 +1,29 @@
-import { Button } from "antd";
 import React from "react";
+import { Button, ConfigProvider } from "antd";
 
-const ButtonComponent = ({
-  size,
-  styleButton,
-  styleTextButton,
-  textButton,
-  disable,
-  ...rests
-}) => {
+const ButtonComponent = ({ onClick, children, ...props }) => {
   return (
-    <Button
-      style={{
-        background: "#ccc",
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            defaultColor: `#000`,
+            defaultHoverBg: `#fff`,
+            defaultHoverBorderColor: "#000",
+            defaultHoverColor: "#000",
+          },
+        },
       }}
-      size={size}
-      styles={styleButton}
-      {...rests}
     >
-      <span style={styleTextButton}>{textButton}</span>
-    </Button>
+      <Button
+        onClick={onClick}
+        type="default"
+        className="primary-btn"
+        {...props}
+      >
+        {children}
+      </Button>
+    </ConfigProvider>
   );
 };
 
