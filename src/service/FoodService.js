@@ -1,27 +1,39 @@
 import axios from "axios"
 import { axiosJWT } from "./UserService";
 
-export const getAllFood = async (search, limit, sort, priceFilter) => {
+// export const getAllFood = async (search, limit, sort, priceFilter) => {
+//     let res = {};
+//     const baseUrl = `${process.env.REACT_APP_API_URL}/food/get-all`;
+
+//     let query = `?limit=${limit}`;
+
+//     if (search?.length > 0) {
+//         query += `&filter=name=${search}`;
+//     }
+
+//     if (priceFilter) {
+//         query += `&filter=price=${priceFilter}`;
+//     }
+
+//     if (sort) {
+//         query += `&sort=${sort}`;
+//     }
+
+//     res = await axios.get(`${baseUrl}${query}`);
+//     return res.data;
+// };
+
+export const getAllFood = async (search) => {
     let res = {};
-    const baseUrl = `${process.env.REACT_APP_API_URL}/food/get-all`;
-
-    let query = `?limit=${limit}`;
-
     if (search?.length > 0) {
-        query += `&filter=name=${search}`;
+        res = await axios.get(`${process.env.REACT_APP_API_URL}/food/get-all?filter=TenMonAn&filter=${search}`)
+    } else {
+        res = await axios.get(`${process.env.REACT_APP_API_URL}/food/get-all`)
     }
-
-    if (priceFilter) {
-        query += `&filter=price=${priceFilter}`;
-    }
-
-    if (sort) {
-        query += `&sort=${sort}`;
-    }
-
-    res = await axios.get(`${baseUrl}${query}`);
     return res.data;
 };
+
+
 
 export const createFood = async (data) => {
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/food/create`, data)

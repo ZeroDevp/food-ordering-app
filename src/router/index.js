@@ -32,7 +32,7 @@ export const routes = [
 
     //trang chi tiet SP
     {
-        path: "/Product/ProductDetail",
+        path: "/Product/ProductDetail/:id",
         page: ProductDetail,
         isShowheader: true,
     },

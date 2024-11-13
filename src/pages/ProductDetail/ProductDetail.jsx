@@ -1,87 +1,127 @@
-import { Image } from "antd";
-import React from "react";
-import { NavLink } from "react-router-dom";
-import imgProduct from "../../assets/img/chicken.png";
+import { Image, Rate } from "antd";
+import React, { useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import { converPrice } from "../../utils";
 import "./ProductDetail.css";
-// import CardComponent from "../../components/CardComponent/CardComponent";
+import * as FoodService from "../../service/FoodService";
+import { useQuery } from "@tanstack/react-query";
 
 const ProductDetail = () => {
-  // const itemRender = (current, type, originalElement) => {
-  //   if (type === "page") {
-  //     return <div className={`dot ${current === 1 ? "active" : ""}`}></div>;
-  //   }
-  //   return originalElement;
-  // };
+  const [numFood, setNumFood] = useState(1);
+  const { id } = useParams();
+  const onChange = (value) => {
+    setNumFood(Number(value));
+  };
+
+  // Hàm lấy chi tiết món ăn từ API
+  const fetchgetDetailsFood = async (context) => {
+    const id = context?.queryKey[1];
+    const res = await FoodService.getDetailsFood(id);
+    return res.data;
+  };
+
+  const { data: foodDetails } = useQuery({
+    queryKey: ["food-details", id],
+    queryFn: fetchgetDetailsFood,
+    enable: !!id,
+  });
+
+  const handleChangeCount = (type) => {
+    if (type === "increase") {
+      setNumFood((prevNumFood) => prevNumFood + 1);
+    } else if (type === "decrease" && numFood > 1) {
+      setNumFood((prevNumFood) => prevNumFood - 1);
+    }
+  };
 
   return (
-    <div className="container">
+    <div className="container" id={id}>
+      <div className="field-back">
+        <NavLink className="btn-back" to="/Product">
+          <span>&larr;</span> Quay lại
+        </NavLink>
+      </div>
       <div className="row">
-        <div className="field-back">
-          <NavLink className="btn-back" to="/Product">
-            <span>&larr;</span> Quay lại
-          </NavLink>
+        <div className="col-md-6 field-img">
+          <Image
+            style={{
+              height: "400px",
+              width: "600px",
+              objectFit: "cover",
+              borderRadius: "20px",
+            }}
+            src={foodDetails?.HinhAnh}
+            preview={false}
+            alt="image Product"
+          />
         </div>
-        <div className="col-md-8 fied-img">
-          <Image src={imgProduct} preview={false} alt="image Product" />
-        </div>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <div className="product-header">
-            <div className="NameProduct">Lody Set</div>
-            <div className="price">145.000 ₫</div>
+            <h1 className="NameProduct">{foodDetails?.TenMonAn}</h1>
+          </div>
+          {/* <div className="price">{converPrice(foodDetails?.GiaMonAn)}</div> */}
+
+          <span className="price">
+            {converPrice(foodDetails?.GiaMonAn)}{" "}
+            <span style={{ fontSize: "20px", color: "#999" }}>
+              - {converPrice(foodDetails?.GiamGia || 5)}
+            </span>
+          </span>
+
+          <div>
+            <span>
+              <Rate allowHalf value={foodDetails?.DanhGia || 0} />
+              <span
+                style={{
+                  marginLeft: "8px",
+                  fontSize: "20px",
+                }}
+              >
+                | Đã bán {foodDetails?.DaBan || 1000}
+              </span>
+            </span>
           </div>
           <div className="description">
-            <span className="include">
-              <p>Món ăn bao gồm:</p>
-            </span>
-            <span className="item">
-              <p>02 Gà rán</p>
-              <p>01 Mì ý </p>
-              <p>01 Phô mai que</p>
-              <p>02 Pepsi (M)</p>
+            <span
+              className="item"
+              style={{ display: "flex", textAlign: "justify" }}
+            >
+              <p>{foodDetails?.MoTa}</p>
             </span>
           </div>
-          <span className="quantity">
+          <div className="quantity">
             <p>Số lượng</p>
-          </span>
+          </div>
           <div className="add-items">
-            <div>
-              <button className="plus">+</button>
-              <input maxLength="2" className="number pt-0" defaultValue="2" />
-              <button className="minus">-</button>
-            </div>
-            <div>
-              <button type="button" className="btn-total">
+            <div className="quantity-controls">
+              <button
+                className="minus"
+                onClick={() => handleChangeCount("decrease")}
+              >
+                -
+              </button>
+              <input
+                className="number pt-0"
+                onChange={onChange}
+                value={numFood}
+              />
+              <button
+                className="plus"
+                onClick={() => handleChangeCount("increase")}
+              >
+                +
+              </button>
+              <button
+                type="button"
+                className="btn-total"
+                style={{ marginLeft: "10px" }}
+              >
                 Thêm vào giỏ hàng
               </button>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="row">
-        <span className="more">CÁC MÓN ĂN KHÁC</span>
-        <div className="row" style={{ marginBottom: "20px" }}>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-        </div>
-        <div className="pagination">
-          <Pagination
-            defaultCurrent={2}
-            total={50}
-            itemRender={itemRender}
-            className="custom-pagination"
-          />
-        </div>
-      </div> */}
     </div>
   );
 };

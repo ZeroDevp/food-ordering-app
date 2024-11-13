@@ -1,27 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBagShopping,
   faBell,
-  faLocationDot,
+  // faLocationDot,
   faUser,
   faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
-import ToggleDropdown from "./toggleDropdown";
+// import ToggleDropdown from "./toggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, Popover } from "antd";
 import * as UserService from "../../service/UserService";
 import { resetUser } from "../../redux/userSlide";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import InputComponent from "../../components/InputComponent/InputComponent";
+
+import {
+  LogoutOutlined,
+  SearchOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import customImage from "../../assets/img/logout.png";
+import { searchFood } from "../../redux/slide/foodSlide";
 
 const HeaderComponent = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
@@ -74,6 +82,15 @@ const HeaderComponent = () => {
     navigate("/SignIn");
   };
 
+  const onSearch = (e) => {
+    setSearch(e.target.value);
+    dispatch(searchFood(e.target.value));
+  };
+
+  useEffect(() => {
+    console.log("object", search);
+  }, [search]);
+
   return (
     <header className="header">
       <div className="header-left">
@@ -100,7 +117,6 @@ const HeaderComponent = () => {
         >
           THỰC ĐƠN
         </NavLink>
-
         <NavLink
           to="/Blog"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
@@ -108,7 +124,6 @@ const HeaderComponent = () => {
         >
           TIN TỨC
         </NavLink>
-
         <NavLink
           to="/Contact"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
@@ -118,16 +133,23 @@ const HeaderComponent = () => {
         </NavLink>
       </nav>
       <div className="right-content">
-        <ToggleDropdown />
-        <button className="download-btn">Download App</button>
+        <InputComponent
+          style={{ width: "500px", border: "1px solid #ccc" }}
+          size="large"
+          placeholder="Tìm kiếm..."
+          prefix={<SearchOutlined />}
+          onChange={onSearch}
+        />
+        {/* <ToggleDropdown />
+        <button className="download-btn">Download App</button> */}
         <ul className="menu-account">
-          <li className="left-header">
+          {/* <li className="left-header">
             <a href="/">
               <span className="icon">
                 <FontAwesomeIcon icon={faLocationDot} />
               </span>
             </a>
-          </li>
+          </li> */}
 
           <li className="left-header">
             <span className="icon" style={{ cursor: "pointer" }}>
@@ -148,14 +170,14 @@ const HeaderComponent = () => {
           <li className="left-header">
             <a href="/">
               <span className="icon">
-                <FontAwesomeIcon icon={faBell} />
+                <FontAwesomeIcon icon={faBagShopping} />
               </span>
             </a>
           </li>
           <li className="left-header">
             <a href="/">
               <span className="icon">
-                <FontAwesomeIcon icon={faBagShopping} />
+                <FontAwesomeIcon icon={faBell} />
               </span>
             </a>
           </li>

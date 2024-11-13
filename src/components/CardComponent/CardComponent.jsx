@@ -136,119 +136,121 @@ import React from "react";
 import { Card, Typography } from "antd";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import "./Card.css";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import { converPrice } from "../../utils";
 
 const { Title, Text } = Typography;
 
 const CardComponent = (props) => {
-  const { DaBan, GiaMonAn, GiamGia, TenMonAn, DanhGia, MoTa, HinhAnh } = props;
-
+  const { DaBan, GiaMonAn, GiamGia, TenMonAn, DanhGia, MoTa, HinhAnh, id } =
+    props;
+  const navigate = useNavigate();
+  const handleDetailsFood = (id) => {
+    navigate(`/Product/ProductDetail/${id}`);
+  };
   return (
-    <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>
-      <Card
-        hoverable
-        style={{
-          width: "22rem",
-          borderRadius: "10px",
-          overflow: "hidden",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          transition: "transform 0.2s",
-        }}
-        cover={
-          <img
-            src={HinhAnh}
-            alt={TenMonAn}
-            style={{
-              height: "308px",
-              width: "100%",
-              objectFit: "cover",
-              borderTopLeftRadius: "10px",
-              borderTopRightRadius: "10px",
-            }}
-          />
-        }
-      >
-        <Title
-          level={4}
-          className="truncated-title"
-          style={{ fontWeight: "bold", margin: "10px 0" }}
-        >
-          {TenMonAn}
-        </Title>
-
-        <Text
-          className="truncated-title"
+    // <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>    </NavLink>
+    <Card
+      onClick={() => handleDetailsFood(id)}
+      hoverable
+      style={{
+        width: "22rem",
+        borderRadius: "10px",
+        overflow: "hidden",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        transition: "transform 0.2s",
+      }}
+      cover={
+        <img
+          src={HinhAnh}
+          alt={TenMonAn}
           style={{
-            fontSize: "12px",
-            color: "#777",
-            fontWeight: "600",
-            marginBottom: "10px",
-            display: "block",
-            textAlign: "center",
+            height: "308px",
+            width: "100%",
+            objectFit: "cover",
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
           }}
-        >
-          {MoTa}
-        </Text>
+        />
+      }
+    >
+      <Title
+        level={4}
+        className="truncated-title"
+        style={{ textAlign: "center", fontWeight: "bold", margin: "10px 0" }}
+      >
+        {TenMonAn}
+      </Title>
 
-        <div
-          className="price-info"
+      <Text
+        className="truncated-title"
+        style={{
+          fontSize: "12px",
+          color: "#777",
+          fontWeight: "600",
+          marginBottom: "10px",
+          display: "block",
+          textAlign: "center",
+        }}
+      >
+        {MoTa}
+      </Text>
+
+      <div
+        className="price-info"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "10px",
+        }}
+      >
+        <span style={{ fontSize: "20px", color: "#ff5b6a", fontWeight: "700" }}>
+          {converPrice(GiaMonAn)}{" "}
+          <span style={{ fontSize: "16px", color: "#999" }}>
+            - {converPrice(GiamGia || 5)}
+          </span>
+        </span>
+        <span
           style={{
+            fontSize: "16px",
+            fontWeight: "500",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "10px",
           }}
         >
-          <span
-            style={{ fontSize: "20px", color: "#ff5b6a", fontWeight: "700" }}
-          >
-            {converPrice(GiaMonAn)}{" "}
-            <span style={{ fontSize: "16px", color: "#999" }}>
-              - {converPrice(GiamGia || 5)}
-            </span>
-          </span>
-          <span
+          <span>{DanhGia}</span>
+          <StarFilled
             style={{
               fontSize: "16px",
-              fontWeight: "500",
-              display: "flex",
-              alignItems: "center",
+              color: "rgb(253,216,54)",
+              marginLeft: "4px",
             }}
-          >
-            <span>{DanhGia}</span>
-            <StarFilled
-              style={{
-                fontSize: "16px",
-                color: "rgb(253,216,54)",
-                marginLeft: "4px",
-              }}
-            />
-            <span style={{ marginLeft: "8px" }}>| Đã bán {DaBan || 1000}</span>
-          </span>
-        </div>
-
-        <ButtonComponent
-          style={{
-            width: "100%",
-            background: "#ff5b6a",
-            color: "#fff",
-            borderRadius: "5px",
-            padding: "10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "background-color 0.3s",
-          }}
-        >
-          <ShoppingCartOutlined
-            style={{ fontSize: "20px", marginRight: "8px" }}
           />
-          Thêm vào giỏ
-        </ButtonComponent>
-      </Card>
-    </NavLink>
+          <span style={{ marginLeft: "8px" }}>| Đã bán {DaBan || 1000}</span>
+        </span>
+      </div>
+
+      <ButtonComponent
+        style={{
+          width: "100%",
+          background: "#ff5b6a",
+          color: "#fff",
+          borderRadius: "5px",
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "background-color 0.3s",
+        }}
+      >
+        <ShoppingCartOutlined
+          style={{ fontSize: "20px", marginRight: "8px" }}
+        />
+        Thêm vào giỏ
+      </ButtonComponent>
+    </Card>
   );
 };
 
