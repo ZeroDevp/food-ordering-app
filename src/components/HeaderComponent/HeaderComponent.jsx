@@ -12,7 +12,7 @@ import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 // import ToggleDropdown from "./toggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, Popover } from "antd";
+import { Badge, Button, Modal, Popover } from "antd";
 import * as UserService from "../../service/UserService";
 import { resetUser } from "../../redux/userSlide";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -30,6 +30,7 @@ const HeaderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const order = useSelector((state) => state.order);
 
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
@@ -72,11 +73,11 @@ const HeaderComponent = () => {
   );
 
   //Set active tab cho menuTab
-  const [setActiveItem] = useState("home");
+  // const [setActiveItem] = useState("home");
 
-  const handleTabClick = (item) => {
-    setActiveItem(item);
-  };
+  // const handleTabClick = (item) => {
+  //   setActiveItem(item);
+  // };
 
   const handleNavigateLogin = () => {
     navigate("/SignIn");
@@ -106,28 +107,28 @@ const HeaderComponent = () => {
         <NavLink
           to="/"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-          onClick={() => handleTabClick("home")}
+          onClick={() => navigate("/")}
         >
           TRANG CHỦ
         </NavLink>
         <NavLink
           to="/Product"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-          onClick={() => handleTabClick("product")}
+          onClick={() => navigate("/Product")}
         >
           THỰC ĐƠN
         </NavLink>
         <NavLink
           to="/Blog"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-          onClick={() => handleTabClick("blog")}
+          onClick={() => navigate("/Blog")}
         >
           TIN TỨC
         </NavLink>
         <NavLink
           to="/Contact"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-          onClick={() => handleTabClick("contact")}
+          onClick={() => navigate("/Contact")}
         >
           LIÊN HỆ
         </NavLink>
@@ -168,11 +169,18 @@ const HeaderComponent = () => {
             </span>
           </li>
           <li className="left-header">
-            <a href="/">
-              <span className="icon">
-                <FontAwesomeIcon icon={faBagShopping} />
-              </span>
-            </a>
+            <span className="icon" onClick={() => navigate("/Order")}>
+              <Badge
+                // dot
+                count={order?.DonHang?.length}
+                size="small"
+              >
+                <FontAwesomeIcon
+                  icon={faBagShopping}
+                  style={{ fontSize: "20px", cursor: "pointer" }}
+                />
+              </Badge>
+            </span>
           </li>
           <li className="left-header">
             <a href="/">

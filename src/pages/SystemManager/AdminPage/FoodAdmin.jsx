@@ -14,13 +14,19 @@ import {
   Image,
   InputNumber,
   Layout,
+  Select,
   theme,
   Upload,
 } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
 import InputComponent from "../../../components/InputComponent/InputComponent";
-import { converPrice, getbase64, truncateDescription } from "../../../utils";
+import {
+  converPrice,
+  getbase64,
+  renderOptions,
+  truncateDescription,
+} from "../../../utils";
 import * as FoodService from "../../../service/FoodService";
 import { useMutationHooks } from "../../../hook/useMutationHook";
 import Loading from "../../../components/LoadingComponent/Loading";
@@ -43,6 +49,7 @@ const FoodAdmin = () => {
   const user = useSelector((state) => state?.user);
   const [marginLeft, setMarginLeft] = useState(80);
   const [collapsed, setCollapsed] = useState(true);
+  // const [typeSelect, setTypeSelect] = useState("");
   const [form] = Form.useForm();
 
   const inittial = () => ({
@@ -53,6 +60,7 @@ const FoodAdmin = () => {
     DanhGia: "",
     MoTa: "",
     GiamGia: "",
+    newPhanLoai: "",
   });
 
   const [stateFood, setStateFood] = useState(inittial());
@@ -105,6 +113,12 @@ const FoodAdmin = () => {
     return res;
   };
 
+  //hàm lấy phân loại món ăn
+  const fetchAllTypefood = async () => {
+    const res = await FoodService.getAllTypeFood();
+    return res;
+  };
+
   const { data, isLoading, isSuccess, isError } = mutation;
   const {
     data: dataUpdated,
@@ -116,6 +130,11 @@ const FoodAdmin = () => {
     isSuccess: isSuccessDeleted,
     isError: isErrorDeleted,
   } = mutationDelete;
+
+  const typeFood = useQuery({
+    queryKey: ["type-food"],
+    queryFn: fetchAllTypefood,
+  });
 
   const queryFood = useQuery({
     queryKey: ["foods"],
@@ -185,7 +204,19 @@ const FoodAdmin = () => {
 
   //Hàm xác nhận ok khi thêm
   const onFinish = () => {
-    mutation.mutate(stateFood, {
+    const params = {
+      TenMonAn: stateFood.TenMonAn,
+      LoaiMonAn:
+        stateFood.LoaiMonAn === "add_type"
+          ? stateFood.newPhanLoai
+          : stateFood.LoaiMonAn,
+      HinhAnh: stateFood.HinhAnh,
+      GiaMonAn: stateFood.GiaMonAn,
+      DanhGia: stateFood.DanhGia,
+      MoTa: stateFood.MoTa,
+      GiamGia: stateFood.GiamGia,
+    };
+    mutation.mutate(params, {
       onSettled: () => {
         queryFood.refetch();
       },
@@ -285,13 +316,13 @@ const FoodAdmin = () => {
     // setisLoadingUpdate(false);
   };
 
-  // useEffect(() => {
-  //   if (!isModalOpen) {
-  //     form.setFieldsValue(stateFoodDetails);
-  //   } else {
-  //     form.setFieldsValue(inittial());
-  //   }
-  // }, [form, stateFoodDetails, isModalOpen]);
+  useEffect(() => {
+    if (!isModalOpen) {
+      form.setFieldsValue(stateFoodDetails);
+    } else {
+      form.setFieldsValue(inittial());
+    }
+  }, [form, stateFoodDetails, isModalOpen]);
 
   useEffect(() => {
     if (isOpenDrawer) {
@@ -313,6 +344,13 @@ const FoodAdmin = () => {
     setTimeout(() => {
       setLoadingDrawer(false);
     }, 1000);
+  };
+
+  const handleChangeSelect = (value) => {
+    setStateFood({
+      ...stateFood,
+      LoaiMonAn: value,
+    });
   };
 
   //Ham render chọn action
@@ -545,12 +583,31 @@ const FoodAdmin = () => {
                     },
                   ]}
                 >
-                  <InputComponent
-                    value={stateFood.LoaiMonAn}
-                    onChange={handleOnchange}
+                  <Select
                     name="LoaiMonAn"
+                    value={stateFood.LoaiMonAn}
+                    onChange={handleChangeSelect}
+                    options={renderOptions(typeFood?.data?.data)}
                   />
                 </Form.Item>
+                {stateFood.LoaiMonAn === "add_type" && (
+                  <Form.Item
+                    label="Thêm phân loại"
+                    name="newPhanLoai"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy phân loại món ăn!",
+                      },
+                    ]}
+                  >
+                    <InputComponent
+                      value={stateFood.newPhanLoai}
+                      onChange={handleOnchange}
+                      name="newPhanLoai"
+                    />
+                  </Form.Item>
+                )}
 
                 <Form.Item
                   label="Giá món ăn"

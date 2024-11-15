@@ -33,6 +33,13 @@ export const getAllFood = async (search) => {
     return res.data;
 };
 
+export const getFoodType = async (LoaiMonAn) => {
+    if (LoaiMonAn) {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/food/get-all?filter=LoaiMonAn&filter=${LoaiMonAn}`)
+        return res.data;
+    }
+};
+
 
 
 export const createFood = async (data) => {
@@ -67,6 +74,12 @@ export const deleteFood = async (id, access_token) => {
             },
         }
     );
+    return res.data;
+};
+
+
+export const getAllTypeFood = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/food/get-all-type`);
     return res.data;
 };
 

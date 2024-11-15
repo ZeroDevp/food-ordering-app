@@ -132,13 +132,17 @@
 
 // export default CardComponent;
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, Typography } from "antd";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import "./Card.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import { converPrice } from "../../utils";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrderFood } from "../../redux/slide/orderSlide";
+import { useQuery } from "@tanstack/react-query";
+import * as FoodService from "../../service/FoodService";
 
 const { Title, Text } = Typography;
 
@@ -149,8 +153,42 @@ const CardComponent = (props) => {
   const handleDetailsFood = (id) => {
     navigate(`/Product/ProductDetail/${id}`);
   };
+  const location = useLocation();
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [numFood, setNumFood] = useState(1);
+
+  const fetchgetDetailsFood = async (context) => {
+    const id = context?.queryKey[1];
+    const res = await FoodService.getDetailsFood(id);
+    return res.data;
+  };
+
+  const { data: foodDetails } = useQuery({
+    queryKey: ["food-details", id],
+    queryFn: fetchgetDetailsFood,
+    enable: !!id,
+  });
+
+  const handleAddOrderFood = () => {
+    if (!user?.id) {
+      navigate("/SignIn", { state: location?.pathname });
+    } else {
+      dispatch(
+        addOrderFood({
+          DonHangs: {
+            TenMonAn: foodDetails?.TenMonAn,
+            SoLuong: numFood,
+            HinhAnh: foodDetails?.HinhAnh,
+            GiaMonAn: foodDetails?.GiaMonAn,
+            food: foodDetails?._id,
+          },
+        })
+      );
+    }
+  };
+
   return (
-    // <NavLink to="/Product/ProductDetail" style={{ textDecoration: "none" }}>    </NavLink>
     <Card
       onClick={() => handleDetailsFood(id)}
       hoverable
@@ -231,8 +269,11 @@ const CardComponent = (props) => {
           <span style={{ marginLeft: "8px" }}>| Đã bán {DaBan || 1000}</span>
         </span>
       </div>
-
       <ButtonComponent
+        onClick={(e) => {
+          e.stopPropagation();
+          handleAddOrderFood();
+        }}
         style={{
           width: "100%",
           background: "#ff5b6a",

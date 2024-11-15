@@ -12,7 +12,7 @@ import InputFormPassword from "../../components/InputForm/InputFormPassword";
 import * as UserService from "../../service/UserService";
 import { useMutationHooks } from "../../hook/useMutationHook";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/userSlide";
@@ -20,6 +20,7 @@ import { faAngleLeft } from "@fortawesome/free-solid-svg-icons"; // Import icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SignIn = ({ toggleAuthMode, closeModal }) => {
+  const location = useLocation();
   const [Email, setEmail] = useState("");
   const [MatKhau, setMatKhau] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -50,20 +51,39 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
     [dispatch]
   );
 
+  // useEffect(() => {
+  //   console.log("location", location);
+  //   if (isSuccess && data?.access_token) {
+  //     try {
+  //       const decoded = jwtDecode(data.access_token);
+  //       if (decoded?.id) {
+  //         handleGetDetailsUser(decoded.id, data.access_token);
+  //       }
+  //       navigate("/");
+  //       localStorage.setItem("access_token", JSON.stringify(data.access_token));
+  //     } catch (error) {
+  //       console.error("Lỗi khi giải mã token:", error);
+  //     }
+  //   }
+  // }, [isSuccess, data, handleGetDetailsUser, navigate, location]);
+
   useEffect(() => {
-    if (isSuccess && data?.access_token) {
-      try {
-        const decoded = jwtDecode(data.access_token);
+    console.log("location", location);
+    if (isSuccess) {
+      if (location?.state) {
+        navigate(location?.state);
+      } else {
+        navigate("/");
+      }
+      localStorage.setItem("access_token", JSON.stringify(data?.access_token));
+      if (data?.access_token) {
+        const decoded = jwtDecode(data?.access_token);
         if (decoded?.id) {
           handleGetDetailsUser(decoded.id, data.access_token);
         }
-        navigate("/");
-        localStorage.setItem("access_token", JSON.stringify(data.access_token));
-      } catch (error) {
-        console.error("Lỗi khi giải mã token:", error);
       }
     }
-  }, [isSuccess, data, handleGetDetailsUser, navigate]);
+  }, [isSuccess, data, handleGetDetailsUser, navigate, location]);
 
   // Hàm lấy giá trị Email
   const handleOnchangeEmail = (value) => {

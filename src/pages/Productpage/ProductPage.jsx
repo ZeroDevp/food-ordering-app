@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Pagination } from "antd";
+import { Col, Pagination, Row } from "antd";
 import CardComponent from "../../components/CardComponent/CardComponent";
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
 import BackToTop from "../../components/BackToTopComponent/BackToTopComponent";
@@ -21,6 +21,7 @@ const ProductPage = () => {
     const res = await FoodService.getAllFood(search);
     if (search?.length > 0 || refSearch.current) {
       setStateFood(res?.data);
+      return res || [];
     } else {
       return res;
     }
@@ -34,7 +35,7 @@ const ProductPage = () => {
   }, [searchDebounce]);
 
   const { data: foods } = useQuery({
-    queryKey: ["foods", searchFood], // Include searchFood in the query key
+    queryKey: ["foods"], // Include searchFood in the query key
     queryFn: () => fetchFoodAll(searchFood),
     retry: 3,
     retryDelay: 1000,
@@ -76,17 +77,12 @@ const ProductPage = () => {
     <>
       <div className="container">
         <NavbarComponent />
-        <div className="row ">
-          {currentFoods.length > 0 ? (
-            currentFoods.map(
-              (
-                food // Use currentFoods for rendering
-              ) => (
-                <div
-                  key={food._id}
-                  className="col"
-                  style={{ marginBottom: "20px" }}
-                >
+
+        <div style={{ padding: "20px" }}>
+          <Row gutter={[16, 16]}>
+            {currentFoods.length > 0 ? (
+              currentFoods.map((food) => (
+                <Col key={food._id} xs={24} sm={12} md={8} lg={6}>
                   <CardComponent
                     DaBan={food.DaBan}
                     DanhGia={food.DanhGia}
@@ -98,22 +94,23 @@ const ProductPage = () => {
                     TenMonAn={food.TenMonAn}
                     id={food._id}
                   />
-                </div>
-              )
-            )
-          ) : (
-            <div
-              className="no-results"
-              style={{
-                textAlign: "center",
-                color: "#ccc",
-                fontWeight: "600",
-                marginTop: "40px",
-              }}
-            >
-              Không có thức ăn mà bạn đang tìm
-            </div> // Message when no food found
-          )}
+                </Col>
+              ))
+            ) : (
+              <div
+                className="no-results"
+                style={{
+                  textAlign: "center",
+                  color: "#ccc",
+                  fontWeight: "600",
+                  marginTop: "40px",
+                  width: "100%",
+                }}
+              >
+                Không có thức ăn mà bạn đang tìm
+              </div>
+            )}
+          </Row>
         </div>
 
         {stateFood.length > 0 && ( // Only show pagination if there are results

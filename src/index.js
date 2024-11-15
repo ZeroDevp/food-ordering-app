@@ -4,12 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import 'antd/dist/antd.css';
-import { store } from './redux/store'
+import { persistor, store } from './redux/store'
 import { Provider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ConfigProvider } from 'antd';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient()
@@ -18,7 +19,9 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <ConfigProvider>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </ConfigProvider>
     </Provider>
     <ReactQueryDevtools initialIsOpen={false} />

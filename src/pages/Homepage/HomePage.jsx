@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Carousel, Pagination } from "antd";
 import CardComponent from "../../components/CardComponent/CardComponent";
 import BackToTop from "../../components/BackToTopComponent/BackToTopComponent";
+import BannerTrongHieu from "../../assets/banner/BannerTrongHieu.png";
 
 const HomePage = () => {
   const [setActiveItem] = useState("home");
@@ -24,11 +25,7 @@ const HomePage = () => {
       {/* <product /> */}
       <Carousel autoplay>
         <div>
-          <img
-            width={"100%"}
-            src={require("../../assets/banner/banner-web-trung-thu.jpg")}
-            alt="banner1"
-          />
+          <img width={"100%"} src={BannerTrongHieu} alt="banner1" />
         </div>
         <div>
           <img

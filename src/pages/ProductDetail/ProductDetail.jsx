@@ -1,14 +1,20 @@
 import { Image, Rate } from "antd";
 import React, { useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { converPrice } from "../../utils";
 import "./ProductDetail.css";
 import * as FoodService from "../../service/FoodService";
 import { useQuery } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrderFood } from "../../redux/slide/orderSlide";
 
 const ProductDetail = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [numFood, setNumFood] = useState(1);
   const { id } = useParams();
+  const user = useSelector((state) => state.user);
   const onChange = (value) => {
     setNumFood(Number(value));
   };
@@ -31,6 +37,24 @@ const ProductDetail = () => {
       setNumFood((prevNumFood) => prevNumFood + 1);
     } else if (type === "decrease" && numFood > 1) {
       setNumFood((prevNumFood) => prevNumFood - 1);
+    }
+  };
+
+  const handleAddOrderFood = () => {
+    if (!user?.id) {
+      navigate("/SignIn", { state: location?.pathname });
+    } else {
+      dispatch(
+        addOrderFood({
+          DonHangs: {
+            TenMonAn: foodDetails?.TenMonAn,
+            SoLuong: numFood,
+            HinhAnh: foodDetails?.HinhAnh,
+            GiaMonAn: foodDetails?.GiaMonAn,
+            food: foodDetails?._id,
+          },
+        })
+      );
     }
   };
 
@@ -115,6 +139,7 @@ const ProductDetail = () => {
                 type="button"
                 className="btn-total"
                 style={{ marginLeft: "10px" }}
+                onClick={handleAddOrderFood}
               >
                 Thêm vào giỏ hàng
               </button>

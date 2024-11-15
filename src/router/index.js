@@ -13,6 +13,7 @@ import Dashboard from "../pages/SystemManager/AdminPage/DashBoard";
 import FoodAdmin from "../pages/SystemManager/AdminPage/FoodAdmin";
 import UserAdmin from "../pages/SystemManager/AdminPage/UserAdmin";
 import OrderAdmin from "../pages/SystemManager/AdminPage/OrderAdmin";
+import FoodType from "../pages/Productpage/FoodType";
 
 export const routes = [
 
@@ -27,6 +28,13 @@ export const routes = [
     {
         path: "/Product",
         page: ProductPage,
+        isShowheader: true,
+    },
+
+    //Trang food Type
+    {
+        path: "/Product/:LoaiMonAn",
+        page: FoodType,
         isShowheader: true,
     },
 
