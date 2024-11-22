@@ -182,6 +182,7 @@ const CardComponent = (props) => {
             HinhAnh: foodDetails?.HinhAnh,
             GiaMonAn: foodDetails?.GiaMonAn,
             food: foodDetails?._id,
+            GiamGia: foodDetails?.GiamGia,
           },
         })
       );
@@ -266,7 +267,7 @@ const CardComponent = (props) => {
               marginLeft: "4px",
             }}
           />
-          <span style={{ marginLeft: "8px" }}>| Đã bán {DaBan || 1000}</span>
+          <span style={{ marginLeft: "8px" }}>| Đã bán {DaBan || 0}</span>
         </span>
       </div>
       <ButtonComponent

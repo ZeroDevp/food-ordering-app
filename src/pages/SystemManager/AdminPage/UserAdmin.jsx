@@ -146,7 +146,7 @@ const UserAdmin = () => {
 
   //Hàm getAllFood từ API
   const getAllUser = async () => {
-    const res = await UserService.getAllUser();
+    const res = await UserService.getAllUser(user?.access_token);
     return res;
   };
 

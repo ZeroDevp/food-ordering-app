@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     DonHang: [],
+    orderItemSelected: [],
     DiaChiGiaoHang: {
     },
     PhuongThucThanhToan: '',
@@ -13,8 +14,8 @@ const initialState = {
     NgayThanhToan: '',
     DaGiao: false,
     NgayGiao: '',
-    TrangThaiGiaoHang: false
-    // GiamGia: { type: Number },
+    TrangThaiGiaoHang: false,
+    GiamGia: '',
 
 }
 
@@ -34,7 +35,7 @@ export const orderSlide = createSlice({
         increaseSoLuong: (state, action) => {
             const { idFood } = action.payload
             const itemOrder = state?.DonHang?.find((item) => item?.food === idFood)
-            const itemOrderSeleted = state?.orderItemsSelected?.find(item => item.food === idFood)
+            const itemOrderSeleted = state?.orderItemSelected?.find(item => item.food === idFood)
             itemOrder.SoLuong++;
             if (itemOrderSeleted) {
                 itemOrderSeleted.SoLuong++;
@@ -43,7 +44,7 @@ export const orderSlide = createSlice({
         decreaseSoLuong: (state, action) => {
             const { idFood } = action.payload
             const itemOrder = state?.DonHang?.find((item) => item?.food === idFood)
-            const itemOrderSeleted = state?.orderItemsSelected?.find(item => item.food === idFood)
+            const itemOrderSeleted = state?.orderItemSelected?.find(item => item.food === idFood)
             itemOrder.SoLuong--;
             if (itemOrderSeleted) {
                 itemOrderSeleted.SoLuong--;
@@ -52,18 +53,33 @@ export const orderSlide = createSlice({
         removeOrderFood: (state, action) => {
             const { idFood } = action.payload
             const itemOrder = state?.DonHang?.filter((item) => item?.food !== idFood)
+            const itemOrderSeleted = state?.orderItemSelected?.filter((item) => item?.food !== idFood)
             state.DonHang = itemOrder
+            state.orderItemSelected = itemOrderSeleted
         },
 
         removeAllOrderFood: (state, action) => {
             const { listChecked } = action.payload
             const itemOrder = state?.DonHang?.filter((item) => !listChecked.includes(item.food))
+            const itemOrderSeleted = state?.DonHang?.filter((item) => !listChecked.includes(item.food))
             state.DonHang = itemOrder
+            state.orderItemSelected = itemOrderSeleted
         },
+
+        selectedOrder: (state, action) => {
+            const { listChecked } = action.payload
+            const orderSelected = []
+            state.DonHang.forEach((order) => {
+                if (listChecked.includes(order.food)) {
+                    orderSelected.push(order)
+                }
+            })
+            state.orderItemSelected = orderSelected
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrderFood, increaseSoLuong, decreaseSoLuong, removeOrderFood, removeAllOrderFood } = orderSlide.actions
+export const { addOrderFood, increaseSoLuong, decreaseSoLuong, removeOrderFood, removeAllOrderFood, selectedOrder } = orderSlide.actions
 
 export default orderSlide.reducer

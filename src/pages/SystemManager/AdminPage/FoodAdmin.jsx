@@ -15,7 +15,9 @@ import {
   InputNumber,
   Layout,
   Select,
+  Switch,
   theme,
+  Typography,
   Upload,
 } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
@@ -52,6 +54,8 @@ const FoodAdmin = () => {
   // const [typeSelect, setTypeSelect] = useState("");
   const [form] = Form.useForm();
 
+  // const [BanChay, setBanChay] = useState(false);
+
   const inittial = () => ({
     TenMonAn: "",
     LoaiMonAn: "",
@@ -61,6 +65,7 @@ const FoodAdmin = () => {
     MoTa: "",
     GiamGia: "",
     newPhanLoai: "",
+    // BanChay: false,
   });
 
   const [stateFood, setStateFood] = useState(inittial());
@@ -154,6 +159,7 @@ const FoodAdmin = () => {
       DanhGia: "",
       MoTa: "",
       GiamGia: "",
+      // BanChay: false,
     });
     form.resetFields();
   }, [form]);
@@ -290,7 +296,12 @@ const FoodAdmin = () => {
 
   const onUpdateFoods = () => {
     mutationUpdate.mutate(
-      { id: rowSelected, token: user?.access_token, ...stateFoodDetails },
+      {
+        id: rowSelected,
+        token: user?.access_token,
+        ...stateFoodDetails,
+        // BanChay,
+      },
       {
         onSettled: () => {
           queryFood.refetch();
@@ -311,7 +322,9 @@ const FoodAdmin = () => {
         DanhGia: res?.data?.DanhGia,
         MoTa: res?.data?.MoTa,
         GiamGia: res?.data?.GiamGia,
+        // BanChay: res?.data?.BanChay,
       });
+      // setBanChay(res?.data?.BanChay);
     }
     // setisLoadingUpdate(false);
   };
@@ -327,8 +340,17 @@ const FoodAdmin = () => {
   useEffect(() => {
     if (isOpenDrawer) {
       form.setFieldsValue(stateFoodDetails); // Set form values when the drawer opens
+      // setBanChay(stateFoodDetails.BanChay);
     }
   }, [isOpenDrawer, stateFoodDetails, form]);
+
+  // const handleSwitchChange = (checked) => {
+  //   setBanChay(checked);
+  //   setStateFoodDetails((prevState) => ({
+  //     ...prevState,
+  //     BanChay: checked, // Cập nhật isAdmin vào stateUser Details
+  //   }));
+  // };
 
   useEffect(() => {
     if (rowSelected) {
@@ -405,6 +427,14 @@ const FoodAdmin = () => {
       responsive: ["md"],
     },
 
+    // {
+    //   title: <div style={{ textAlign: "center" }}>Bán chạy</div>,
+    //   dataIndex: "BanChay",
+    //   width: "10%",
+    //   align: "center",
+    //   responsive: ["md"],
+    // },
+
     {
       title: <div style={{ textAlign: "center" }}>Phân loại</div>,
       dataIndex: "LoaiMonAn",
@@ -434,6 +464,7 @@ const FoodAdmin = () => {
         GiaMonAn: converPrice(food.GiaMonAn),
         MoTa: truncateDescription(food.MoTa, 100),
         GiamGia: food.GiamGia,
+        // BanChay: food.BanChay ? "Bán chạy" : "Bình thường",
       };
     });
 
@@ -900,6 +931,13 @@ const FoodAdmin = () => {
                     name="DanhGia"
                   />
                 </Form.Item>
+
+                {/* <Form.Item label="BanChay">
+                  <Switch checked={BanChay} onChange={handleSwitchChange} />
+                  <Typography.Text style={{ marginLeft: 8 }}>
+                    {stateFoodDetails.BanChay ? "Bán chạy" : "Bình thường"}
+                  </Typography.Text>
+                </Form.Item> */}
 
                 <Form.Item
                   label="Ảnh món ăn"

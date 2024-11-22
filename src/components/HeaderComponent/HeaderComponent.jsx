@@ -135,23 +135,14 @@ const HeaderComponent = () => {
       </nav>
       <div className="right-content">
         <InputComponent
+          className="search-bar"
           style={{ width: "500px", border: "1px solid #ccc" }}
           size="large"
           placeholder="Tìm kiếm..."
           prefix={<SearchOutlined />}
           onChange={onSearch}
         />
-        {/* <ToggleDropdown />
-        <button className="download-btn">Download App</button> */}
         <ul className="menu-account">
-          {/* <li className="left-header">
-            <a href="/">
-              <span className="icon">
-                <FontAwesomeIcon icon={faLocationDot} />
-              </span>
-            </a>
-          </li> */}
-
           <li className="left-header">
             <span className="icon" style={{ cursor: "pointer" }}>
               {user?.HoTen ? (
@@ -170,11 +161,7 @@ const HeaderComponent = () => {
           </li>
           <li className="left-header">
             <span className="icon" onClick={() => navigate("/Order")}>
-              <Badge
-                // dot
-                count={order?.DonHang?.length}
-                size="small"
-              >
+              <Badge count={order?.DonHang?.length} size="small">
                 <FontAwesomeIcon
                   icon={faBagShopping}
                   style={{ fontSize: "20px", cursor: "pointer" }}
@@ -202,12 +189,13 @@ const HeaderComponent = () => {
           textAlign: "center",
           borderRadius: "10px",
         }}
-        wrapClassName="custom-logout-modal"
+        ClassName="custom-logout-modal"
       >
         <img
           src={customImage}
           alt="Custom Icon"
-          style={{ width: "400px", marginBottom: "0px" }}
+          // style={{ width: "400px", marginBottom: "0px" }}
+          style={{ width: "100%", maxWidth: "400px", marginBottom: "10px" }}
         />
 
         {/* Container for the text and buttons */}

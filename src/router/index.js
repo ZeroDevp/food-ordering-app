@@ -14,6 +14,9 @@ import FoodAdmin from "../pages/SystemManager/AdminPage/FoodAdmin";
 import UserAdmin from "../pages/SystemManager/AdminPage/UserAdmin";
 import OrderAdmin from "../pages/SystemManager/AdminPage/OrderAdmin";
 import FoodType from "../pages/Productpage/FoodType";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
+import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
+import DetailsOrderPage from "../pages/Profile/DetailsOrderPage";
 
 export const routes = [
 
@@ -49,6 +52,20 @@ export const routes = [
     {
         path: "/Order",
         page: OrderPage,
+        isShowheader: true,
+    },
+
+    //Trang Payment
+    {
+        path: "/Payment",
+        page: PaymentPage,
+        isShowheader: true,
+    },
+
+    //Trang OrderSuccess
+    {
+        path: "/OrderSuccess",
+        page: OrderSuccess,
         isShowheader: true,
     },
 
@@ -91,6 +108,13 @@ export const routes = [
     {
         path: "/my-order",
         page: MyOrderPage,
+        isShowheader: true,
+    },
+
+    //Trang chi tiết đơn hàng
+    {
+        path: "/details-order/:id",
+        page: DetailsOrderPage,
         isShowheader: true,
     },
 

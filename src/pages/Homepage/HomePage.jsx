@@ -1,13 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./homePage.css";
 import { NavLink } from "react-router-dom";
-import { Carousel, Pagination } from "antd";
+import { Carousel, Col, Pagination, Row } from "antd";
 import CardComponent from "../../components/CardComponent/CardComponent";
 import BackToTop from "../../components/BackToTopComponent/BackToTopComponent";
 import BannerTrongHieu from "../../assets/banner/BannerTrongHieu.png";
+import * as FoodService from "../../service/FoodService";
+import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
   const [setActiveItem] = useState("home");
+  const [stateFood, setStateFood] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const itemsPerPage = 4; // Number of items per page
+  const [bestSellingFoods, setBestSellingFoods] = useState([]);
+
+  ///
+  const fetchFoodAll = async () => {
+    const res = await FoodService.getAllFood();
+    return res;
+  };
+
+  const { data: foods } = useQuery({
+    queryKey: ["foods"],
+    queryFn: fetchFoodAll,
+    retry: 3,
+    retryDelay: 1000,
+    keepPreviousData: true,
+  });
+
+  // useEffect(() => {
+  //   if (foods?.data?.length > 0) {
+  //     setStateFood(foods.data);
+  //   } else {
+  //     setStateFood([]); // Reset stateFood if no data found
+  //   }
+  // }, [foods]);
+
+  useEffect(() => {
+    if (foods?.data?.length > 0) {
+      setStateFood(foods.data);
+      // Filter best selling foods (assuming DaBan indicates the number sold)
+      const filteredBestSelling = foods.data.filter((food) => food.DaBan > 10);
+      setBestSellingFoods(filteredBestSelling);
+    } else {
+      setStateFood([]); // Reset stateFood if no data found
+      setBestSellingFoods([]); // Reset best selling foods if no data found
+    }
+  }, [foods]);
+
+  // Calculate the items to display based on the current page
+  const indexOfLastFood = currentPage * itemsPerPage;
+  const indexOfFirstFood = indexOfLastFood - itemsPerPage;
+  // const currentFoods = stateFood.slice(indexOfFirstFood, indexOfLastFood); // Use stateFood for current items
+  const currentBestSellingFoods = bestSellingFoods.slice(
+    indexOfFirstFood,
+    indexOfLastFood
+  ); // Use bestSellingFoods for current items
+
+  ///
 
   const handleTabClick = (item) => {
     setActiveItem(item);
@@ -15,9 +66,15 @@ const HomePage = () => {
 
   const itemRender = (current, type, originalElement) => {
     if (type === "page") {
-      return <div className={`dot ${current === 1 ? "active" : ""}`}></div>;
+      return (
+        <div className={`dot ${current === currentPage ? "active" : ""}`}></div>
+      );
     }
     return originalElement;
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // Update current page state
   };
 
   return (
@@ -84,27 +141,52 @@ const HomePage = () => {
           </h2>
         </div>
 
-        <div className="row" style={{ marginBottom: "20px" }}>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="pagination">
-            <Pagination
-              defaultCurrent={2}
-              total={50}
-              itemRender={itemRender}
-              className="custom-pagination"
-            />
-          </div>
+        <div style={{ marginBottom: "20px" }}>
+          <Row gutter={[16, 16]}>
+            {currentBestSellingFoods.length > 0 ? (
+              currentBestSellingFoods.map((food) => (
+                <Col key={food._id} xs={24} sm={12} md={8} lg={6}>
+                  <CardComponent
+                    DaBan={food.DaBan}
+                    DanhGia={food.DanhGia}
+                    GiaMonAn={food.GiaMonAn}
+                    HinhAnh={food.HinhAnh}
+                    LoaiMonAn={food.LoaiMonAn}
+                    GiamGia={food.GiamGia}
+                    MoTa={food.MoTa}
+                    TenMonAn={food.TenMonAn}
+                    id={food._id}
+                  />
+                </Col>
+              ))
+            ) : (
+              <div
+                className="no-results"
+                style={{
+                  textAlign: "center",
+                  color: "#ccc",
+                  fontWeight: "600",
+                  marginTop: "40px",
+                  width: "100%",
+                }}
+              >
+                Không có thức ăn mà bạn đang tìm
+              </div>
+            )}
+          </Row>
+
+          {bestSellingFoods.length > 0 && ( // Only show pagination if there are results
+            <div className="pagination">
+              <Pagination
+                current={currentPage} // Set current page
+                pageSize={itemsPerPage} // Set items per page
+                total={bestSellingFoods.length} // Set total items based on stateFood
+                onChange={handlePageChange} // Handle page change
+                itemRender={itemRender}
+                className="custom-pagination"
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="bg-img d-flex align-items-center">

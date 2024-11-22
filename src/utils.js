@@ -19,7 +19,7 @@ export const getbase64 = (file) =>
 export const converPrice = (price) => {
     try {
         const result = price?.toLocaleString().replaceAll(",", ".");
-        return `${result} Đ`;
+        return `${result} VNĐ`;
     } catch (error) {
         return null;
     }

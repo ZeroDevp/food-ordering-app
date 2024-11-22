@@ -4,3 +4,40 @@
   text-overflow: ellipsis; /* Show ellipsis when text is too long */
   max-width: 100%; /* Ensure it doesn't exceed the container width */
 }
+
+.hover-effect {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-item {
+  word-wrap: break-word;
+}
+
+.price-info div span {
+  font-size: 16px;
+}
+
+.btn-order:hover {
+  background: #ff4a5a !important;
+  border-color: #ff4a5a !important;
+}
+
+.hover-effect:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease;
+}
+
+.quantity-control input {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .quantity-control input {
+    max-width: 40px;
+  }
+}

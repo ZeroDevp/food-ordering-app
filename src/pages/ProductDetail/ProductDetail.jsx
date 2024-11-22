@@ -52,6 +52,7 @@ const ProductDetail = () => {
             HinhAnh: foodDetails?.HinhAnh,
             GiaMonAn: foodDetails?.GiaMonAn,
             food: foodDetails?._id,
+            GiamGia: foodDetails?.GiamGia,
           },
         })
       );
@@ -101,7 +102,7 @@ const ProductDetail = () => {
                   fontSize: "20px",
                 }}
               >
-                | Đã bán {foodDetails?.DaBan || 1000}
+                | Đã bán {foodDetails?.DaBan || 0}
               </span>
             </span>
           </div>
