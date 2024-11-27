@@ -1,4 +1,4 @@
-import { Image, Rate } from "antd";
+import { Image, notification, Rate } from "antd";
 import React, { useState } from "react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { converPrice } from "../../utils";
@@ -56,6 +56,12 @@ const ProductDetail = () => {
           },
         })
       );
+      notification.success({
+        message: "Thành công",
+        description: `Đã thêm ${foodDetails.TenMonAn} thành công!`,
+        placement: "top",
+        duration: 1,
+      });
     }
   };
 
@@ -127,6 +133,7 @@ const ProductDetail = () => {
               </button>
               <input
                 className="number pt-0"
+                disabled
                 onChange={onChange}
                 value={numFood}
               />

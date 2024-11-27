@@ -42,6 +42,10 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
     async (id, token) => {
       if (!token) return;
       try {
+        //27/11
+        // const storage = localStorage.getItem("refresh_token");
+        // const refreshToken = storage ? JSON.parse(storage) : null;
+        //27/11
         const res = await UserService.getDetailUser(id, token);
         dispatch(updateUser({ ...res?.data, access_token: token }));
       } catch (error) {
@@ -51,24 +55,7 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
     [dispatch]
   );
 
-  // useEffect(() => {
-  //   console.log("location", location);
-  //   if (isSuccess && data?.access_token) {
-  //     try {
-  //       const decoded = jwtDecode(data.access_token);
-  //       if (decoded?.id) {
-  //         handleGetDetailsUser(decoded.id, data.access_token);
-  //       }
-  //       navigate("/");
-  //       localStorage.setItem("access_token", JSON.stringify(data.access_token));
-  //     } catch (error) {
-  //       console.error("Lỗi khi giải mã token:", error);
-  //     }
-  //   }
-  // }, [isSuccess, data, handleGetDetailsUser, navigate, location]);
-
   useEffect(() => {
-    console.log("location", location);
     if (isSuccess) {
       if (location?.state) {
         navigate(location?.state);
@@ -76,6 +63,12 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
         navigate("/");
       }
       localStorage.setItem("access_token", JSON.stringify(data?.access_token));
+      //27/11
+      // localStorage.setItem(
+      //   "refresh_token",
+      //   JSON.stringify(data?.refresh_token)
+      // );
+      //27/11
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
         if (decoded?.id) {

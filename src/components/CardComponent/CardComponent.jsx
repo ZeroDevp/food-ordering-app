@@ -133,7 +133,7 @@
 // export default CardComponent;
 
 import React, { useState } from "react";
-import { Card, Typography } from "antd";
+import { Card, notification, Typography } from "antd";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import "./Card.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -186,6 +186,12 @@ const CardComponent = (props) => {
           },
         })
       );
+      notification.success({
+        message: "Thành công",
+        description: `Đã thêm ${foodDetails.TenMonAn} thành công!`,
+        placement: "top",
+        duration: 1,
+      });
     }
   };
 
@@ -248,7 +254,7 @@ const CardComponent = (props) => {
         <span style={{ fontSize: "20px", color: "#ff5b6a", fontWeight: "700" }}>
           {converPrice(GiaMonAn)}{" "}
           <span style={{ fontSize: "16px", color: "#999" }}>
-            - {converPrice(GiamGia || 5)}
+            - {GiamGia || 0} %
           </span>
         </span>
         <span

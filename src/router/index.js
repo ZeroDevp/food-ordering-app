@@ -17,6 +17,7 @@ import FoodType from "../pages/Productpage/FoodType";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
 import DetailsOrderPage from "../pages/Profile/DetailsOrderPage";
+import OrderDetailsAdmin from "../pages/SystemManager/AdminPage/OrderDetailsAdmin";
 
 export const routes = [
 
@@ -130,6 +131,14 @@ export const routes = [
     {
         path: "/system/FoodAdmin",
         page: FoodAdmin,
+        isShowheader: false,
+        isPrivate: true
+    },
+
+    //Trang chi tiết đơn hàng
+    {
+        path: "/system/AdminOrderDetails/:id",
+        page: OrderDetailsAdmin,
         isShowheader: false,
         isPrivate: true
     },

@@ -30,6 +30,7 @@ import { useMutationHooks } from "../../hook/useMutationHook";
 import { getbase64 } from "../../utils";
 import "./ProfilePage.css";
 import customImage from "../../assets/img/logout.png";
+import { clearCart } from "../../redux/slide/orderSlide";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -228,6 +229,7 @@ const ProfilePage = () => {
   const handleLogout = async () => {
     await UserService.logoutUser();
     dispatch(resetUser());
+    dispatch(clearCart());
     handleNavigateLogin();
   };
 

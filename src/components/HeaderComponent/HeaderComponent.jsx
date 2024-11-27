@@ -24,6 +24,8 @@ import {
 } from "@ant-design/icons";
 import customImage from "../../assets/img/logout.png";
 import { searchFood } from "../../redux/slide/foodSlide";
+import { clearCart } from "../../redux/slide/orderSlide";
+// import { cartReducer } from "../../redux/slide/orderSlide";
 
 const HeaderComponent = () => {
   const user = useSelector((state) => state.user);
@@ -41,6 +43,7 @@ const HeaderComponent = () => {
   const handleLogout = async () => {
     await UserService.logoutUser();
     dispatch(resetUser());
+    dispatch(clearCart());
     handleNavigateLogin();
   };
 
@@ -89,7 +92,7 @@ const HeaderComponent = () => {
   };
 
   useEffect(() => {
-    console.log("object", search);
+    // console.log("object", search);
   }, [search]);
 
   return (

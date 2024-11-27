@@ -75,11 +75,16 @@ export const orderSlide = createSlice({
                 }
             })
             state.orderItemSelected = orderSelected
-        }
+        },
+
+        clearCart: (state) => {
+            state.DonHang = []; // Reset the cart to an empty state
+            state.orderItemSelected = []; // Optionally clear selected orders
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrderFood, increaseSoLuong, decreaseSoLuong, removeOrderFood, removeAllOrderFood, selectedOrder } = orderSlide.actions
+export const { addOrderFood, increaseSoLuong, decreaseSoLuong, removeOrderFood, removeAllOrderFood, selectedOrder, clearCart } = orderSlide.actions
 
 export default orderSlide.reducer

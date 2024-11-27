@@ -40,8 +40,8 @@ const DetailsOrderPage = () => {
     enabled: !!id,
   });
 
-  const { isLoading, data } = queryOrder;
-  console.log("data", data);
+  const { data } = queryOrder;
+  // console.log("data", data);
 
   useEffect(() => {
     if (data?.DiaChiGiaoHang) {
@@ -272,9 +272,9 @@ const DetailsOrderPage = () => {
                   <b>Địa chỉ:</b> {data?.DiaChiGiaoHang?.Diachi}, {wardName},{" "}
                   {districtName}, {provinceName}
                 </p>
-                <p>
+                {/* <p>
                   <b>Hình thức vận chuyển:</b> FAST
-                </p>
+                </p> */}
                 <p>
                   <b>Phương thức thanh toán:</b> {data?.PhuongThucThanhToan} |{" "}
                   {data?.DaThanhToan ? "Đã thanh toán" : "Chưa thanh toán"}

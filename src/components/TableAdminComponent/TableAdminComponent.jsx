@@ -1,0 +1,35 @@
+import { Table } from "antd";
+import React from "react";
+
+const TableAdminComponent = (props) => {
+  const { data = [], columns = [] } = props;
+
+  // const rowSelection = {
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     console.log(
+  //       `selectedRowKeys: ${selectedRowKeys}`,
+  //       "selectedRows: ",
+  //       selectedRows
+  //     );
+  //   },
+  //   getCheckboxProps: (record) => ({
+  //     disabled: record.name === "Disabled User",
+  //     name: record.name,
+  //   }),
+  // };
+
+  return (
+    <Table
+      style={{ fontWeight: "500", fontFamily: "sans-serif" }}
+      //   rowSelection={{
+      //     type: selectionType,
+      //     ...rowSelection,
+      //   }}
+      columns={columns}
+      dataSource={data}
+      {...props}
+    />
+  );
+};
+
+export default TableAdminComponent;

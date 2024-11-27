@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import * as OrderService from "../../service/OrderService";
 import * as UserService from "../../service/UserService";
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import customImage from "../../assets/img/logout.png";
 import { LogoutOutlined, TruckOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Avatar, Button, Image, List, Modal } from "antd";
+import { Avatar, Button, Empty, Image, List, Modal } from "antd";
 import * as message from "../../components/Message/Message";
 import { resetUser } from "../../redux/userSlide";
 import { orderContant } from "../../contant";
@@ -31,6 +31,9 @@ const MyOrderPage = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [currentOrderUpdate, setCurrentOrderUpdate] = useState(null);
   const [confirmLoadingUpdate, setConfirmLoadingUpdate] = useState(false);
+  const [modalTextUpdate, setModalTextUpdate] = useState(
+    "Vui lòng xác nhận đã nhận được hàng"
+  );
 
   const fetchMyOrder = async () => {
     const res = await OrderService.getOrderbyUserId(state?.id, state?.token);
@@ -84,7 +87,6 @@ const MyOrderPage = () => {
   };
 
   const renderFood = (data) => {
-    console.log("data", data);
     return data?.map((order) => {
       return (
         <List.Item key={order?._id}>
@@ -115,20 +117,64 @@ const MyOrderPage = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const showModal = (order) => {
-    setCurrentOrder(order);
-    setOpen(true);
-  };
+  // const showModal = (order) => {
+  //   setCurrentOrder(order);
+  //   setOpen(true);
+  // };
 
-  const handleOk = () => {
-    setModalText("Vui lòng xác nhận hủy đơn hàng!");
-    setConfirmLoading(true);
-    // handleCancelOrder(currentOrder);
-  };
+  // const handleOk = () => {
+  //   setModalText("Vui lòng xác nhận hủy đơn hàng!");
+  //   setConfirmLoading(true);
+  //   // handleCancelOrder(currentOrder);
+  // };
 
   const showModalUpdate = (order) => {
     setOpenUpdate(true);
     setCurrentOrderUpdate(order);
+  };
+
+  // const handleOkUpdate = (order) => {
+  //   setModalTextUpdate("Đang xác nhận đơn hàng vui lòng chờ trong giây lát !");
+  //   setConfirmLoadingUpdate(true);
+
+  //   OrderService.markOrderAsReceived(
+  //     { orderId: currentOrderUpdate?._id, DaThanhToan: true, DaGiao: true },
+  //     state?.token
+  //   )
+  //     .then(() => {
+  //       QueryClient.refetchQueries(["order", state?.id]); // Làm mới dữ liệu đơn hàng
+  //       setOpenUpdate(false); // Đóng modal sau khi xác nhận thành công
+  //       setConfirmLoadingUpdate(false);
+  //     })
+  //     .catch(() => {
+  //       setConfirmLoadingUpdate(false);
+  //       // Có thể hiển thị một thông báo lỗi ở đây nếu cần
+  //     });
+  // };
+
+  const handleOkUpdate = async () => {
+    setModalTextUpdate("Đang xác nhận đơn hàng vui lòng chờ trong giây lát !");
+    setConfirmLoadingUpdate(true);
+
+    try {
+      await OrderService.markOrderAsReceived(
+        { orderId: currentOrderUpdate?._id, DaThanhToan: true, DaGiao: true },
+        state?.token
+      );
+
+      // Làm mới dữ liệu đơn hàng
+      await queryOrder.refetch();
+      setOpenUpdate(false); // Đóng modal sau khi xác nhận thành công
+    } catch (error) {
+      console.error("Error confirming order:", error);
+      // Có thể hiển thị một thông báo lỗi ở đây nếu cần
+    } finally {
+      setConfirmLoadingUpdate(false);
+    }
+  };
+
+  const handleCancelUpdate = () => {
+    setOpenUpdate(false);
   };
 
   const handleDetailsOrder = (id) => {
@@ -314,10 +360,10 @@ const MyOrderPage = () => {
                 THÔNG TIN ĐƠN HÀNG
               </h2>
 
-              <Loading isLoading={isLoading} />
-              {/* {data?.DonHang?.length > 0 ? ( */}
-              {data?.map((order) => {
-                return (
+              {isLoading ? (
+                <Loading isLoading={isLoading} />
+              ) : Array.isArray(data) && data.length > 0 ? (
+                data.map((order) => (
                   <div
                     className="card border-1 mt-3"
                     key={order?._id || order?.id}
@@ -329,10 +375,13 @@ const MyOrderPage = () => {
                         padding: "8px",
                       }}
                     >
-                      Ngày đặt: <span>{formatDate(order?.createdAt)} </span> |
+                      Ngày đặt: <span>{formatDate(order?.createdAt)}</span> |
                       Thanh toán:{" "}
                       <span>
-                        {orderContant.payment[order?.PhuongThucThanhToan]}
+                        {/* {orderContant.payment[order?.PhuongThucThanhToan]} */}
+                        {order?.DaThanhToan
+                          ? "Đã thanh toán"
+                          : "Chưa thanh toán"}
                       </span>
                       <span
                         style={{
@@ -368,27 +417,25 @@ const MyOrderPage = () => {
                         <Button
                           danger
                           onClick={() => handleCancelOrder(order)}
-                          // onClick={() => showModal(order)}
                           style={{ marginRight: "10px" }}
                           disabled={order?.TrangThaiGiaoHang >= 3}
                         >
                           Hủy đơn hàng
                         </Button>
-                        <Modal
+                        {/* <Modal
                           title="Bạn có chắc muốn hủy đơn hàng?"
                           open={open}
                           mask={false}
                           onOk={handleOk}
                           confirmLoading={confirmLoading}
-                          // onCancel={handleCancelOrder(order?._id)}
                         >
                           <p>{modalText}</p>
-                        </Modal>
+                        </Modal> */}
                         <Button onClick={() => handleDetailsOrder(order?._id)}>
                           Xem chi tiết
                         </Button>
 
-                        {order?.TrangThaiGiaoHang >= 4 ? (
+                        {order?.TrangThaiGiaoHang >= 4 && (
                           <Button
                             type="primary"
                             onClick={() => showModalUpdate(order)}
@@ -397,22 +444,27 @@ const MyOrderPage = () => {
                           >
                             Đã nhận được hàng
                           </Button>
-                        ) : null}
+                        )}
                         <Modal
                           title="Xác nhận đơn hàng"
                           open={openUpdate}
-                          // onOk={handleOkUpdate}
+                          onOk={handleOkUpdate}
                           mask={false}
                           confirmLoading={confirmLoadingUpdate}
-                          // onCancel={handleCancelUpdate}
+                          onCancel={handleCancelUpdate}
                         >
-                          {/* <p>{modalTextUpdate}</p> */}
+                          <p>{modalTextUpdate}</p>
                         </Modal>
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                ))
+              ) : (
+                <Empty
+                  className="mt-5"
+                  description={"Không có đơn hàng nào!"}
+                />
+              )}
             </div>
           </div>
         </div>

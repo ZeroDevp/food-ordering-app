@@ -13,7 +13,6 @@ const OrderSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  console.log("location", location);
 
   return (
     <div className="p-4 bg-light">
@@ -45,7 +44,7 @@ const OrderSuccess = () => {
           >
             <Card.Body>
               {/* Phương thức giao hàng */}
-              <div className="user-info mb-4">
+              {/* <div className="user-info mb-4">
                 <h5 className="mb-3" style={{ fontWeight: "600" }}>
                   Phương thức giao hàng
                 </h5>
@@ -86,7 +85,7 @@ const OrderSuccess = () => {
                 </Row>
               </div>
 
-              <hr />
+              <hr /> */}
 
               {/* Phương thức thanh toán */}
               <div className="user-info">

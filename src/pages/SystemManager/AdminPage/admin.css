@@ -1,0 +1,10 @@
+.card {
+  overflow: hidden; /* Ẩn nội dung tràn */
+  text-align: center; /* Căn giữa */
+  position: relative; /* Đảm bảo layout không bị ảnh hưởng */
+}
+
+.chart-container {
+  width: 100%; /* Bắt buộc chiều rộng theo container */
+  height: auto;
+}

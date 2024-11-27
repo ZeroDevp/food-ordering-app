@@ -41,7 +41,7 @@ const HomePage = () => {
     if (foods?.data?.length > 0) {
       setStateFood(foods.data);
       // Filter best selling foods (assuming DaBan indicates the number sold)
-      const filteredBestSelling = foods.data.filter((food) => food.DaBan > 10);
+      const filteredBestSelling = foods.data.filter((food) => food.DaBan >= 10);
       setBestSellingFoods(filteredBestSelling);
     } else {
       setStateFood([]); // Reset stateFood if no data found

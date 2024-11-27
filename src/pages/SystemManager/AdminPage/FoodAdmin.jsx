@@ -41,6 +41,7 @@ import TextArea from "antd/es/input/TextArea";
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 
 const { Header, Content } = Layout;
+const { Title, Text } = Typography;
 
 const FoodAdmin = () => {
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -468,64 +469,596 @@ const FoodAdmin = () => {
       };
     });
 
+  // return (
+  //   <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
+  //     <SiderComponent collapsed={collapsed} user={user} selectKey={"2"} />
+  //     <Layout
+  //       style={{
+  //         height: "100%",
+  //         minHeight: "750px",
+  //         marginLeft: marginLeft,
+  //         transition: "margin-left 0.5s ease",
+  //         backgroundColor: "#FEE4CC",
+  //       }}
+  //     >
+  //       <Header
+  //         // style={{
+  //         //   padding: 0,
+  //         //   background: colorBgContainer,
+  //         //   backgroundColor: "#FEE4CC",
+  //         // }}
+  //         style={{
+  //           padding: "0 20px",
+  //           background: "#fff",
+  //           boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+  //         }}
+  //       >
+  //         <Button
+  //           type="text"
+  //           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+  //           onClick={() => toggleCollapsed()}
+  //           style={{
+  //             fontSize: "18px",
+  //             // width: 64,
+  //             // height: 64,
+  //           }}
+  //         />
+  //         <Text strong style={{ marginLeft: 20, fontSize: 20 }}>
+  //           QUẢN LÝ THỨC ĂN
+  //         </Text>
+  //         <Button
+  //           type="text"
+  //           icon={<PlusOutlined style={{ fontSize: "30px", color: "green" }} />}
+  //           className="btn btn-default"
+  //           onClick={() => setIsModalOpen(true)}
+  //           style={{
+  //             width: 64,
+  //             height: 64,
+  //             float: "right",
+  //             marginRight: 50,
+  //             marginTop: 20,
+  //           }}
+  //         />
+  //       </Header>
+  //       <Content
+  //         style={{
+  //           margin: "24px 16px",
+  //           padding: 24,
+  //           minHeight: 280,
+  //           background: colorBgContainer,
+  //           borderRadius: borderRadiusLG,
+  //         }}
+  //       >
+  //         <Loading isLoading={isLoadingFood}>
+  //           <TableComponent
+  //             columns={columns}
+  //             isLoading={isLoadingFood}
+  //             pagination={{
+  //               position: ["bottomCenter"],
+  //               pageSize: 6,
+  //             }}
+  //             data={dataTable}
+  //             onRow={(record, rowIndex) => {
+  //               return {
+  //                 onClick: (event) => {
+  //                   setRowSelected(record._id);
+  //                 },
+  //               };
+  //             }}
+  //           />
+  //         </Loading>
+  //         <ModalComponent
+  //           forceRender
+  //           title="Thêm Mới món ăn"
+  //           open={isModalOpen}
+  //           footer={null}
+  //           onCancel={handleCancel}
+  //         >
+  //           <Loading isLoading={isLoading}>
+  //             <Form
+  //               name="addFood"
+  //               labelCol={{
+  //                 span: 6,
+  //               }}
+  //               wrapperCol={{
+  //                 span: 18,
+  //               }}
+  //               style={{
+  //                 maxWidth: 600,
+  //               }}
+  //               onFinish={onFinish}
+  //               autoComplete="on"
+  //               form={form}
+  //             >
+  //               <Form.Item
+  //                 label="Tên món ăn"
+  //                 name="TenMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập tên món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputComponent
+  //                   value={stateFood.TenMonAn}
+  //                   onChange={handleOnchange}
+  //                   name="TenMonAn"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Mô tả món ăn"
+  //                 name="MoTa"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập mô tả của món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <TextArea
+  //                   rows={4}
+  //                   value={stateFood.MoTa}
+  //                   onChange={handleOnchange}
+  //                   name="MoTa"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Phân loại "
+  //                 name="LoaiMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy phân loại món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <Select
+  //                   name="LoaiMonAn"
+  //                   value={stateFood.LoaiMonAn}
+  //                   onChange={handleChangeSelect}
+  //                   options={renderOptions(typeFood?.data?.data)}
+  //                 />
+  //               </Form.Item>
+  //               {stateFood.LoaiMonAn === "add_type" && (
+  //                 <Form.Item
+  //                   label="Thêm phân loại"
+  //                   name="newPhanLoai"
+  //                   rules={[
+  //                     {
+  //                       required: true,
+  //                       message: "Hãy phân loại món ăn!",
+  //                     },
+  //                   ]}
+  //                 >
+  //                   <InputComponent
+  //                     value={stateFood.newPhanLoai}
+  //                     onChange={handleOnchange}
+  //                     name="newPhanLoai"
+  //                   />
+  //                 </Form.Item>
+  //               )}
+
+  //               <Form.Item
+  //                 label="Giá món ăn"
+  //                 name="GiaMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy ra giá món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputNumber
+  //                   min={0}
+  //                   step={1000}
+  //                   prefix={<DollarOutlined />}
+  //                   value={stateFood.GiaMonAn}
+  //                   formatter={(value) =>
+  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  //                   }
+  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+  //                   onChange={(value) =>
+  //                     handleOnchange({ target: { name: "GiaMonAn", value } })
+  //                   }
+  //                   name="GiaMonAn"
+  //                   style={{ width: "100%" }}
+  //                 />
+  //                 {/* <InputComponent
+  //                   value={stateFood.GiaMonAn}
+  //                   onChange={handleOnchange}
+  //                   name="GiaMonAn"
+  //                 /> */}
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Giảm giá"
+  //                 name="GiamGia"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập giảm giá cho món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputNumber
+  //                   min={0}
+  //                   step={1000}
+  //                   prefix={<PercentageOutlined />}
+  //                   value={stateFood.GiamGia}
+  //                   formatter={(value) =>
+  //                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  //                   }
+  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+  //                   onChange={(value) =>
+  //                     handleOnchange({ target: { name: "GiamGia", value } })
+  //                   }
+  //                   name="GiamGia"
+  //                   style={{ width: "100%" }}
+  //                 />
+  //                 {/* <InputComponent
+  //                   value={stateFood.GiamGia}
+  //                   onChange={handleOnchange}
+  //                   name="GiamGia"
+  //                 /> */}
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Đánh giá"
+  //                 name="DanhGia"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy đánh giá món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputComponent
+  //                   value={stateFood.DanhGia}
+  //                   onChange={handleOnchange}
+  //                   name="DanhGia"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Ảnh món ăn"
+  //                 name="HinhAnh"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy thêm hình ảnh cho món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <Upload
+  //                   maxCount={1}
+  //                   className="ant-upload-list-item-name"
+  //                   onChange={handleOnchangeAvatar}
+  //                   showUploadList={false}
+  //                   fileList={
+  //                     stateFood.HinhAnh
+  //                       ? [{ uid: "-1", url: stateFood.HinhAnh }]
+  //                       : []
+  //                   }
+  //                 >
+  //                   <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+  //                 </Upload>
+  //                 {stateFood?.HinhAnh && (
+  //                   <Image
+  //                     src={stateFood?.HinhAnh}
+  //                     alt="Ảnh đại diện"
+  //                     style={{
+  //                       height: "60px",
+  //                       width: "60px",
+  //                       marginLeft: "10px",
+  //                       borderRadius: "10%",
+  //                       objectFit: "cover",
+  //                     }}
+  //                   />
+  //                 )}
+  //               </Form.Item>
+
+  //               <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
+  //                 <Button type="primary" htmlType="submit">
+  //                   Submit
+  //                 </Button>
+  //                 <Button style={{ marginLeft: 8 }} onClick={handleCancel}>
+  //                   Cancel
+  //                 </Button>
+  //               </Form.Item>
+  //             </Form>
+  //           </Loading>
+  //         </ModalComponent>
+  //         <Drawer
+  //           title="Cập nhật Món ăn"
+  //           onClose={onClose}
+  //           open={isOpenDrawer}
+  //           loading={loadingDrawer}
+  //           width="40%"
+  //         >
+  //           <Loading isLoading={isLoadingFood}>
+  //             <Form
+  //               name="updateFood"
+  //               labelCol={{
+  //                 span: 6,
+  //               }}
+  //               wrapperCol={{
+  //                 span: 18,
+  //               }}
+  //               style={{
+  //                 maxWidth: 600,
+  //               }}
+  //               onFinish={onUpdateFoods}
+  //               autoComplete="on"
+  //               form={form}
+  //             >
+  //               <Form.Item
+  //                 label="Tên món ăn"
+  //                 name="TenMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập tên món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputComponent
+  //                   value={stateFoodDetails.TenMonAn}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="TenMonAn"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Mô tả món ăn"
+  //                 name="MoTa"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập mô tả của món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <TextArea
+  //                   rows={4}
+  //                   value={stateFoodDetails.MoTa}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="MoTa"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Phân loại "
+  //                 name="LoaiMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy phân loại món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputComponent
+  //                   value={stateFoodDetails.LoaiMonAn}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="LoaiMonAn"
+  //                 />
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Giá món ăn"
+  //                 name="GiaMonAn"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy ra giá món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputNumber
+  //                   min={0}
+  //                   step={1000}
+  //                   prefix={<DollarOutlined />}
+  //                   value={stateFoodDetails.GiaMonAn}
+  //                   formatter={(value) =>
+  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  //                   }
+  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+  //                   onChange={(value) =>
+  //                     setStateFoodDetails((prevState) => ({
+  //                       ...prevState,
+  //                       GiaMonAn: value,
+  //                     }))
+  //                   }
+  //                   name="GiaMonAn"
+  //                   style={{ width: "100%" }}
+  //                 />
+  //                 {/* <InputComponent
+  //                   value={stateFoodDetails.GiaMonAn}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="GiaMonAn"
+  //                 /> */}
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Giảm giá"
+  //                 name="GiamGia"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy nhập giảm giá cho món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputNumber
+  //                   min={0}
+  //                   step={1000}
+  //                   prefix={<PercentageOutlined />}
+  //                   value={stateFoodDetails.GiamGia}
+  //                   formatter={(value) =>
+  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  //                   }
+  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+  //                   onChange={(value) =>
+  //                     setStateFoodDetails((prevState) => ({
+  //                       ...prevState,
+  //                       GiamGia: value,
+  //                     }))
+  //                   }
+  //                   name="GiaMonAn"
+  //                   style={{ width: "100%" }}
+  //                 />
+  //                 {/* <InputComponent
+  //                   value={stateFoodDetails.GiamGia}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="GiamGia"
+  //                 /> */}
+  //               </Form.Item>
+
+  //               <Form.Item
+  //                 label="Đánh giá"
+  //                 name="DanhGia"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy đánh giá món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <InputComponent
+  //                   value={stateFoodDetails.DanhGia}
+  //                   onChange={handleOnchangeDetails}
+  //                   name="DanhGia"
+  //                 />
+  //               </Form.Item>
+
+  //               {/* <Form.Item label="BanChay">
+  //                 <Switch checked={BanChay} onChange={handleSwitchChange} />
+  //                 <Typography.Text style={{ marginLeft: 8 }}>
+  //                   {stateFoodDetails.BanChay ? "Bán chạy" : "Bình thường"}
+  //                 </Typography.Text>
+  //               </Form.Item> */}
+
+  //               <Form.Item
+  //                 label="Ảnh món ăn"
+  //                 name="HinhAnh"
+  //                 rules={[
+  //                   {
+  //                     required: true,
+  //                     message: "Hãy thêm hình ảnh cho món ăn!",
+  //                   },
+  //                 ]}
+  //               >
+  //                 <div>
+  //                   <Upload
+  //                     maxCount={1}
+  //                     className="ant-upload-list-item-name"
+  //                     onChange={handleOnchangeAvatarDetails}
+  //                     showUploadList={false}
+  //                     ileList={
+  //                       stateFoodDetails.HinhAnh
+  //                         ? [{ uid: "-1", url: stateFoodDetails.HinhAnh }]
+  //                         : []
+  //                     }
+  //                   >
+  //                     <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+  //                   </Upload>
+  //                   {stateFoodDetails?.HinhAnh && (
+  //                     <Image
+  //                       src={stateFoodDetails?.HinhAnh}
+  //                       alt="Ảnh đại diện"
+  //                       style={{
+  //                         height: "60px",
+  //                         width: "60px",
+  //                         marginLeft: "10px",
+  //                         borderRadius: "10%",
+  //                         objectFit: "cover",
+  //                       }}
+  //                     />
+  //                   )}
+  //                 </div>
+  //               </Form.Item>
+
+  //               <Form.Item wrapperCol={{ offset: 20, span: 20 }}>
+  //                 <Button
+  //                   type="primary"
+  //                   htmlType="submit"
+  //                   style={{ width: "90%" }}
+  //                 >
+  //                   Cập nhật
+  //                 </Button>
+  //               </Form.Item>
+  //             </Form>
+  //           </Loading>
+  //         </Drawer>
+  //         <ModalComponent
+  //           title="Xóa món ăn"
+  //           open={isModalOpenDelete}
+  //           onCancel={handleCancelDelete}
+  //           onOk={handleDeleteFood}
+  //         >
+  //           <div>Bạn có chắc xóa món {stateFoodDetails.TenMonAn} này không</div>
+  //         </ModalComponent>
+  //       </Content>
+  //     </Layout>
+  //   </Layout>
+  // );
   return (
-    <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
+    <Layout style={{ minHeight: "100vh", backgroundColor: "#FFF7E4" }}>
       <SiderComponent collapsed={collapsed} user={user} selectKey={"2"} />
       <Layout
         style={{
-          height: "100%",
           minHeight: "750px",
           marginLeft: marginLeft,
-          transition: "margin-left 0.5s ease",
-          backgroundColor: "#FEE4CC",
+          transition: "margin-left 0.3s ease",
+          backgroundColor: "#FFF7E4",
         }}
       >
         <Header
           style={{
-            padding: 0,
-            background: colorBgContainer,
-            backgroundColor: "#FEE4CC",
+            padding: "0 16px",
+            background: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => toggleCollapsed()}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
+            onClick={toggleCollapsed}
+            style={{ fontSize: "20px" }}
           />
-          <h5
-            style={{
-              display: "inline-block",
-              marginLeft: "20px",
-            }}
-          >
+          <Text strong style={{ fontSize: "24px", color: "#FF6F00" }}>
             QUẢN LÝ THỨC ĂN
-          </h5>
+          </Text>
           <Button
-            type="text"
-            icon={<PlusOutlined style={{ fontSize: "30px", color: "green" }} />}
-            className="btn btn-default"
+            type="primary"
+            icon={<PlusOutlined />}
             onClick={() => setIsModalOpen(true)}
             style={{
-              width: 64,
-              height: 64,
-              float: "right",
-              marginRight: 50,
-              marginTop: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "40px",
+              fontSize: "16px",
+              backgroundColor: "#FF6F00",
+              border: "none",
             }}
-          />
+          >
+            Thêm mới
+          </Button>
         </Header>
         <Content
           style={{
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Loading isLoading={isLoadingFood}>
@@ -537,76 +1070,80 @@ const FoodAdmin = () => {
                 pageSize: 6,
               }}
               data={dataTable}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    setRowSelected(record._id);
-                  },
-                };
-              }}
+              onRow={(record) => ({
+                onClick: () => setRowSelected(record._id),
+              })}
             />
           </Loading>
-          <ModalComponent
-            forceRender
-            title="Thêm Mới món ăn"
-            open={isModalOpen}
-            footer={null}
-            onCancel={handleCancel}
-          >
-            <Loading isLoading={isLoading}>
-              <Form
-                name="addFood"
-                labelCol={{
-                  span: 6,
-                }}
-                wrapperCol={{
-                  span: 18,
-                }}
-                style={{
-                  maxWidth: 600,
-                }}
-                onFinish={onFinish}
-                autoComplete="on"
-                form={form}
+        </Content>
+        <ModalComponent
+          forceRender
+          title={
+            <Text style={{ fontSize: "20px", fontWeight: "bold" }}>
+              Thêm món ăn
+            </Text>
+          }
+          open={isModalOpen}
+          footer={null}
+          onCancel={handleCancel}
+        >
+          <Loading isLoading={isLoading}>
+            <Form
+              name="addFood"
+              layout="vertical"
+              onFinish={onFinish}
+              autoComplete="on"
+              form={form}
+              style={{
+                maxWidth: "100%",
+              }}
+            >
+              <Form.Item
+                label="Tên món ăn"
+                name="TenMonAn"
+                rules={[{ required: true, message: "Hãy nhập tên món ăn!" }]}
               >
-                <Form.Item
-                  label="Tên món ăn"
+                <InputComponent
+                  value={stateFood.TenMonAn}
+                  onChange={handleOnchange}
                   name="TenMonAn"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập tên món ăn!",
-                    },
-                  ]}
-                >
-                  <InputComponent
-                    value={stateFood.TenMonAn}
-                    onChange={handleOnchange}
-                    name="TenMonAn"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Mô tả món ăn"
+                />
+              </Form.Item>
+              <Form.Item
+                label="Mô tả món ăn"
+                name="MoTa"
+                rules={[
+                  { required: true, message: "Hãy nhập mô tả của món ăn!" },
+                ]}
+              >
+                <TextArea
+                  rows={4}
+                  value={stateFood.MoTa}
+                  onChange={handleOnchange}
                   name="MoTa"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mô tả của món ăn!",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    rows={4}
-                    value={stateFood.MoTa}
-                    onChange={handleOnchange}
-                    name="MoTa"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Phân loại "
+                />
+              </Form.Item>
+              <Form.Item
+                label="Phân loại "
+                name="LoaiMonAn"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy phân loại món ăn!",
+                  },
+                ]}
+              >
+                <Select
                   name="LoaiMonAn"
+                  value={stateFood.LoaiMonAn}
+                  onChange={handleChangeSelect}
+                  options={renderOptions(typeFood?.data?.data)}
+                />
+              </Form.Item>
+              {stateFood.LoaiMonAn === "add_type" && (
+                <Form.Item
+                  label="Thêm phân loại"
+                  name="newPhanLoai"
                   rules={[
                     {
                       required: true,
@@ -614,139 +1151,344 @@ const FoodAdmin = () => {
                     },
                   ]}
                 >
-                  <Select
-                    name="LoaiMonAn"
-                    value={stateFood.LoaiMonAn}
-                    onChange={handleChangeSelect}
-                    options={renderOptions(typeFood?.data?.data)}
-                  />
-                </Form.Item>
-                {stateFood.LoaiMonAn === "add_type" && (
-                  <Form.Item
-                    label="Thêm phân loại"
-                    name="newPhanLoai"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Hãy phân loại món ăn!",
-                      },
-                    ]}
-                  >
-                    <InputComponent
-                      value={stateFood.newPhanLoai}
-                      onChange={handleOnchange}
-                      name="newPhanLoai"
-                    />
-                  </Form.Item>
-                )}
-
-                <Form.Item
-                  label="Giá món ăn"
-                  name="GiaMonAn"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy ra giá món ăn!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    step={1000}
-                    prefix={<DollarOutlined />}
-                    value={stateFood.GiaMonAn}
-                    formatter={(value) =>
-                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    onChange={(value) =>
-                      handleOnchange({ target: { name: "GiaMonAn", value } })
-                    }
-                    name="GiaMonAn"
-                    style={{ width: "100%" }}
-                  />
-                  {/* <InputComponent
-                    value={stateFood.GiaMonAn}
-                    onChange={handleOnchange}
-                    name="GiaMonAn"
-                  /> */}
-                </Form.Item>
-
-                <Form.Item
-                  label="Giảm giá"
-                  name="GiamGia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập giảm giá cho món ăn!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    step={1000}
-                    prefix={<PercentageOutlined />}
-                    value={stateFood.GiamGia}
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    onChange={(value) =>
-                      handleOnchange({ target: { name: "GiamGia", value } })
-                    }
-                    name="GiamGia"
-                    style={{ width: "100%" }}
-                  />
-                  {/* <InputComponent
-                    value={stateFood.GiamGia}
-                    onChange={handleOnchange}
-                    name="GiamGia"
-                  /> */}
-                </Form.Item>
-
-                <Form.Item
-                  label="Đánh giá"
-                  name="DanhGia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy đánh giá món ăn!",
-                    },
-                  ]}
-                >
                   <InputComponent
-                    value={stateFood.DanhGia}
+                    value={stateFood.newPhanLoai}
                     onChange={handleOnchange}
-                    name="DanhGia"
+                    name="newPhanLoai"
                   />
                 </Form.Item>
+              )}
+              <Form.Item
+                label="Giá món ăn"
+                name="GiaMonAn"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy ra giá món ăn!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  step={1000}
+                  prefix={<DollarOutlined />}
+                  value={stateFood.GiaMonAn}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(value) =>
+                    handleOnchange({ target: { name: "GiaMonAn", value } })
+                  }
+                  name="GiaMonAn"
+                  style={{ width: "100%" }}
+                />
+                {/* <InputComponent
+                    value={stateFood.GiaMonAn}
+                    onChange={handleOnchange}
+                    name="GiaMonAn"
+                  /> */}
+              </Form.Item>
 
-                <Form.Item
-                  label="Ảnh món ăn"
-                  name="HinhAnh"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy thêm hình ảnh cho món ăn!",
-                    },
-                  ]}
+              <Form.Item
+                label="Giảm giá"
+                name="GiamGia"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập giảm giá cho món ăn!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  step={1000}
+                  prefix={<PercentageOutlined />}
+                  value={stateFood.GiamGia}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(value) =>
+                    handleOnchange({ target: { name: "GiamGia", value } })
+                  }
+                  name="GiamGia"
+                  style={{ width: "100%" }}
+                />
+                {/* <InputComponent
+                    value={stateFood.GiamGia}
+                    onChange={handleOnchange}
+                    name="GiamGia"
+                  /> */}
+              </Form.Item>
+
+              <Form.Item
+                label="Đánh giá"
+                name="DanhGia"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy đánh giá món ăn!",
+                  },
+                ]}
+              >
+                <InputComponent
+                  value={stateFood.DanhGia}
+                  onChange={handleOnchange}
+                  name="DanhGia"
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Ảnh món ăn"
+                name="HinhAnh"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy thêm hình ảnh cho món ăn!",
+                  },
+                ]}
+              >
+                <Upload
+                  maxCount={1}
+                  className="ant-upload-list-item-name"
+                  onChange={handleOnchangeAvatar}
+                  showUploadList={false}
+                  fileList={
+                    stateFood.HinhAnh
+                      ? [{ uid: "-1", url: stateFood.HinhAnh }]
+                      : []
+                  }
                 >
+                  <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+                </Upload>
+                {stateFood?.HinhAnh && (
+                  <Image
+                    src={stateFood?.HinhAnh}
+                    alt="Ảnh đại diện"
+                    style={{
+                      height: "60px",
+                      width: "60px",
+                      marginLeft: "10px",
+                      borderRadius: "10%",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+              </Form.Item>
+
+              <Form.Item wrapperCol={{ span: 24 }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#FF6F00",
+                    border: "none",
+                  }}
+                >
+                  Thêm mới
+                </Button>
+              </Form.Item>
+            </Form>
+          </Loading>
+        </ModalComponent>
+        <Drawer
+          title="Cập nhật Món ăn"
+          onClose={onClose}
+          open={isOpenDrawer}
+          loading={loadingDrawer}
+          width="40%"
+        >
+          <Loading isLoading={isLoadingFood}>
+            <Form
+              name="updateFood"
+              labelCol={{
+                span: 6,
+              }}
+              wrapperCol={{
+                span: 18,
+              }}
+              style={{
+                maxWidth: 600,
+              }}
+              onFinish={onUpdateFoods}
+              autoComplete="on"
+              form={form}
+            >
+              <Form.Item
+                label="Tên món ăn"
+                name="TenMonAn"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập tên món ăn!",
+                  },
+                ]}
+              >
+                <InputComponent
+                  value={stateFoodDetails.TenMonAn}
+                  onChange={handleOnchangeDetails}
+                  name="TenMonAn"
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Mô tả món ăn"
+                name="MoTa"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập mô tả của món ăn!",
+                  },
+                ]}
+              >
+                <TextArea
+                  rows={4}
+                  value={stateFoodDetails.MoTa}
+                  onChange={handleOnchangeDetails}
+                  name="MoTa"
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Phân loại "
+                name="LoaiMonAn"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy phân loại món ăn!",
+                  },
+                ]}
+              >
+                <InputComponent
+                  value={stateFoodDetails.LoaiMonAn}
+                  onChange={handleOnchangeDetails}
+                  name="LoaiMonAn"
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Giá món ăn"
+                name="GiaMonAn"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy ra giá món ăn!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  step={1000}
+                  prefix={<DollarOutlined />}
+                  value={stateFoodDetails.GiaMonAn}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(value) =>
+                    setStateFoodDetails((prevState) => ({
+                      ...prevState,
+                      GiaMonAn: value,
+                    }))
+                  }
+                  name="GiaMonAn"
+                  style={{ width: "100%" }}
+                />
+                {/* <InputComponent
+                    value={stateFoodDetails.GiaMonAn}
+                    onChange={handleOnchangeDetails}
+                    name="GiaMonAn"
+                  /> */}
+              </Form.Item>
+
+              <Form.Item
+                label="Giảm giá"
+                name="GiamGia"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập giảm giá cho món ăn!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  step={1000}
+                  prefix={<PercentageOutlined />}
+                  value={stateFoodDetails.GiamGia}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(value) =>
+                    setStateFoodDetails((prevState) => ({
+                      ...prevState,
+                      GiamGia: value,
+                    }))
+                  }
+                  name="GiaMonAn"
+                  style={{ width: "100%" }}
+                />
+                {/* <InputComponent
+                    value={stateFoodDetails.GiamGia}
+                    onChange={handleOnchangeDetails}
+                    name="GiamGia"
+                  /> */}
+              </Form.Item>
+
+              <Form.Item
+                label="Đánh giá"
+                name="DanhGia"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy đánh giá món ăn!",
+                  },
+                ]}
+              >
+                <InputComponent
+                  value={stateFoodDetails.DanhGia}
+                  onChange={handleOnchangeDetails}
+                  name="DanhGia"
+                />
+              </Form.Item>
+
+              {/* <Form.Item label="BanChay">
+                  <Switch checked={BanChay} onChange={handleSwitchChange} />
+                  <Typography.Text style={{ marginLeft: 8 }}>
+                    {stateFoodDetails.BanChay ? "Bán chạy" : "Bình thường"}
+                  </Typography.Text>
+                </Form.Item> */}
+
+              <Form.Item
+                label="Ảnh món ăn"
+                name="HinhAnh"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy thêm hình ảnh cho món ăn!",
+                  },
+                ]}
+              >
+                <div>
                   <Upload
                     maxCount={1}
                     className="ant-upload-list-item-name"
-                    onChange={handleOnchangeAvatar}
+                    onChange={handleOnchangeAvatarDetails}
                     showUploadList={false}
-                    fileList={
-                      stateFood.HinhAnh
-                        ? [{ uid: "-1", url: stateFood.HinhAnh }]
+                    ileList={
+                      stateFoodDetails.HinhAnh
+                        ? [{ uid: "-1", url: stateFoodDetails.HinhAnh }]
                         : []
                     }
                   >
                     <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
                   </Upload>
-                  {stateFood?.HinhAnh && (
+                  {stateFoodDetails?.HinhAnh && (
                     <Image
-                      src={stateFood?.HinhAnh}
+                      src={stateFoodDetails?.HinhAnh}
                       alt="Ảnh đại diện"
                       style={{
                         height: "60px",
@@ -757,249 +1499,29 @@ const FoodAdmin = () => {
                       }}
                     />
                   )}
-                </Form.Item>
+                </div>
+              </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                  <Button style={{ marginLeft: 8 }} onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Loading>
-          </ModalComponent>
-          <Drawer
-            title="Cập nhật Món ăn"
-            onClose={onClose}
-            open={isOpenDrawer}
-            loading={loadingDrawer}
-            width="40%"
-          >
-            <Loading isLoading={isLoadingFood}>
-              <Form
-                name="updateFood"
-                labelCol={{
-                  span: 6,
-                }}
-                wrapperCol={{
-                  span: 18,
-                }}
-                style={{
-                  maxWidth: 600,
-                }}
-                onFinish={onUpdateFoods}
-                autoComplete="on"
-                form={form}
-              >
-                <Form.Item
-                  label="Tên món ăn"
-                  name="TenMonAn"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập tên món ăn!",
-                    },
-                  ]}
+              <Form.Item wrapperCol={{ offset: 20, span: 20 }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ width: "90%" }}
                 >
-                  <InputComponent
-                    value={stateFoodDetails.TenMonAn}
-                    onChange={handleOnchangeDetails}
-                    name="TenMonAn"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Mô tả món ăn"
-                  name="MoTa"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mô tả của món ăn!",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    rows={4}
-                    value={stateFoodDetails.MoTa}
-                    onChange={handleOnchangeDetails}
-                    name="MoTa"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Phân loại "
-                  name="LoaiMonAn"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy phân loại món ăn!",
-                    },
-                  ]}
-                >
-                  <InputComponent
-                    value={stateFoodDetails.LoaiMonAn}
-                    onChange={handleOnchangeDetails}
-                    name="LoaiMonAn"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Giá món ăn"
-                  name="GiaMonAn"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy ra giá món ăn!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    step={1000}
-                    prefix={<DollarOutlined />}
-                    value={stateFoodDetails.GiaMonAn}
-                    formatter={(value) =>
-                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    onChange={(value) =>
-                      setStateFoodDetails((prevState) => ({
-                        ...prevState,
-                        GiaMonAn: value,
-                      }))
-                    }
-                    name="GiaMonAn"
-                    style={{ width: "100%" }}
-                  />
-                  {/* <InputComponent
-                    value={stateFoodDetails.GiaMonAn}
-                    onChange={handleOnchangeDetails}
-                    name="GiaMonAn"
-                  /> */}
-                </Form.Item>
-
-                <Form.Item
-                  label="Giảm giá"
-                  name="GiamGia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập giảm giá cho món ăn!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    step={1000}
-                    prefix={<PercentageOutlined />}
-                    value={stateFoodDetails.GiamGia}
-                    formatter={(value) =>
-                      ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    onChange={(value) =>
-                      setStateFoodDetails((prevState) => ({
-                        ...prevState,
-                        GiamGia: value,
-                      }))
-                    }
-                    name="GiaMonAn"
-                    style={{ width: "100%" }}
-                  />
-                  {/* <InputComponent
-                    value={stateFoodDetails.GiamGia}
-                    onChange={handleOnchangeDetails}
-                    name="GiamGia"
-                  /> */}
-                </Form.Item>
-
-                <Form.Item
-                  label="Đánh giá"
-                  name="DanhGia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy đánh giá món ăn!",
-                    },
-                  ]}
-                >
-                  <InputComponent
-                    value={stateFoodDetails.DanhGia}
-                    onChange={handleOnchangeDetails}
-                    name="DanhGia"
-                  />
-                </Form.Item>
-
-                {/* <Form.Item label="BanChay">
-                  <Switch checked={BanChay} onChange={handleSwitchChange} />
-                  <Typography.Text style={{ marginLeft: 8 }}>
-                    {stateFoodDetails.BanChay ? "Bán chạy" : "Bình thường"}
-                  </Typography.Text>
-                </Form.Item> */}
-
-                <Form.Item
-                  label="Ảnh món ăn"
-                  name="HinhAnh"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy thêm hình ảnh cho món ăn!",
-                    },
-                  ]}
-                >
-                  <div>
-                    <Upload
-                      maxCount={1}
-                      className="ant-upload-list-item-name"
-                      onChange={handleOnchangeAvatarDetails}
-                      showUploadList={false}
-                      ileList={
-                        stateFoodDetails.HinhAnh
-                          ? [{ uid: "-1", url: stateFoodDetails.HinhAnh }]
-                          : []
-                      }
-                    >
-                      <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
-                    </Upload>
-                    {stateFoodDetails?.HinhAnh && (
-                      <Image
-                        src={stateFoodDetails?.HinhAnh}
-                        alt="Ảnh đại diện"
-                        style={{
-                          height: "60px",
-                          width: "60px",
-                          marginLeft: "10px",
-                          borderRadius: "10%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    )}
-                  </div>
-                </Form.Item>
-
-                <Form.Item wrapperCol={{ offset: 20, span: 20 }}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ width: "90%" }}
-                  >
-                    Cập nhật
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Loading>
-          </Drawer>
-          <ModalComponent
-            title="Xóa món ăn"
-            open={isModalOpenDelete}
-            onCancel={handleCancelDelete}
-            onOk={handleDeleteFood}
-          >
-            <div>Bạn có chắc xóa món {stateFoodDetails.TenMonAn} này không</div>
-          </ModalComponent>
-        </Content>
+                  Cập nhật
+                </Button>
+              </Form.Item>
+            </Form>
+          </Loading>
+        </Drawer>
+        <ModalComponent
+          title="Xóa món ăn"
+          open={isModalOpenDelete}
+          onCancel={handleCancelDelete}
+          onOk={handleDeleteFood}
+        >
+          <div>Bạn có chắc xóa món {stateFoodDetails.TenMonAn} này không</div>
+        </ModalComponent>
       </Layout>
     </Layout>
   );

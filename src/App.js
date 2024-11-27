@@ -15,6 +15,10 @@ function App() {
 
   const handleGetDetailsUser = useCallback(async (id, token) => {
     try {
+      //27/11
+      // let storageRefreshToken = localStorage.getItem('refresh_token')
+      // const refreshToken = JSON.parse(storageRefreshToken)
+      //27/11
       const res = await UserService.getDetailUser(id, token);
       dispatch(updateUser({ ...res?.data, access_token: token }));
     } catch (e) {
@@ -51,9 +55,18 @@ function App() {
       // Do something before request is sent
       const currentTime = new Date();
       const { decoded } = handleDecoded();
+      //27/11
+      // let storageRefreshToken = localStorage.getItem('refresh_token')
+      // const refreshToken = JSON.parse(storageRefreshToken)
+      // const decodedRefreshToken = jwtDecode(refreshToken)
+      //27/11
       if (decoded?.exp < currentTime.getTime() / 1000) {
+        // if (decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
         const data = await UserService.refreshToken();
         config.headers["token"] = `Bearer ${data?.access_token}`;
+        // } else {
+        //   dispatch(resetUser())
+        // }
       }
       return config;
     },
