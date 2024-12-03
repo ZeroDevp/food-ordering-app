@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  DollarCircleOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Button, Layout, Typography, Row, Col, Card } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
@@ -12,6 +18,10 @@ import { converPrice, truncateDescription } from "../../../utils";
 import { Radio } from "antd";
 
 import TableAdminComponent from "../../../components/TableAdminComponent/TableAdminComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import PieChartComponent from "../../../components/PieChartComponent/PieChartComponent";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -20,6 +30,7 @@ const Dashboard = () => {
   const user = useSelector((state) => state?.user);
   const [collapsed, setCollapsed] = useState(true);
   const [filter, setFilter] = useState("day"); // Lựa chọn mặc định: "day"
+  const navigate = useNavigate("");
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -117,8 +128,38 @@ const Dashboard = () => {
     ?.reduce((total, order) => total + order.TongTien, 0);
 
   // Biểu đồ
+
   const chartOptions = {
-    chart: { type: "bar", height: 350, toolbar: { show: false } },
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: { show: false },
+      dropShadow: {
+        enabled: true,
+        top: 2,
+        left: 2,
+        blur: 4,
+        opacity: 0.2,
+      },
+    },
+    colors: ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "50%",
+        borderRadius: 5, // Bo góc cho cột
+      },
+    },
+    dataLabels: {
+      enabled: true, // Hiển thị giá trị trên cột
+      formatter: function (value) {
+        return value.toLocaleString("vi-VN");
+      },
+      style: {
+        fontSize: "10px",
+        colors: ["#fff"],
+      },
+    },
     xaxis: {
       categories: [
         "Jan",
@@ -134,14 +175,41 @@ const Dashboard = () => {
         "Nov",
         "Dec",
       ],
+      labels: {
+        style: {
+          colors: "#9C9C9C",
+          fontSize: "14px",
+          fontWeight: "bold",
+        },
+      },
     },
-    title: { text: "Doanh thu theo tháng", align: "left" },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#9C9C9C",
+          fontSize: "14px",
+        },
+      },
+    },
+
+    tooltip: {
+      theme: "dark", // Giao diện tối
+      y: {
+        formatter: function (value) {
+          return value.toLocaleString("vi-VN") + " VNĐ"; // Hiển thị tiền tệ
+        },
+      },
+    },
+    grid: {
+      borderColor: "#e7e7e7",
+      strokeDashArray: 4,
+    },
     responsive: [
       {
         breakpoint: 768,
         options: {
           chart: { height: 300 },
-          xaxis: { labels: { style: { fontSize: "16px" } } },
+          xaxis: { labels: { style: { fontSize: "12px" } } },
           title: { style: { fontSize: "14px" } },
         },
       },
@@ -156,15 +224,22 @@ const Dashboard = () => {
     ],
   };
 
-  // const chartSeries = [{ name: "Doanh thu", data: monthlyRevenue }];
-
   //days
   const dailyChartSeries = [{ name: "Doanh thu", data: dailyData }];
 
   const dailyChartOptions = {
     ...chartOptions,
-    xaxis: { categories: dailyCategories }, // Gán danh sách ngày làm nhãn trục X
-    title: { text: "Doanh thu theo ngày", align: "left" },
+    xaxis: {
+      categories: dailyCategories,
+      labels: {
+        style: {
+          colors: "#9C9C9C",
+          fontSize: "14px",
+          // fontWeight: "bold",
+        },
+      },
+    }, // Gán danh sách ngày làm nhãn trục X
+    // title: { text: "Doanh thu theo ngày", align: "center" },
   };
 
   //months
@@ -172,8 +247,17 @@ const Dashboard = () => {
 
   const monthlyChartOptions = {
     ...chartOptions,
-    xaxis: { categories: monthlyCategories }, // Gán danh sách tháng làm nhãn trục X
-    title: { text: "Doanh thu theo tháng", align: "left" },
+    xaxis: {
+      categories: monthlyCategories,
+      labels: {
+        style: {
+          colors: "#9C9C9C",
+          fontSize: "14px",
+          // fontWeight: "bold",
+        },
+      },
+    }, // Gán danh sách tháng làm nhãn trục X
+    // title: { text: "Doanh thu theo tháng", align: "center" },
   };
 
   //year
@@ -181,54 +265,18 @@ const Dashboard = () => {
 
   const yearlyChartOptions = {
     ...chartOptions,
-    xaxis: { categories: yearlyCategories }, // Gán danh sách năm làm nhãn trục X
-    title: { text: "Doanh thu theo năm", align: "left" },
+    xaxis: {
+      categories: yearlyCategories,
+      labels: {
+        style: {
+          colors: "#9C9C9C",
+          fontSize: "14px",
+          // fontWeight: "bold",
+        },
+      },
+    }, // Gán danh sách năm làm nhãn trục X
+    // title: { text: "Doanh thu theo năm", align: "center" },
   };
-
-  const columns = [
-    {
-      title: <div style={{ textAlign: "center" }}>Họ và tên</div>,
-      dataIndex: "HoTen",
-      width: "30%",
-      responsive: ["lg"],
-      sorter: (a, b) => a.HoTen.length - b.HoTen.length,
-    },
-    {
-      title: <div style={{ textAlign: "center" }}>Email</div>,
-      dataIndex: "Email",
-      width: "30%",
-      responsive: ["md"],
-    },
-
-    {
-      title: <div style={{ textAlign: "center" }}>Quản lý</div>,
-      dataIndex: "isAdmin",
-      width: "30%",
-      align: "center",
-      responsive: ["md"],
-    },
-
-    {
-      title: <div style={{ textAlign: "center" }}>Điện thoại</div>,
-      dataIndex: "DienThoai",
-      align: "center",
-      width: "30%",
-      responsive: ["lg"],
-      // sorter: (a, b) => a.LoaiMonAn - b.LoaiMonAn,
-    },
-  ];
-
-  const dataTable =
-    users?.data?.length &&
-    users?.data?.map((user) => {
-      return {
-        ...user,
-        key: user._id,
-        isAdmin: user.isAdmin ? "Admin" : "User",
-        MatKhau: truncateDescription(user.MatKhau, 100),
-        // GiamGia: user.GiamGia,
-      };
-    });
 
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#f4f5f7" }}>
@@ -254,132 +302,200 @@ const Dashboard = () => {
         </Header>
 
         {/* Content */}
-        <Content style={{ margin: "24px 16px", padding: 24 }}>
-          <Title level={3} style={{ color: "#333" }}>
-            TỔNG QUAN
-          </Title>
-          <Row gutter={[16, 16]}>
-            {/* Card: Số lượng người dùng */}
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                hoverable
+        <Content
+          style={{
+            padding: "20px",
+            background: "linear-gradient(135deg, #141e30, #243b55)", // Màu nền gradient đậm
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+          }}
+        >
+          {/* Phần tiêu đề */}
+          <div
+            style={{
+              textAlign: "center",
+              padding: "20px 0",
+            }}
+          >
+            <Title level={2} style={{ color: "#fff", fontWeight: "bold" }}>
+              Trang Chủ Tổng Quan
+            </Title>
+            <Text style={{ color: "#ddd" }}>Cập nhật thông tin bán hàng</Text>
+          </div>
+
+          {/* Vùng Cards */}
+          <Row
+            gutter={[20, 20]}
+            style={{
+              justifyContent: "center",
+            }}
+          >
+            {/* Card: Người dùng */}
+            <Col
+              xs={24}
+              sm={12}
+              md={6}
+              onClick={() => navigate("/system/UserAdmin")}
+            >
+              <div
                 style={{
+                  padding: "20px",
+                  borderRadius: "20px",
+                  background: "linear-gradient(145deg, #00c6ff, #0072ff)", // Gradient màu sáng
                   textAlign: "center",
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                  transform: "scale(1)",
+                  transition: "transform 0.3s ease-in-out",
                 }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
               >
-                <Title level={4} style={{ color: "#007bff" }}>
+                <UserOutlined style={{ fontSize: "40px", color: "#fff" }} />
+                <Title level={3} style={{ color: "#fff", margin: "10px 0" }}>
                   {users?.data?.length || 0}
                 </Title>
-                <Text>Số lượng người dùng</Text>
-              </Card>
+                <Text style={{ color: "#e0f7fa" }}>Người dùng</Text>
+              </div>
             </Col>
 
-            {/* Card: Số lượng đơn hàng */}
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                hoverable
+            {/* Card: Đơn hàng */}
+            <Col
+              xs={24}
+              sm={12}
+              md={6}
+              onClick={() => navigate("/system/OrderAdmin")}
+            >
+              <div
                 style={{
+                  padding: "20px",
+                  borderRadius: "20px",
+                  background: "linear-gradient(145deg, #ff9a9e, #fecfef)", // Gradient màu đỏ hồng
                   textAlign: "center",
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                  transform: "scale(1)",
+                  transition: "transform 0.3s ease-in-out",
                 }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
               >
-                <Title level={4} style={{ color: "#28a745" }}>
+                <ShoppingCartOutlined
+                  style={{ fontSize: "40px", color: "#fff" }}
+                />
+                <Title level={3} style={{ color: "#fff", margin: "10px 0" }}>
                   {orders?.data?.length || 0}
                 </Title>
-                <Text>Số lượng đơn hàng</Text>
-              </Card>
+                <Text style={{ color: "#e0f7fa" }}>Đơn hàng</Text>
+              </div>
+            </Col>
+
+            {/* Card: món ăn */}
+            <Col
+              xs={24}
+              sm={12}
+              md={6}
+              onClick={() => navigate("/system/FoodAdmin")}
+            >
+              <div
+                style={{
+                  padding: "20px",
+                  borderRadius: "20px",
+                  background: "linear-gradient(145deg, #ff7e5f, #feb47b)", // Gradient màu đỏ hồng
+                  textAlign: "center",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                  transform: "scale(1)",
+                  transition: "transform 0.3s ease-in-out",
+                }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+              >
+                <FontAwesomeIcon
+                  icon={faUtensils}
+                  style={{ fontSize: "40px", color: "#fff" }}
+                />
+                <Title level={3} style={{ color: "#fff", margin: "10px 0" }}>
+                  {foods?.data?.length || 0}
+                </Title>
+                <Text style={{ color: "#e0f7fa" }}>Món ăn</Text>
+              </div>
             </Col>
 
             {/* Card: Doanh thu */}
             <Col xs={24} sm={12} md={6}>
-              <Card
-                hoverable
+              <div
                 style={{
+                  padding: "20px",
+                  borderRadius: "20px",
+                  background: "linear-gradient(145deg, #1e3c72, #2a5298)", // Gradient xanh đậm
                   textAlign: "center",
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                  transform: "scale(1)",
+                  transition: "transform 0.3s ease-in-out",
                 }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
               >
-                <Title level={4} style={{ color: "#ff6347" }}>
+                <DollarCircleOutlined
+                  style={{ fontSize: "40px", color: "#fff" }}
+                />
+                <Title level={3} style={{ color: "#fff", margin: "10px 0" }}>
                   {converPrice(totalRevenue || 0)}
                 </Title>
-                <Text>Doanh thu</Text>
-              </Card>
-            </Col>
-
-            {/* Card: Số lượng món ăn */}
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                hoverable
-                style={{
-                  textAlign: "center",
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
-                }}
-              >
-                <Title level={4} style={{ color: "#6f42c1" }}>
-                  {foods?.data?.length || 0}
-                </Title>
-                <Text>Số lượng món ăn</Text>
-              </Card>
+                <Text style={{ color: "#b3cde0" }}>Doanh thu</Text>
+              </div>
             </Col>
           </Row>
 
-          {/* Row: Biểu đồ và bảng */}
-          <Row gutter={[16, 16]} style={{ marginTop: 20 }}>
+          {/* Biểu đồ và Bảng */}
+          <Row gutter={[20, 20]}>
+            {/* Biểu đồ */}
             <Col xs={24} md={12}>
               <Card
-                title="Biểu đồ doanh thu"
-                hoverable
+                title={<Text style={{ color: "#fff" }}>Biểu đồ doanh thu</Text>}
                 style={{
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
+                  background: "#1c2833",
+                  borderRadius: "20px",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                  color: "#fff",
                 }}
               >
                 <Radio.Group
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)} // Cập nhật trạng thái khi người dùng chọn
-                  style={{ marginBottom: 16 }} // Khoảng cách bên dưới Radio Button
+                  onChange={(e) => setFilter(e.target.value)}
+                  style={{ marginBottom: 16 }}
                 >
                   <Radio.Button value="day">Theo ngày</Radio.Button>
                   <Radio.Button value="month">Theo tháng</Radio.Button>
                   <Radio.Button value="year">Theo năm</Radio.Button>
                 </Radio.Group>
                 <Chart
-                  options={getChartData().options} // Lấy cấu hình từ lựa chọn hiện tại
-                  series={getChartData().series} // Lấy dữ liệu từ lựa chọn hiện tại
-                  type="bar" // Loại biểu đồ (cột)
-                  height={400} // Chiều cao của biểu đồ
+                  options={getChartData().options}
+                  series={getChartData().series}
+                  type="bar"
+                  height={440}
                 />
               </Card>
             </Col>
+
+            {/* Bảng */}
             <Col xs={24} md={12}>
               <Card
-                title="Bảng người dùng"
-                hoverable
+                title={<Text style={{ color: "#fff" }}>Thống kê bán hàng</Text>}
                 style={{
-                  borderRadius: 10,
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: "#ffffff",
+                  background: "#2c3e50",
+                  borderRadius: "20px",
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
                 }}
               >
-                <TableAdminComponent
+                {/* <TableAdminComponent
                   columns={columns}
                   isLoading={isLoadingUser}
-                  pagination={{
-                    position: ["bottomCenter"],
-                    pageSize: 6,
-                  }}
+                  pagination={{ position: ["bottomCenter"], pageSize: 6 }}
                   data={dataTable}
-                />
+                /> */}
+
+                <PieChartComponent data={orders?.data} />
               </Card>
             </Col>
           </Row>

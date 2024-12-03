@@ -1,3 +1,6 @@
+import { orderContant } from "./contant";
+
+
 export const isJsonString = (data) => {
     try {
         JSON.parse(data)
@@ -65,4 +68,39 @@ export const formatDate = (dateString) => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
 
     return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+};
+
+export const convertDataChart = (data, type) => {
+    try {
+        const object = {}
+        Array.isArray(data) && data.forEach((opt) => {
+            if (!object[opt[type]]) {
+                object[opt[type]] = 1
+            } else {
+                object[opt[type]] += 1
+                // console.log('c;getBase64', object[opt[type]], typeof (object[opt[type]]))
+            }
+        })
+        return Array.isArray(Object.keys(object))
+            ? Object.keys(object).map((item) => object[item]) // Trả về mảng số liệu
+            : [];
+    } catch (e) {
+        return []
+    }
+}
+
+export const getLabels = (data, type) => {
+    const object = {};
+    Array.isArray(data) &&
+        data.forEach((opt) => {
+            if (!object[opt[type]]) {
+                object[opt[type]] = 1;
+            } else {
+                object[opt[type]] += 1;
+            }
+        });
+
+    return Array.isArray(Object.keys(object))
+        ? Object.keys(object).map((item) => orderContant.payment[item])
+        : [];
 };
