@@ -49,15 +49,15 @@ const MyOrderPage = () => {
   // console.log("data", data);
   ////////////////////////////////////
 
-  const handleNavigateLogin = () => {
-    navigate("/SignIn");
-  };
+  // const handleNavigateLogin = () => {
+  //   navigate("/SignIn");
+  // };
 
-  const handleLogout = async () => {
-    await UserService.logoutUser();
-    dispatch(resetUser());
-    handleNavigateLogin();
-  };
+  // const handleLogout = async () => {
+  //   await UserService.logoutUser();
+  //   dispatch(resetUser());
+  //   handleNavigateLogin();
+  // };
 
   useEffect(() => {
     setHoTen(user?.HoTen);
@@ -73,18 +73,18 @@ const MyOrderPage = () => {
     });
   };
 
-  const showLogoutModal = () => {
-    setIsLogoutModalVisible(true);
-  };
+  // const showLogoutModal = () => {
+  //   setIsLogoutModalVisible(true);
+  // };
 
-  const handleCancelLogout = () => {
-    setIsLogoutModalVisible(false);
-  };
+  // const handleCancelLogout = () => {
+  //   setIsLogoutModalVisible(false);
+  // };
 
-  const confirmLogout = () => {
-    handleLogout();
-    setIsLogoutModalVisible(false);
-  };
+  // const confirmLogout = () => {
+  //   handleLogout();
+  //   setIsLogoutModalVisible(false);
+  // };
 
   const renderFood = (data) => {
     return data?.map((order) => {
@@ -218,54 +218,265 @@ const MyOrderPage = () => {
   }, [isSuccessCancel, isErrorCancel]);
 
   return (
+    // <div>
+    //   <div className="container pt-5" style={{ marginBottom: "100px" }}>
+    //     <div className="row">
+    //       <div className="col-3">
+    //         <div
+    //           className="card border-0 shadow"
+    //           style={{
+    //             borderRadius: "10px",
+    //             backgroundColor: "#ff5b6a",
+    //             color: "#fff",
+    //           }}
+    //         >
+    //           <div className="text-center p-4">
+    //             {AnhDaiDien ? (
+    //               <Image
+    //                 src={AnhDaiDien}
+    //                 alt="Ảnh đại diện"
+    //                 style={{
+    //                   height: "136px",
+    //                   width: "136px",
+    //                   borderRadius: "10%",
+    //                   objectFit: "cover",
+    //                 }}
+    //               />
+    //             ) : (
+    //               <p>Không có ảnh đại diện</p>
+    //             )}
+
+    //             <p
+    //               style={{
+    //                 marginTop: "10px",
+    //                 fontWeight: "500",
+    //                 fontSize: "16px",
+    //               }}
+    //             >
+    //               {HoTen}
+    //             </p>
+    //           </div>
+    //           <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
+    //             <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+    //               <Link
+    //                 to="/Profile-User"
+    //                 style={{ color: "#fff", textDecoration: "none" }}
+    //               >
+    //                 <UserOutlined /> Thông tin tài khoản
+    //               </Link>
+    //             </li>
+    //             <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+    //               <Link
+    //                 style={{ color: "#fff", textDecoration: "none" }}
+    //                 onClick={(e) => {
+    //                   e.preventDefault();
+    //                   handleClickNavigate();
+    //                 }}
+    //               >
+    //                 <TruckOutlined /> Thông tin đơn hàng
+    //               </Link>
+    //             </li>
+    //           </ul>
+    //         </div>
+    //       </div>
+
+    //       <div className="col-lg-9 col-md-10 col-sm-12">
+    //         <div
+    //           className="card shadow-sm border-0"
+    //           style={{
+    //             borderRadius: "15px",
+    //             padding: "20px",
+    //             background: "linear-gradient(to bottom, #ffffff, #f9f9f9)",
+    //           }}
+    //         >
+    //           <h2
+    //             style={{
+    //               fontWeight: "bold",
+    //               fontSize: "1.8rem",
+    //               marginBottom: "20px",
+    //               textAlign: "center",
+    //               color: "#34495e",
+    //             }}
+    //           >
+    //             THÔNG TIN ĐƠN HÀNG
+    //           </h2>
+
+    //           {isLoading ? (
+    //             <Loading isLoading={isLoading} />
+    //           ) : Array.isArray(data) && data.length > 0 ? (
+    //             data.map((order) => (
+    //               <div
+    //                 className="card mb-4 border-0 shadow-sm"
+    //                 key={order?._id || order?.id}
+    //                 style={{ borderRadius: "10px", overflow: "hidden" }}
+    //               >
+    //                 <div
+    //                   style={{
+    //                     backgroundColor: "#d5e8d4",
+    //                     padding: "10px 15px",
+    //                     fontWeight: "600",
+    //                     display: "flex",
+    //                     justifyContent: "space-between",
+    //                     alignItems: "center",
+    //                   }}
+    //                 >
+    //                   <span>Ngày đặt: {formatDate(order?.createdAt)}</span>
+    //                   <span>
+    //                     Thanh toán:{" "}
+    //                     <strong
+    //                       style={{
+    //                         color: order?.DaThanhToan ? "#27ae60" : "#e74c3c",
+    //                       }}
+    //                     >
+    //                       {order?.DaThanhToan
+    //                         ? "Đã thanh toán"
+    //                         : "Chưa thanh toán"}
+    //                     </strong>
+    //                   </span>
+    //                   <span
+    //                     style={{
+    //                       fontSize: "14px",
+    //                       color: "#c0392b",
+    //                       backgroundColor: "#fce4e4",
+    //                       padding: "5px 10px",
+    //                       borderRadius: "5px",
+    //                     }}
+    //                   >
+    //                     {orderContant.status[order?.TrangThaiGiaoHang]}
+    //                   </span>
+    //                 </div>
+
+    //                 <div className="card-body">
+    //                   <List itemLayout="horizontal">
+    //                     {renderFood(order?.DonHang)}
+    //                   </List>
+    //                 </div>
+
+    //                 <div
+    //                   className="card-footer"
+    //                   style={{
+    //                     backgroundColor: "#ffffff",
+    //                     display: "flex",
+    //                     justifyContent: "space-between",
+    //                     alignItems: "center",
+    //                   }}
+    //                 >
+    //                   <span style={{ fontSize: "1rem", fontWeight: "bold" }}>
+    //                     Tổng tiền:{" "}
+    //                     <span style={{ color: "#e74c3c" }}>
+    //                       {converPrice(order?.TongTien)}
+    //                     </span>
+    //                   </span>
+    //                   <div>
+    //                     <Button
+    //                       danger
+    //                       onClick={() => handleCancelOrder(order)}
+    //                       style={{ marginRight: "10px" }}
+    //                       disabled={order?.TrangThaiGiaoHang >= 3}
+    //                     >
+    //                       Hủy đơn hàng
+    //                     </Button>
+    //                     <Button
+    //                       type="primary"
+    //                       onClick={() => handleDetailsOrder(order?._id)}
+    //                     >
+    //                       Xem chi tiết
+    //                     </Button>
+    //                     {order?.TrangThaiGiaoHang >= 4 && (
+    //                       <Button
+    //                         type="primary"
+    //                         style={{
+    //                           marginLeft: "10px",
+    //                           backgroundColor: "#27ae60",
+    //                           borderColor: "#27ae60",
+    //                         }}
+    //                         onClick={() => showModalUpdate(order)}
+    //                         disabled={order?.DaThanhToan && order?.DaGiao}
+    //                       >
+    //                         Đã nhận hàng
+    //                       </Button>
+    //                     )}
+    //                   </div>
+    //                 </div>
+    //               </div>
+    //             ))
+    //           ) : (
+    //             <Empty
+    //               className="mt-5"
+    //               description={"Không có đơn hàng nào!"}
+    //               imageStyle={{ height: 60 }}
+    //               style={{ color: "#95a5a6" }}
+    //             />
+    //           )}
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
     <div>
       <div className="container pt-5" style={{ marginBottom: "100px" }}>
         <div className="row">
-          <div className="col-3">
+          {/* Sidebar */}
+          <div className="col-lg-3 col-md-4 col-sm-12 mb-4">
             <div
               className="card border-0 shadow"
               style={{
-                borderRadius: "10px",
-                backgroundColor: "#ff5b6a",
-                color: "#fff",
+                borderRadius: "15px",
+                backgroundColor: "#ff6b81",
+                color: "#ffffff",
+                overflow: "hidden",
               }}
             >
-              <div className="text-center p-4">
+              <div className="text-center py-4">
                 {AnhDaiDien ? (
                   <Image
                     src={AnhDaiDien}
                     alt="Ảnh đại diện"
                     style={{
-                      height: "136px",
-                      width: "136px",
-                      borderRadius: "10%",
+                      height: "120px",
+                      width: "120px",
+                      borderRadius: "50%",
                       objectFit: "cover",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                     }}
                   />
                 ) : (
                   <p>Không có ảnh đại diện</p>
                 )}
-
                 <p
                   style={{
                     marginTop: "10px",
-                    fontWeight: "500",
-                    fontSize: "16px",
+                    fontWeight: "600",
+                    fontSize: "18px",
                   }}
                 >
                   {HoTen}
                 </p>
               </div>
-              <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0",
+                  margin: "0",
+                  borderTop: "1px solid #ffffff50",
+                }}
+              >
+                <li
+                  style={{
+                    padding: "15px 20px",
+                    fontSize: "1rem",
+                    borderBottom: "1px solid #ffffff50",
+                  }}
+                >
                   <Link
                     to="/Profile-User"
                     style={{ color: "#fff", textDecoration: "none" }}
                   >
-                    <UserOutlined /> Thông tin tài khoản
+                    <UserOutlined style={{ marginRight: "10px" }} />
+                    Thông tin tài khoản
                   </Link>
                 </li>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+                <li style={{ padding: "15px 20px", fontSize: "1rem" }}>
                   <Link
                     style={{ color: "#fff", textDecoration: "none" }}
                     onClick={(e) => {
@@ -273,91 +484,34 @@ const MyOrderPage = () => {
                       handleClickNavigate();
                     }}
                   >
-                    <TruckOutlined /> Thông tin đơn hàng
+                    <TruckOutlined style={{ marginRight: "10px" }} />
+                    Thông tin đơn hàng
                   </Link>
-                </li>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
-                  <Link
-                    style={{ color: "#fff", textDecoration: "none" }}
-                    onClick={showLogoutModal}
-                  >
-                    <LogoutOutlined /> Đăng xuất
-                  </Link>
-                  <Modal
-                    open={isLogoutModalVisible}
-                    onOk={confirmLogout}
-                    onCancel={handleCancelLogout}
-                    footer={null}
-                    centered
-                    style={{
-                      padding: "20px",
-                      textAlign: "center",
-                      borderRadius: "10px",
-                    }}
-                    wrapClassName="custom-logout-modal"
-                  >
-                    <img
-                      src={customImage}
-                      alt="Custom Icon"
-                      style={{ width: "400px", marginBottom: "0px" }}
-                    />
-                    <div style={{ marginTop: "20px" }}>
-                      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
-                        Bạn muốn đăng xuất?
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          onClick={handleCancelLogout}
-                          style={{
-                            backgroundColor: "#f2f2f2",
-                            borderColor: "#f2f2f2",
-                            color: "#ff6666",
-                          }}
-                        >
-                          Hủy
-                        </Button>
-                        <Button
-                          onClick={handleLogout}
-                          style={{
-                            backgroundColor: "#ff6666",
-                            borderColor: "#ff6666",
-                            color: "#fff",
-                          }}
-                        >
-                          OK
-                        </Button>
-                      </div>
-                    </div>
-                  </Modal>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="col-9">
+          {/* Main Content */}
+          <div className="col-lg-9 col-md-8 col-sm-12">
             <div
-              className="card border-0 shadow"
+              className="card shadow border-0"
               style={{
-                borderRadius: "10px",
-                padding: "20px",
-                background: "#f2f2f2",
+                borderRadius: "20px",
+                padding: "25px",
+                background: "#f7faff",
               }}
             >
               <h2
                 style={{
                   fontWeight: "700",
-                  fontSize: "1.8rem",
+                  fontSize: "2rem",
                   marginBottom: "20px",
                   textAlign: "center",
+                  color: "#2f3542",
                 }}
               >
-                THÔNG TIN ĐƠN HÀNG
+                Thông tin đơn hàng
               </h2>
 
               {isLoading ? (
@@ -365,55 +519,86 @@ const MyOrderPage = () => {
               ) : Array.isArray(data) && data.length > 0 ? (
                 data.map((order) => (
                   <div
-                    className="card border-1 mt-3"
+                    className="card mb-4 shadow border-0"
                     key={order?._id || order?.id}
+                    style={{
+                      borderRadius: "15px",
+                      overflow: "hidden",
+                    }}
                   >
+                    {/* Header */}
                     <div
+                      className="d-flex justify-content-between align-items-center p-3"
                       style={{
-                        width: "100%",
-                        backgroundColor: "#c3d2bd",
-                        padding: "8px",
+                        backgroundColor: "#e3f2fd",
+                        borderBottom: "1px solid #d1e9ff",
                       }}
                     >
-                      Ngày đặt: <span>{formatDate(order?.createdAt)}</span> |
-                      Thanh toán:{" "}
-                      <span>
-                        {/* {orderContant.payment[order?.PhuongThucThanhToan]} */}
-                        {order?.DaThanhToan
-                          ? "Đã thanh toán"
-                          : "Chưa thanh toán"}
-                      </span>
-                      <span
+                      <div>
+                        <span
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: "600",
+                            color: "#37474f",
+                          }}
+                        >
+                          Ngày đặt:
+                        </span>{" "}
+                        {formatDate(order?.createdAt)}
+                      </div>
+                      <div>
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            color: order?.DaThanhToan ? "#388e3c" : "#d32f2f",
+                          }}
+                        >
+                          {order?.DaThanhToan
+                            ? "Đã thanh toán"
+                            : "Chưa thanh toán"}
+                        </span>
+                      </div>
+                      <div
                         style={{
-                          fontSize: "16px",
-                          color: "red",
-                          float: "right",
+                          fontSize: "0.9rem",
+                          padding: "5px 10px",
                           borderRadius: "5px",
-                          padding: "5px",
-                          backgroundColor: "#feeeea",
+                          color: "#ffffff",
+                          backgroundColor:
+                            order?.TrangThaiGiaoHang === 3
+                              ? "#ff9800"
+                              : order?.TrangThaiGiaoHang >= 4
+                              ? "#4caf50"
+                              : "#f44336",
                         }}
                       >
                         {orderContant.status[order?.TrangThaiGiaoHang]}
-                      </span>
+                      </div>
                     </div>
 
-                    <div
-                      className="card-body"
-                      style={{ paddingTop: "10px", paddingBottom: "10px" }}
-                    >
+                    {/* Body */}
+                    <div className="card-body">
                       <List itemLayout="horizontal">
                         {renderFood(order?.DonHang)}
                       </List>
                     </div>
-                    <hr style={{ marginTop: "0px" }} />
-                    <div className="card-body" style={{ paddingTop: "0px" }}>
-                      <span style={{ float: "right", fontSize: "18px" }}>
+
+                    {/* Footer */}
+                    <div
+                      className="card-footer d-flex justify-content-between align-items-center"
+                      style={{
+                        backgroundColor: "#ffffff",
+                        padding: "15px",
+                        borderTop: "1px solid #e0e0e0",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                         Tổng tiền:{" "}
-                        <span style={{ color: "#e53637", fontWeight: "700" }}>
+                        <span style={{ color: "#e74c3c" }}>
                           {converPrice(order?.TongTien)}
                         </span>
                       </span>
-                      <div>
+                      <div className="action-buttons">
                         <Button
                           danger
                           onClick={() => handleCancelOrder(order)}
@@ -422,27 +607,26 @@ const MyOrderPage = () => {
                         >
                           Hủy đơn hàng
                         </Button>
-                        {/* <Modal
-                          title="Bạn có chắc muốn hủy đơn hàng?"
-                          open={open}
-                          mask={false}
-                          onOk={handleOk}
-                          confirmLoading={confirmLoading}
+                        <Button
+                          type="primary"
+                          onClick={() => handleDetailsOrder(order?._id)}
+                          style={{
+                            marginRight: "10px",
+                          }}
                         >
-                          <p>{modalText}</p>
-                        </Modal> */}
-                        <Button onClick={() => handleDetailsOrder(order?._id)}>
-                          Xem chi tiết
+                          Chi tiết
                         </Button>
-
                         {order?.TrangThaiGiaoHang >= 4 && (
                           <Button
                             type="primary"
+                            style={{
+                              backgroundColor: "#27ae60",
+                              borderColor: "#27ae60",
+                            }}
                             onClick={() => showModalUpdate(order)}
-                            style={{ float: "right", marginRight: "16px" }}
                             disabled={order?.DaThanhToan && order?.DaGiao}
                           >
-                            Đã nhận được hàng
+                            Đã nhận hàng
                           </Button>
                         )}
                         <Modal
@@ -462,7 +646,9 @@ const MyOrderPage = () => {
               ) : (
                 <Empty
                   className="mt-5"
-                  description={"Không có đơn hàng nào!"}
+                  description={"Chưa có đơn hàng nào"}
+                  imageStyle={{ height: 80 }}
+                  style={{ color: "#90a4ae" }}
                 />
               )}
             </div>

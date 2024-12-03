@@ -42,10 +42,10 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
     async (id, token) => {
       if (!token) return;
       try {
-        //27/11
+        //28/11
         // const storage = localStorage.getItem("refresh_token");
-        // const refreshToken = storage ? JSON.parse(storage) : null;
-        //27/11
+        // const refreshToken = JSON.parse(storage);
+        //28/11
         const res = await UserService.getDetailUser(id, token);
         dispatch(updateUser({ ...res?.data, access_token: token }));
       } catch (error) {
@@ -63,16 +63,16 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
         navigate("/");
       }
       localStorage.setItem("access_token", JSON.stringify(data?.access_token));
-      //27/11
+      //28/11
       // localStorage.setItem(
       //   "refresh_token",
       //   JSON.stringify(data?.refresh_token)
       // );
-      //27/11
+      //28/11
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
         if (decoded?.id) {
-          handleGetDetailsUser(decoded.id, data.access_token);
+          handleGetDetailsUser(decoded?.id, data?.access_token);
         }
       }
     }

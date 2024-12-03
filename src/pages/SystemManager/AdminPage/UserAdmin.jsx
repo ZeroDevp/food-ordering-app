@@ -31,6 +31,7 @@ import {
   getWardsByDistrictCode,
 } from "vn-local-plus";
 const { Header, Content } = Layout;
+const { Title, Text } = Typography;
 
 const UserAdmin = () => {
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -208,7 +209,7 @@ const UserAdmin = () => {
     } else if (isErrorDeleted) {
       Message.error();
     }
-  }, [isSuccessDeleted, dataDeleted?.status, isErrorDeleted, handleCancel]);
+  }, [isSuccessDeleted, dataDeleted?.status, isErrorDeleted]);
 
   const onClose = () => {
     setIsOpenDrawer(false);
@@ -299,14 +300,14 @@ const UserAdmin = () => {
   }, [selectedWard]);
 
   useEffect(() => {
-    if (rowSelected) {
+    if (rowSelected && isOpenDrawer) {
       fetchgetDetailsUser(rowSelected);
     }
     // setIsOpenDrawer(true);
-  }, [rowSelected]);
+  }, [rowSelected, isOpenDrawer]);
 
   //Hàm lấy lấy chi tiết món ăn khi click vào món ăn
-  const handleDetailsFood = () => {
+  const handleDetailsUser = () => {
     setLoadingDrawer(true);
     setIsOpenDrawer(true);
     setTimeout(() => {
@@ -328,7 +329,7 @@ const UserAdmin = () => {
         }}
       >
         <div>
-          <FontAwesomeIcon icon={faPenToSquare} onClick={handleDetailsFood} />
+          <FontAwesomeIcon icon={faPenToSquare} onClick={handleDetailsUser} />
         </div>
         <div>
           <FontAwesomeIcon
@@ -399,22 +400,22 @@ const UserAdmin = () => {
     });
 
   return (
-    <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
+    <Layout style={{ minHeight: "100vh", backgroundColor: "#FFF7E4" }}>
       <SiderComponent collapsed={collapsed} user={user} selectKey={"3"} />
       <Layout
         style={{
-          height: "100%",
           minHeight: "750px",
           marginLeft: marginLeft,
-          transition: "margin-left 0.5s ease",
-          backgroundColor: "#FEE4CC",
+          transition: "margin-left 0.3s ease",
+          backgroundColor: "#FFF7E4",
         }}
       >
         <Header
           style={{
-            padding: 0,
-            background: colorBgContainer,
-            backgroundColor: "#FEE4CC",
+            padding: "0 16px",
+            background: "#fff",
+            justifyContent: "space-between",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Button
@@ -422,22 +423,21 @@ const UserAdmin = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => toggleCollapsed()}
             style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
+              fontSize: "20px",
             }}
           />
-          <h5 style={{ display: "inline-block", marginLeft: "20px" }}>
+          <Text strong style={{ marginLeft: 20, fontSize: 22 }}>
             QUẢN LÝ NGƯỜI DÙNG
-          </h5>
+          </Text>
         </Header>
         <Content
           style={{
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Loading isLoading={isLoadingUser}>

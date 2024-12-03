@@ -222,35 +222,35 @@ const ProfilePage = () => {
     });
   };
 
-  const showLogoutModal = () => {
-    setIsLogoutModalVisible(true);
-  };
+  // const showLogoutModal = () => {
+  //   setIsLogoutModalVisible(true);
+  // };
 
-  const handleLogout = async () => {
-    await UserService.logoutUser();
-    dispatch(resetUser());
-    dispatch(clearCart());
-    handleNavigateLogin();
-  };
+  // const handleLogout = async () => {
+  //   await UserService.logoutUser();
+  //   dispatch(resetUser());
+  //   dispatch(clearCart());
+  //   handleNavigateLogin();
+  // };
 
-  const handleCancelLogout = () => {
-    setIsLogoutModalVisible(false);
-  };
+  // const handleCancelLogout = () => {
+  //   setIsLogoutModalVisible(false);
+  // };
 
-  const confirmLogout = () => {
-    handleLogout();
-    setIsLogoutModalVisible(false);
-  };
+  // const confirmLogout = () => {
+  //   handleLogout();
+  //   setIsLogoutModalVisible(false);
+  // };
 
-  const handleNavigateLogin = () => {
-    navigate("/SignIn");
-  };
+  // const handleNavigateLogin = () => {
+  //   navigate("/SignIn");
+  // };
 
   return (
     <div>
       <div className="container pt-5" style={{ marginBottom: "100px" }}>
         <div className="row ">
-          <div className="col-3 ">
+          {/* <div className="col-3 ">
             <div
               className="card border-0 shadow "
               style={{
@@ -327,67 +327,102 @@ const ProfilePage = () => {
                   </Link>
                 </li>
 
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+                
+              </ul>
+            </div>
+          </div> */}
+
+          {/* Sidebar */}
+          <div className="col-lg-3 col-md-4 col-sm-12 mb-4">
+            <div
+              className="card border-0 shadow"
+              style={{
+                borderRadius: "15px",
+                backgroundColor: "#ff6b81",
+                color: "#ffffff",
+                overflow: "hidden",
+              }}
+            >
+              <div className="text-center py-4">
+                {AnhDaiDien ? (
+                  <Image
+                    src={AnhDaiDien}
+                    alt="Ảnh đại diện"
+                    style={{
+                      height: "120px",
+                      width: "120px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                  />
+                ) : (
+                  <p>Không có ảnh đại diện</p>
+                )}
+                <p
+                  style={{
+                    marginTop: "10px",
+                    fontWeight: "600",
+                    fontSize: "18px",
+                  }}
+                >
+                  {HoTen}
+                </p>
+                {showUpload && (
+                  <Upload
+                    maxCount={1}
+                    className="ant-upload-list-item-name"
+                    onChange={handleOnchangeAvatar}
+                  >
+                    <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+                  </Upload>
+                )}
+
+                {showDeleted && (
+                  <Button
+                    type="danger"
+                    style={{ marginTop: "10px", background: "#fff" }}
+                    onClick={handleDeleteAvatar}
+                    icon={<DeleteOutlined />}
+                  >
+                    Xóa ảnh đại diện
+                  </Button>
+                )}
+              </div>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0",
+                  margin: "0",
+                  borderTop: "1px solid #ffffff50",
+                }}
+              >
+                <li
+                  style={{
+                    padding: "15px 20px",
+                    fontSize: "1rem",
+                    borderBottom: "1px solid #ffffff50",
+                  }}
+                >
+                  <Link
+                    to="/Profile-User"
+                    style={{ color: "#fff", textDecoration: "none" }}
+                  >
+                    <UserOutlined style={{ marginRight: "10px" }} />
+                    Thông tin tài khoản
+                  </Link>
+                </li>
+                <li style={{ padding: "15px 20px", fontSize: "1rem" }}>
                   <Link
                     style={{ color: "#fff", textDecoration: "none" }}
-                    onClick={showLogoutModal}
-                  >
-                    <LogoutOutlined /> Đăng xuất
-                  </Link>
-                  <Modal
-                    open={isLogoutModalVisible}
-                    onOk={confirmLogout}
-                    onCancel={handleCancelLogout}
-                    footer={null}
-                    centered
-                    style={{
-                      padding: "20px",
-                      textAlign: "center",
-                      borderRadius: "10px",
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickNavigate();
                     }}
-                    wrapClassName="custom-logout-modal"
                   >
-                    <img
-                      src={customImage}
-                      alt="Custom Icon"
-                      style={{ width: "400px", marginBottom: "0px" }}
-                    />
-
-                    {/* Container for the text and buttons */}
-                    <div style={{ marginTop: "20px" }}>
-                      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
-                        Bạn muốn đăng xuất?
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          onClick={handleCancelLogout}
-                          style={{
-                            backgroundColor: "#f2f2f2",
-                            borderColor: "#f2f2f2",
-                            color: "#ff6666",
-                          }}
-                        >
-                          Hủy
-                        </Button>
-                        <Button
-                          onClick={handleLogout}
-                          style={{
-                            backgroundColor: "#ff6666",
-                            borderColor: "#ff6666",
-                            color: "#fff",
-                          }}
-                        >
-                          OK
-                        </Button>
-                      </div>
-                    </div>
-                  </Modal>
+                    <TruckOutlined style={{ marginRight: "10px" }} />
+                    Thông tin đơn hàng
+                  </Link>
                 </li>
               </ul>
             </div>

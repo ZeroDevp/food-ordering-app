@@ -75,13 +75,6 @@ const HeaderComponent = () => {
     </div>
   );
 
-  //Set active tab cho menuTab
-  // const [setActiveItem] = useState("home");
-
-  // const handleTabClick = (item) => {
-  //   setActiveItem(item);
-  // };
-
   const handleNavigateLogin = () => {
     navigate("/SignIn");
   };

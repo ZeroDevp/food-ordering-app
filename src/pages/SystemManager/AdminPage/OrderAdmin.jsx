@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Layout, theme } from "antd";
+import { Button, Layout, theme, Typography } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
 import * as OrderService from "../../../service/OrderService";
@@ -13,6 +13,7 @@ import TableComponent from "../../../components/TableComponent/TableComponent";
 import Loading from "../../../components/LoadingComponent/Loading";
 
 const { Header, Content } = Layout;
+const { Title, Text } = Typography;
 
 const OrderAdmin = () => {
   const user = useSelector((state) => state?.user);
@@ -146,22 +147,22 @@ const OrderAdmin = () => {
 
   return (
     <Loading isLoading={isLoadingOrder}>
-      <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
+      <Layout style={{ minHeight: "100vh", backgroundColor: "#FFF7E4" }}>
         <SiderComponent collapsed={collapsed} user={user} selectKey={"4"} />
         <Layout
           style={{
-            height: "100%",
             minHeight: "750px",
             marginLeft: marginLeft,
-            transition: "margin-left 0.5s ease",
-            backgroundColor: "#FEE4CC",
+            transition: "margin-left 0.3s ease",
+            backgroundColor: "#FFF7E4",
           }}
         >
           <Header
             style={{
-              padding: 0,
-              background: colorBgContainer,
-              backgroundColor: "#FEE4CC",
+              padding: "0 16px",
+              background: "#fff",
+              justifyContent: "space-between",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             }}
           >
             <Button
@@ -174,18 +175,18 @@ const OrderAdmin = () => {
                 height: 64,
               }}
             />
-            <h5 style={{ display: "inline-block", marginLeft: "20px" }}>
+            <Text strong style={{ marginLeft: 20, fontSize: 22 }}>
               QUẢN LÝ ĐƠN HÀNG
-            </h5>
+            </Text>
           </Header>
           <Content
             style={{
-              // height: "50vh",
               margin: "24px 16px",
               padding: 24,
               minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              background: "#fff",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
             }}
           >
             <TableComponent

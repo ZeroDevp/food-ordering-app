@@ -12,6 +12,7 @@ import {
   Select,
   Table,
   theme,
+  Typography,
 } from "antd";
 import SiderComponent from "../../../components/SiderComponent/SiderComponent";
 import { useSelector } from "react-redux";
@@ -23,6 +24,8 @@ import VnProvinces from "vn-local-plus";
 import { useMutationHooks } from "../../../hook/useMutationHook";
 import { orderContant } from "../../../contant";
 
+const { Title, Text } = Typography;
+
 const OrderDetailsAdmin = () => {
   const user = useSelector((state) => state?.user);
   const { id } = useParams();
@@ -32,13 +35,13 @@ const OrderDetailsAdmin = () => {
   const [ward, setWard] = useState("");
   const queryClient = useQueryClient();
 
-  const fetchGetDetailsProduct = async () => {
+  const fetchGetDetailsOrder = async () => {
     const res = await OrderService.getDetailsOrder(id);
     return res.data;
   };
   const queryOrder = useQuery({
     queryKey: ["product-details", id],
-    queryFn: fetchGetDetailsProduct,
+    queryFn: fetchGetDetailsOrder,
     enabled: !!id,
   });
   const { isLoading, data: orderDetails } = queryOrder;
@@ -49,7 +52,7 @@ const OrderDetailsAdmin = () => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
-    setMarginLeft(collapsed ? 200 : 80);
+    setMarginLeft(collapsed ? 280 : 80);
   };
 
   useEffect(() => {
@@ -229,18 +232,18 @@ const OrderDetailsAdmin = () => {
         <SiderComponent collapsed={collapsed} user={user} selectKey={"4"} />
         <Layout
           style={{
-            height: "100%",
             minHeight: "750px",
             marginLeft: marginLeft,
-            transition: "margin-left 0.5s ease",
-            backgroundColor: "#FEE4CC",
+            transition: "margin-left 0.3s ease",
+            backgroundColor: "#FFF7E4",
           }}
         >
           <Header
             style={{
-              padding: 0,
-              background: colorBgContainer,
-              backgroundColor: "#FEE4CC",
+              padding: "0 16px",
+              background: "#fff",
+              justifyContent: "space-between",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             }}
           >
             <Button
@@ -253,11 +256,11 @@ const OrderDetailsAdmin = () => {
                 height: 64,
               }}
             />
-            <h5 style={{ display: "inline-block", marginLeft: "20px" }}>
+            <Text strong style={{ marginLeft: 20, fontSize: 22 }}>
               QUẢN LÝ ĐƠN HÀNG
-            </h5>
+            </Text>
           </Header>
-          <Content
+          {/* <Content
             style={{
               margin: "24px 16px",
               padding: 24,
@@ -373,6 +376,172 @@ const OrderDetailsAdmin = () => {
                 <hr />
               </Col>
             </Row>
+          </Content> */}
+
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: "20px",
+              minHeight: "280px",
+              background: "#f8f9fa",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            {/* Tiêu đề đơn hàng */}
+            <div
+              style={{
+                padding: "15px 20px",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                marginBottom: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h3
+                style={{ fontWeight: "600", fontSize: "1.5rem", color: "#333" }}
+              >
+                Thông tin đơn hàng
+              </h3>
+              <div style={{ textAlign: "right" }}>
+                <span
+                  style={{
+                    fontSize: "16px",
+                    color: "#555",
+                    marginRight: "10px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Mã đơn: {orderDetails?._id}
+                </span>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    color: "#fff",
+                    backgroundColor:
+                      orderDetails?.TrangThaiGiaoHang >= 4
+                        ? "#28a745"
+                        : "#ffc107",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {orderContant.status[orderDetails?.TrangThaiGiaoHang]}
+                </span>
+              </div>
+            </div>
+
+            {/* Thông tin khách hàng và vận chuyển */}
+            <Row gutter={24}>
+              <Col span={12}>
+                <div
+                  style={{
+                    background: "#fff",
+                    borderRadius: "10px",
+                    padding: "20px",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <h4 style={{ fontWeight: "600", marginBottom: "15px" }}>
+                    Thông tin khách hàng
+                  </h4>
+                  <p style={{ margin: 0 }}>
+                    <strong>Họ và tên:</strong>{" "}
+                    {orderDetails?.DiaChiGiaoHang?.HoTen}
+                  </p>
+                  <p style={{ margin: "10px 0" }}>
+                    <strong>Địa chỉ:</strong>{" "}
+                    {`${orderDetails?.DiaChiGiaoHang?.Diachi}, ${ward}, ${district}, ${province}`}
+                  </p>
+                  <p>
+                    <strong>Số điện thoại:</strong> 0
+                    {orderDetails?.DiaChiGiaoHang?.DienThoai}
+                  </p>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div
+                  style={{
+                    background: "#fff",
+                    borderRadius: "10px",
+                    padding: "20px",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <h4 style={{ fontWeight: "600", marginBottom: "15px" }}>
+                    Thông tin thanh toán & vận chuyển
+                  </h4>
+                  <p style={{ margin: 0 }}>
+                    <strong>Phương thức thanh toán:</strong>{" "}
+                    {orderContant.payment[orderDetails?.PhuongThucThanhToan]}
+                  </p>
+                  <p style={{ margin: "10px 0" }}>
+                    <strong>Phương thức vận chuyển:</strong> {Delivery()}
+                  </p>
+                  <p>
+                    <strong>Ngày đặt hàng:</strong>{" "}
+                    {formatDate(orderDetails?.createdAt)}
+                  </p>
+                </div>
+              </Col>
+            </Row>
+
+            {/* Trạng thái đơn hàng */}
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: "10px",
+                padding: "20px",
+                marginTop: "20px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h4 style={{ fontWeight: "600", marginBottom: "15px" }}>
+                Thay đổi trạng thái đơn hàng
+              </h4>
+              <Select
+                defaultValue={orderDetails?.TrangThaiGiaoHang || "1"}
+                style={{ width: "100%" }}
+                options={[
+                  { value: "1", label: "Chờ xác nhận" },
+                  { value: "2", label: "Đã xác nhận" },
+                  { value: "3", label: "Đang vận chuyển" },
+                  { value: "4", label: "Đã giao hàng" },
+                ]}
+                onChange={handleStatusChange}
+              />
+            </div>
+
+            {/* Thông tin sản phẩm */}
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: "10px",
+                padding: "20px",
+                marginTop: "20px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h4 style={{ fontWeight: "600", marginBottom: "15px" }}>
+                Thông tin sản phẩm
+              </h4>
+              <Table
+                dataSource={dataSource}
+                columns={columns}
+                pagination={false}
+                style={{ marginBottom: "20px" }}
+              />
+              <div style={{ textAlign: "right", fontSize: "16px" }}>
+                <strong>Tổng tiền:</strong>{" "}
+                <span style={{ color: "#e74c3c", fontWeight: "700" }}>
+                  {converPrice(orderDetails?.TongTien)}
+                </span>
+              </div>
+            </div>
           </Content>
         </Layout>
       </Layout>

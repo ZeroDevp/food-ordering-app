@@ -95,7 +95,8 @@ const ProductDetail = () => {
           <span className="price">
             {converPrice(foodDetails?.GiaMonAn)}{" "}
             <span style={{ fontSize: "20px", color: "#999" }}>
-              - {converPrice(foodDetails?.GiamGia || 5)}
+              {/* - {converPrice(foodDetails?.GiamGia || 5)} */}-{" "}
+              {foodDetails?.GiamGia || 0} %
             </span>
           </span>
 

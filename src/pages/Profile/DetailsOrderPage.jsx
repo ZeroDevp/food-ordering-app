@@ -14,12 +14,10 @@ import { orderContant } from "../../contant";
 import { converPrice } from "../../utils";
 
 const DetailsOrderPage = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [HoTen, setHoTen] = useState("");
   const [AnhDaiDien, setAnhDaiDien] = useState("");
   const navigate = useNavigate();
-  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
   const params = useParams();
   const location = useLocation();
@@ -62,16 +60,6 @@ const DetailsOrderPage = () => {
     }
   }, [data]);
 
-  const handleNavigateLogin = () => {
-    navigate("/SignIn");
-  };
-
-  const handleLogout = async () => {
-    await UserService.logoutUser();
-    dispatch(resetUser());
-    handleNavigateLogin();
-  };
-
   useEffect(() => {
     setHoTen(user?.HoTen);
     setAnhDaiDien(user?.AnhDaiDien);
@@ -86,19 +74,6 @@ const DetailsOrderPage = () => {
     });
   };
 
-  const showLogoutModal = () => {
-    setIsLogoutModalVisible(true);
-  };
-
-  const handleCancelLogout = () => {
-    setIsLogoutModalVisible(false);
-  };
-
-  const confirmLogout = () => {
-    handleLogout();
-    setIsLogoutModalVisible(false);
-  };
-
   //Tạm tính
   const priceMemo = useMemo(() => {
     const result = data?.DonHang?.reduce((total, cur) => {
@@ -111,51 +86,66 @@ const DetailsOrderPage = () => {
     <div>
       <div className="container pt-5" style={{ marginBottom: "100px" }}>
         <div className="row">
-          <div className="col-3">
+          <div className="col-lg-3 col-md-4 col-sm-12 mb-4">
             <div
               className="card border-0 shadow"
               style={{
-                borderRadius: "10px",
-                backgroundColor: "#ff5b6a",
-                color: "#fff",
+                borderRadius: "15px",
+                backgroundColor: "#ff6b81",
+                color: "#ffffff",
+                overflow: "hidden",
               }}
             >
-              <div className="text-center p-4">
+              <div className="text-center py-4">
                 {AnhDaiDien ? (
                   <Image
                     src={AnhDaiDien}
                     alt="Ảnh đại diện"
                     style={{
-                      height: "136px",
-                      width: "136px",
-                      borderRadius: "10%",
+                      height: "120px",
+                      width: "120px",
+                      borderRadius: "50%",
                       objectFit: "cover",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                     }}
                   />
                 ) : (
                   <p>Không có ảnh đại diện</p>
                 )}
-
                 <p
                   style={{
                     marginTop: "10px",
-                    fontWeight: "500",
-                    fontSize: "16px",
+                    fontWeight: "600",
+                    fontSize: "18px",
                   }}
                 >
                   {HoTen}
                 </p>
               </div>
-              <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0",
+                  margin: "0",
+                  borderTop: "1px solid #ffffff50",
+                }}
+              >
+                <li
+                  style={{
+                    padding: "15px 20px",
+                    fontSize: "1rem",
+                    borderBottom: "1px solid #ffffff50",
+                  }}
+                >
                   <Link
                     to="/Profile-User"
                     style={{ color: "#fff", textDecoration: "none" }}
                   >
-                    <UserOutlined /> Thông tin tài khoản
+                    <UserOutlined style={{ marginRight: "10px" }} />
+                    Thông tin tài khoản
                   </Link>
                 </li>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
+                <li style={{ padding: "15px 20px", fontSize: "1rem" }}>
                   <Link
                     style={{ color: "#fff", textDecoration: "none" }}
                     onClick={(e) => {
@@ -163,68 +153,9 @@ const DetailsOrderPage = () => {
                       handleClickNavigate();
                     }}
                   >
-                    <TruckOutlined /> Thông tin đơn hàng
+                    <TruckOutlined style={{ marginRight: "10px" }} />
+                    Thông tin đơn hàng
                   </Link>
-                </li>
-                <li style={{ padding: "10px 20px", fontSize: "1rem" }}>
-                  <Link
-                    style={{ color: "#fff", textDecoration: "none" }}
-                    onClick={showLogoutModal}
-                  >
-                    <LogoutOutlined /> Đăng xuất
-                  </Link>
-                  <Modal
-                    open={isLogoutModalVisible}
-                    onOk={confirmLogout}
-                    onCancel={handleCancelLogout}
-                    footer={null}
-                    centered
-                    style={{
-                      padding: "20px",
-                      textAlign: "center",
-                      borderRadius: "10px",
-                    }}
-                    wrapClassName="custom-logout-modal"
-                  >
-                    <img
-                      src={customImage}
-                      alt="Custom Icon"
-                      style={{ width: "400px", marginBottom: "0px" }}
-                    />
-                    <div style={{ marginTop: "20px" }}>
-                      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
-                        Bạn muốn đăng xuất?
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          onClick={handleCancelLogout}
-                          style={{
-                            backgroundColor: "#f2f2f2",
-                            borderColor: "#f2f2f2",
-                            color: "#ff6666",
-                          }}
-                        >
-                          Hủy
-                        </Button>
-                        <Button
-                          onClick={handleLogout}
-                          style={{
-                            backgroundColor: "#ff6666",
-                            borderColor: "#ff6666",
-                            color: "#fff",
-                          }}
-                        >
-                          OK
-                        </Button>
-                      </div>
-                    </div>
-                  </Modal>
                 </li>
               </ul>
             </div>

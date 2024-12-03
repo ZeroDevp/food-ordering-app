@@ -3,9 +3,11 @@ import "./homePage.css";
 import { NavLink } from "react-router-dom";
 import { Carousel, Col, Pagination, Row } from "antd";
 import CardComponent from "../../components/CardComponent/CardComponent";
+import CardBlogComponent from "../../components/CardComponent/CardBlogComponent";
 import BackToTop from "../../components/BackToTopComponent/BackToTopComponent";
 import BannerTrongHieu from "../../assets/banner/BannerTrongHieu.png";
 import * as FoodService from "../../service/FoodService";
+import * as BlogService from "../../service/BlogService";
 import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
@@ -15,15 +17,31 @@ const HomePage = () => {
   const itemsPerPage = 4; // Number of items per page
   const [bestSellingFoods, setBestSellingFoods] = useState([]);
 
+  const [stateBlog, setStateBlog] = useState([]);
+  const [tinNoiBat, SetTinNoibat] = useState([]);
+
   ///
   const fetchFoodAll = async () => {
     const res = await FoodService.getAllFood();
     return res;
   };
 
+  const fetchBlogAll = async () => {
+    const res = await BlogService.getAllBlog();
+    return res;
+  };
+
   const { data: foods } = useQuery({
     queryKey: ["foods"],
     queryFn: fetchFoodAll,
+    retry: 3,
+    retryDelay: 1000,
+    keepPreviousData: true,
+  });
+
+  const { data: blogs } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: fetchBlogAll,
     retry: 3,
     retryDelay: 1000,
     keepPreviousData: true,
@@ -49,6 +67,19 @@ const HomePage = () => {
     }
   }, [foods]);
 
+  useEffect(() => {
+    if (blogs?.data?.length > 0) {
+      setStateBlog(blogs.data);
+      const fillteredTinNoiBat = blogs.data.filter(
+        (blog) => blog.tinNoiBat === true
+      );
+      SetTinNoibat(fillteredTinNoiBat);
+    } else {
+      setStateBlog([]);
+      SetTinNoibat([]);
+    }
+  }, [blogs]);
+
   // Calculate the items to display based on the current page
   const indexOfLastFood = currentPage * itemsPerPage;
   const indexOfFirstFood = indexOfLastFood - itemsPerPage;
@@ -59,6 +90,10 @@ const HomePage = () => {
   ); // Use bestSellingFoods for current items
 
   ///
+
+  const indexOfLastBlog = currentPage * itemsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - itemsPerPage;
+  const currentBlogNoibat = tinNoiBat.slice(indexOfFirstBlog, indexOfLastBlog);
 
   const handleTabClick = (item) => {
     setActiveItem(item);
@@ -221,27 +256,48 @@ const HomePage = () => {
           </h2>
         </div>
 
-        <div className="row" style={{ marginBottom: "20px" }}>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="col-md-3">
-            <CardComponent />
-          </div>
-          <div className="pagination">
-            <Pagination
-              defaultCurrent={2}
-              total={50}
-              itemRender={itemRender}
-              className="custom-pagination"
-            />
-          </div>
+        <div style={{ marginBottom: "20px" }}>
+          <Row gutter={[16, 16]}>
+            {currentBlogNoibat.length > 0 ? (
+              currentBlogNoibat.map((blog) => (
+                <Col key={blog._id} xs={24} sm={12} md={8} lg={6}>
+                  <CardBlogComponent
+                    tieuDe={blog.tieuDe}
+                    hinhAnh={blog.hinhAnh}
+                    noiDung={blog.noiDung}
+                    noiDungTomTat={blog.noiDungTomTat}
+                    id={blog._id}
+                    createdAt={blog.createdAt}
+                  />
+                </Col>
+              ))
+            ) : (
+              <div
+                className="no-results"
+                style={{
+                  textAlign: "center",
+                  color: "#ccc",
+                  fontWeight: "600",
+                  marginTop: "40px",
+                  width: "100%",
+                }}
+              >
+                Không có bài viết mà bạn đang tìm
+              </div>
+            )}
+          </Row>
+          {tinNoiBat.length > 0 && ( // Only show pagination if there are results
+            <div className="pagination">
+              <Pagination
+                current={currentPage} // Set current page
+                pageSize={itemsPerPage} // Set items per page
+                total={tinNoiBat.length} // Set total items based on stateFood
+                onChange={handlePageChange} // Handle page change
+                itemRender={itemRender}
+                className="custom-pagination"
+              />
+            </div>
+          )}
         </div>
       </div>
       <BackToTop />

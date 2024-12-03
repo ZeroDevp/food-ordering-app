@@ -15,7 +15,6 @@ import {
   InputNumber,
   Layout,
   Select,
-  Switch,
   theme,
   Typography,
   Upload,
@@ -84,18 +83,7 @@ const FoodAdmin = () => {
 
   //Hàm gọi API createFood
   const mutation = useMutationHooks((data) => {
-    const { TenMonAn, LoaiMonAn, HinhAnh, GiaMonAn, DanhGia, MoTa, GiamGia } =
-      data;
-    const res = FoodService.createFood({
-      TenMonAn,
-      LoaiMonAn,
-      HinhAnh,
-      GiaMonAn,
-      DanhGia,
-      MoTa,
-      GiamGia,
-    });
-    return res;
+    return FoodService.createFood(data);
   });
 
   const mutationUpdate = useMutationHooks((data) => {
@@ -150,25 +138,37 @@ const FoodAdmin = () => {
   const { isLoading: isLoadingFood, data: foods } = queryFood;
 
   //Hàm cancel khi 0 muốn tạo món ăn
+  // const handleCancel = useCallback(() => {
+  //   setIsModalOpen(false);
+  //   setStateFood({
+  //     TenMonAn: "",
+  //     LoaiMonAn: "",
+  //     HinhAnh: null,
+  //     GiaMonAn: "",
+  //     DanhGia: "",
+  //     MoTa: "",
+  //     GiamGia: "",
+  //     // BanChay: false,
+  //   });
+  //   form.resetFields();
+  // }, [form]);
+
   const handleCancel = useCallback(() => {
     setIsModalOpen(false);
-    setStateFood({
-      TenMonAn: "",
-      LoaiMonAn: "",
-      HinhAnh: null,
-      GiaMonAn: "",
-      DanhGia: "",
-      MoTa: "",
-      GiamGia: "",
-      // BanChay: false,
-    });
-    form.resetFields();
+    setStateFood(inittial()); // Reset stateFood
+    form.resetFields(); // Reset form fields
   }, [form]);
+
+  // const handleCloseDrawer = useCallback(() => {
+  //   setIsOpenDrawer(false);
+  //   // Do not reset stateFoodDetails here
+  // }, []);
 
   const handleCloseDrawer = useCallback(() => {
     setIsOpenDrawer(false);
-    // Do not reset stateFoodDetails here
-  }, []);
+    setStateFoodDetails(inittial()); // Reset stateFoodDetails
+    form.resetFields(); // Reset form fields
+  }, [form]);
 
   //Xử lý sự kiện khi thêm món ăn thành công
   useEffect(() => {
@@ -231,19 +231,26 @@ const FoodAdmin = () => {
   };
 
   //hàm nhập dữ liệu cho từng thuộc tính
+  // const handleOnchange = (e) => {
+  //   const { name, value } = e.target;
+  //   if (name in stateFood) {
+  //     setStateFood((prevState) => ({
+  //       ...prevState,
+  //       [name]: value,
+  //     }));
+  //   } else if (name in stateFoodDetails) {
+  //     setStateFoodDetails((prevState) => ({
+  //       ...prevState,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
+
   const handleOnchange = (e) => {
-    const { name, value } = e.target;
-    if (name in stateFood) {
-      setStateFood((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    } else if (name in stateFoodDetails) {
-      setStateFoodDetails((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
+    setStateFood({
+      ...stateFood,
+      [e.target.name]: e.target.value,
+    });
   };
 
   //Hàm cancel Delete
@@ -345,20 +352,19 @@ const FoodAdmin = () => {
     }
   }, [isOpenDrawer, stateFoodDetails, form]);
 
-  // const handleSwitchChange = (checked) => {
-  //   setBanChay(checked);
-  //   setStateFoodDetails((prevState) => ({
-  //     ...prevState,
-  //     BanChay: checked, // Cập nhật isAdmin vào stateUser Details
-  //   }));
-  // };
+  // useEffect(() => {
+  //   if (rowSelected) {
+  //     fetchgetDetailsFood(rowSelected);
+  //   }
+  //   // setIsOpenDrawer(true);
+  // }, [rowSelected]);
 
   useEffect(() => {
-    if (rowSelected) {
+    if (rowSelected && isOpenDrawer) {
       fetchgetDetailsFood(rowSelected);
     }
     // setIsOpenDrawer(true);
-  }, [rowSelected]);
+  }, [rowSelected, isOpenDrawer]);
 
   //Hàm lấy lấy chi tiết món ăn khi click vào món ăn
   const handleDetailsFood = () => {
@@ -469,541 +475,11 @@ const FoodAdmin = () => {
       };
     });
 
-  // return (
-  //   <Layout style={{ minHeight: "100vh", backgroundColor: "#FEE4CC" }}>
-  //     <SiderComponent collapsed={collapsed} user={user} selectKey={"2"} />
-  //     <Layout
-  //       style={{
-  //         height: "100%",
-  //         minHeight: "750px",
-  //         marginLeft: marginLeft,
-  //         transition: "margin-left 0.5s ease",
-  //         backgroundColor: "#FEE4CC",
-  //       }}
-  //     >
-  //       <Header
-  //         // style={{
-  //         //   padding: 0,
-  //         //   background: colorBgContainer,
-  //         //   backgroundColor: "#FEE4CC",
-  //         // }}
-  //         style={{
-  //           padding: "0 20px",
-  //           background: "#fff",
-  //           boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-  //         }}
-  //       >
-  //         <Button
-  //           type="text"
-  //           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-  //           onClick={() => toggleCollapsed()}
-  //           style={{
-  //             fontSize: "18px",
-  //             // width: 64,
-  //             // height: 64,
-  //           }}
-  //         />
-  //         <Text strong style={{ marginLeft: 20, fontSize: 20 }}>
-  //           QUẢN LÝ THỨC ĂN
-  //         </Text>
-  //         <Button
-  //           type="text"
-  //           icon={<PlusOutlined style={{ fontSize: "30px", color: "green" }} />}
-  //           className="btn btn-default"
-  //           onClick={() => setIsModalOpen(true)}
-  //           style={{
-  //             width: 64,
-  //             height: 64,
-  //             float: "right",
-  //             marginRight: 50,
-  //             marginTop: 20,
-  //           }}
-  //         />
-  //       </Header>
-  //       <Content
-  //         style={{
-  //           margin: "24px 16px",
-  //           padding: 24,
-  //           minHeight: 280,
-  //           background: colorBgContainer,
-  //           borderRadius: borderRadiusLG,
-  //         }}
-  //       >
-  //         <Loading isLoading={isLoadingFood}>
-  //           <TableComponent
-  //             columns={columns}
-  //             isLoading={isLoadingFood}
-  //             pagination={{
-  //               position: ["bottomCenter"],
-  //               pageSize: 6,
-  //             }}
-  //             data={dataTable}
-  //             onRow={(record, rowIndex) => {
-  //               return {
-  //                 onClick: (event) => {
-  //                   setRowSelected(record._id);
-  //                 },
-  //               };
-  //             }}
-  //           />
-  //         </Loading>
-  //         <ModalComponent
-  //           forceRender
-  //           title="Thêm Mới món ăn"
-  //           open={isModalOpen}
-  //           footer={null}
-  //           onCancel={handleCancel}
-  //         >
-  //           <Loading isLoading={isLoading}>
-  //             <Form
-  //               name="addFood"
-  //               labelCol={{
-  //                 span: 6,
-  //               }}
-  //               wrapperCol={{
-  //                 span: 18,
-  //               }}
-  //               style={{
-  //                 maxWidth: 600,
-  //               }}
-  //               onFinish={onFinish}
-  //               autoComplete="on"
-  //               form={form}
-  //             >
-  //               <Form.Item
-  //                 label="Tên món ăn"
-  //                 name="TenMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập tên món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputComponent
-  //                   value={stateFood.TenMonAn}
-  //                   onChange={handleOnchange}
-  //                   name="TenMonAn"
-  //                 />
-  //               </Form.Item>
+  const openAddFoodModal = () => {
+    setStateFood(inittial()); // Reset to initial state when opening the modal
+    setIsModalOpen(true);
+  };
 
-  //               <Form.Item
-  //                 label="Mô tả món ăn"
-  //                 name="MoTa"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập mô tả của món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <TextArea
-  //                   rows={4}
-  //                   value={stateFood.MoTa}
-  //                   onChange={handleOnchange}
-  //                   name="MoTa"
-  //                 />
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Phân loại "
-  //                 name="LoaiMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy phân loại món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <Select
-  //                   name="LoaiMonAn"
-  //                   value={stateFood.LoaiMonAn}
-  //                   onChange={handleChangeSelect}
-  //                   options={renderOptions(typeFood?.data?.data)}
-  //                 />
-  //               </Form.Item>
-  //               {stateFood.LoaiMonAn === "add_type" && (
-  //                 <Form.Item
-  //                   label="Thêm phân loại"
-  //                   name="newPhanLoai"
-  //                   rules={[
-  //                     {
-  //                       required: true,
-  //                       message: "Hãy phân loại món ăn!",
-  //                     },
-  //                   ]}
-  //                 >
-  //                   <InputComponent
-  //                     value={stateFood.newPhanLoai}
-  //                     onChange={handleOnchange}
-  //                     name="newPhanLoai"
-  //                   />
-  //                 </Form.Item>
-  //               )}
-
-  //               <Form.Item
-  //                 label="Giá món ăn"
-  //                 name="GiaMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy ra giá món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputNumber
-  //                   min={0}
-  //                   step={1000}
-  //                   prefix={<DollarOutlined />}
-  //                   value={stateFood.GiaMonAn}
-  //                   formatter={(value) =>
-  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  //                   }
-  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-  //                   onChange={(value) =>
-  //                     handleOnchange({ target: { name: "GiaMonAn", value } })
-  //                   }
-  //                   name="GiaMonAn"
-  //                   style={{ width: "100%" }}
-  //                 />
-  //                 {/* <InputComponent
-  //                   value={stateFood.GiaMonAn}
-  //                   onChange={handleOnchange}
-  //                   name="GiaMonAn"
-  //                 /> */}
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Giảm giá"
-  //                 name="GiamGia"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập giảm giá cho món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputNumber
-  //                   min={0}
-  //                   step={1000}
-  //                   prefix={<PercentageOutlined />}
-  //                   value={stateFood.GiamGia}
-  //                   formatter={(value) =>
-  //                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  //                   }
-  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-  //                   onChange={(value) =>
-  //                     handleOnchange({ target: { name: "GiamGia", value } })
-  //                   }
-  //                   name="GiamGia"
-  //                   style={{ width: "100%" }}
-  //                 />
-  //                 {/* <InputComponent
-  //                   value={stateFood.GiamGia}
-  //                   onChange={handleOnchange}
-  //                   name="GiamGia"
-  //                 /> */}
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Đánh giá"
-  //                 name="DanhGia"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy đánh giá món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputComponent
-  //                   value={stateFood.DanhGia}
-  //                   onChange={handleOnchange}
-  //                   name="DanhGia"
-  //                 />
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Ảnh món ăn"
-  //                 name="HinhAnh"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy thêm hình ảnh cho món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <Upload
-  //                   maxCount={1}
-  //                   className="ant-upload-list-item-name"
-  //                   onChange={handleOnchangeAvatar}
-  //                   showUploadList={false}
-  //                   fileList={
-  //                     stateFood.HinhAnh
-  //                       ? [{ uid: "-1", url: stateFood.HinhAnh }]
-  //                       : []
-  //                   }
-  //                 >
-  //                   <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
-  //                 </Upload>
-  //                 {stateFood?.HinhAnh && (
-  //                   <Image
-  //                     src={stateFood?.HinhAnh}
-  //                     alt="Ảnh đại diện"
-  //                     style={{
-  //                       height: "60px",
-  //                       width: "60px",
-  //                       marginLeft: "10px",
-  //                       borderRadius: "10%",
-  //                       objectFit: "cover",
-  //                     }}
-  //                   />
-  //                 )}
-  //               </Form.Item>
-
-  //               <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
-  //                 <Button type="primary" htmlType="submit">
-  //                   Submit
-  //                 </Button>
-  //                 <Button style={{ marginLeft: 8 }} onClick={handleCancel}>
-  //                   Cancel
-  //                 </Button>
-  //               </Form.Item>
-  //             </Form>
-  //           </Loading>
-  //         </ModalComponent>
-  //         <Drawer
-  //           title="Cập nhật Món ăn"
-  //           onClose={onClose}
-  //           open={isOpenDrawer}
-  //           loading={loadingDrawer}
-  //           width="40%"
-  //         >
-  //           <Loading isLoading={isLoadingFood}>
-  //             <Form
-  //               name="updateFood"
-  //               labelCol={{
-  //                 span: 6,
-  //               }}
-  //               wrapperCol={{
-  //                 span: 18,
-  //               }}
-  //               style={{
-  //                 maxWidth: 600,
-  //               }}
-  //               onFinish={onUpdateFoods}
-  //               autoComplete="on"
-  //               form={form}
-  //             >
-  //               <Form.Item
-  //                 label="Tên món ăn"
-  //                 name="TenMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập tên món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputComponent
-  //                   value={stateFoodDetails.TenMonAn}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="TenMonAn"
-  //                 />
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Mô tả món ăn"
-  //                 name="MoTa"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập mô tả của món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <TextArea
-  //                   rows={4}
-  //                   value={stateFoodDetails.MoTa}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="MoTa"
-  //                 />
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Phân loại "
-  //                 name="LoaiMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy phân loại món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputComponent
-  //                   value={stateFoodDetails.LoaiMonAn}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="LoaiMonAn"
-  //                 />
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Giá món ăn"
-  //                 name="GiaMonAn"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy ra giá món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputNumber
-  //                   min={0}
-  //                   step={1000}
-  //                   prefix={<DollarOutlined />}
-  //                   value={stateFoodDetails.GiaMonAn}
-  //                   formatter={(value) =>
-  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  //                   }
-  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-  //                   onChange={(value) =>
-  //                     setStateFoodDetails((prevState) => ({
-  //                       ...prevState,
-  //                       GiaMonAn: value,
-  //                     }))
-  //                   }
-  //                   name="GiaMonAn"
-  //                   style={{ width: "100%" }}
-  //                 />
-  //                 {/* <InputComponent
-  //                   value={stateFoodDetails.GiaMonAn}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="GiaMonAn"
-  //                 /> */}
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Giảm giá"
-  //                 name="GiamGia"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy nhập giảm giá cho món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputNumber
-  //                   min={0}
-  //                   step={1000}
-  //                   prefix={<PercentageOutlined />}
-  //                   value={stateFoodDetails.GiamGia}
-  //                   formatter={(value) =>
-  //                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  //                   }
-  //                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-  //                   onChange={(value) =>
-  //                     setStateFoodDetails((prevState) => ({
-  //                       ...prevState,
-  //                       GiamGia: value,
-  //                     }))
-  //                   }
-  //                   name="GiaMonAn"
-  //                   style={{ width: "100%" }}
-  //                 />
-  //                 {/* <InputComponent
-  //                   value={stateFoodDetails.GiamGia}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="GiamGia"
-  //                 /> */}
-  //               </Form.Item>
-
-  //               <Form.Item
-  //                 label="Đánh giá"
-  //                 name="DanhGia"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy đánh giá món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <InputComponent
-  //                   value={stateFoodDetails.DanhGia}
-  //                   onChange={handleOnchangeDetails}
-  //                   name="DanhGia"
-  //                 />
-  //               </Form.Item>
-
-  //               {/* <Form.Item label="BanChay">
-  //                 <Switch checked={BanChay} onChange={handleSwitchChange} />
-  //                 <Typography.Text style={{ marginLeft: 8 }}>
-  //                   {stateFoodDetails.BanChay ? "Bán chạy" : "Bình thường"}
-  //                 </Typography.Text>
-  //               </Form.Item> */}
-
-  //               <Form.Item
-  //                 label="Ảnh món ăn"
-  //                 name="HinhAnh"
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Hãy thêm hình ảnh cho món ăn!",
-  //                   },
-  //                 ]}
-  //               >
-  //                 <div>
-  //                   <Upload
-  //                     maxCount={1}
-  //                     className="ant-upload-list-item-name"
-  //                     onChange={handleOnchangeAvatarDetails}
-  //                     showUploadList={false}
-  //                     ileList={
-  //                       stateFoodDetails.HinhAnh
-  //                         ? [{ uid: "-1", url: stateFoodDetails.HinhAnh }]
-  //                         : []
-  //                     }
-  //                   >
-  //                     <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
-  //                   </Upload>
-  //                   {stateFoodDetails?.HinhAnh && (
-  //                     <Image
-  //                       src={stateFoodDetails?.HinhAnh}
-  //                       alt="Ảnh đại diện"
-  //                       style={{
-  //                         height: "60px",
-  //                         width: "60px",
-  //                         marginLeft: "10px",
-  //                         borderRadius: "10%",
-  //                         objectFit: "cover",
-  //                       }}
-  //                     />
-  //                   )}
-  //                 </div>
-  //               </Form.Item>
-
-  //               <Form.Item wrapperCol={{ offset: 20, span: 20 }}>
-  //                 <Button
-  //                   type="primary"
-  //                   htmlType="submit"
-  //                   style={{ width: "90%" }}
-  //                 >
-  //                   Cập nhật
-  //                 </Button>
-  //               </Form.Item>
-  //             </Form>
-  //           </Loading>
-  //         </Drawer>
-  //         <ModalComponent
-  //           title="Xóa món ăn"
-  //           open={isModalOpenDelete}
-  //           onCancel={handleCancelDelete}
-  //           onOk={handleDeleteFood}
-  //         >
-  //           <div>Bạn có chắc xóa món {stateFoodDetails.TenMonAn} này không</div>
-  //         </ModalComponent>
-  //       </Content>
-  //     </Layout>
-  //   </Layout>
-  // );
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#FFF7E4" }}>
       <SiderComponent collapsed={collapsed} user={user} selectKey={"2"} />
@@ -1031,13 +507,14 @@ const FoodAdmin = () => {
             onClick={toggleCollapsed}
             style={{ fontSize: "20px" }}
           />
-          <Text strong style={{ fontSize: "24px", color: "#FF6F00" }}>
+          <Text strong style={{ fontSize: 22 }}>
             QUẢN LÝ THỨC ĂN
           </Text>
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            onClick={() => setIsModalOpen(true)}
+            // onClick={() => setIsModalOpen(true)}
+            onClick={openAddFoodModal}
             style={{
               display: "flex",
               alignItems: "center",

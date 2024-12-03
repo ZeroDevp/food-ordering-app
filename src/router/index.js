@@ -18,6 +18,8 @@ import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
 import DetailsOrderPage from "../pages/Profile/DetailsOrderPage";
 import OrderDetailsAdmin from "../pages/SystemManager/AdminPage/OrderDetailsAdmin";
+import BlogAdmin from "../pages/SystemManager/AdminPage/BlogAdmin";
+import BlogDetails from "../pages/BlogDetails/BlogDetails";
 
 export const routes = [
 
@@ -70,10 +72,17 @@ export const routes = [
         isShowheader: true,
     },
 
-    //trang tin tuc
+    //trang bai viet
     {
         path: "/Blog",
         page: Blog,
+        isShowheader: true,
+    },
+
+    //trang chi tiet bai viet
+    {
+        path: "/Blog/BlogDetails/:id",
+        page: BlogDetails,
         isShowheader: true,
     },
 
@@ -158,6 +167,15 @@ export const routes = [
         isShowheader: false,
         isPrivate: true
     },
+
+    //Trang QL Blogs
+    {
+        path: "/system/BlogAdmin",
+        page: BlogAdmin,
+        isShowheader: false,
+        isPrivate: true
+    },
+
 
     // 404
     {

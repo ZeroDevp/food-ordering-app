@@ -1,16 +1,16 @@
 import React from "react";
-// import Sider from "antd/es/layout/Sider";
 import { Layout, Menu } from "antd";
-import {
-  BarChartOutlined,
-  DollarOutlined,
-  LogoutOutlined,
-  ProductOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserGear } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartLine,
+  faMoneyBill1,
+  faNewspaper,
+  faRightFromBracket,
+  faUser,
+  faUserShield,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 
 const { Sider } = Layout;
 
@@ -63,7 +63,7 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
             textTransform: "capitalize",
           }}
         >
-          {collapsed ? <FontAwesomeIcon icon={faUserGear} /> : user?.HoTen}
+          {collapsed ? <FontAwesomeIcon icon={faUserShield} /> : user?.HoTen}
         </p>
       </div>
       <Menu
@@ -74,7 +74,7 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
         items={[
           {
             key: "1",
-            icon: <BarChartOutlined />,
+            icon: <FontAwesomeIcon icon={faChartLine} />,
             label: (
               <Link to="/system/Admin" style={styles.Link}>
                 Trang chủ
@@ -83,7 +83,7 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
           },
           {
             key: "2",
-            icon: <ProductOutlined />,
+            icon: <FontAwesomeIcon icon={faUtensils} />,
             label: (
               <Link to="/system/FoodAdmin" style={styles.Link}>
                 Quản lý Thức ăn
@@ -92,7 +92,7 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
           },
           {
             key: "3",
-            icon: <UserOutlined />,
+            icon: <FontAwesomeIcon icon={faUser} />,
             label: (
               <Link to="/system/UserAdmin" style={styles.Link}>
                 Quản Lý Người Dùng
@@ -101,10 +101,19 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
           },
           {
             key: "4",
-            icon: <DollarOutlined />,
+            icon: <FontAwesomeIcon icon={faMoneyBill1} />,
             label: (
               <Link to="/system/OrderAdmin" style={styles.Link}>
                 Quản Lý Đơn Hàng
+              </Link>
+            ),
+          },
+          {
+            key: "5",
+            icon: <FontAwesomeIcon icon={faNewspaper} />,
+            label: (
+              <Link to="/system/BlogAdmin" style={styles.Link}>
+                Quản Lý Bài Viết
               </Link>
             ),
           },
@@ -121,7 +130,7 @@ const SiderComponent = ({ collapsed, user, selectKey }) => {
         items={[
           {
             key: "5",
-            icon: <LogoutOutlined />,
+            icon: <FontAwesomeIcon icon={faRightFromBracket} />,
             label: (
               <Link
                 onClick={(e) => {
