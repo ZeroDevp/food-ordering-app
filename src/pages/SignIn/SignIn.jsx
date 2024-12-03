@@ -42,12 +42,13 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
     async (id, token) => {
       if (!token) return;
       try {
-        //28/11
-        // const storage = localStorage.getItem("refresh_token");
-        // const refreshToken = JSON.parse(storage);
-        //28/11
+        const storage = localStorage.getItem("refresh_token");
+        const refreshToken = JSON.parse(storage);
+
         const res = await UserService.getDetailUser(id, token);
-        dispatch(updateUser({ ...res?.data, access_token: token }));
+        dispatch(
+          updateUser({ ...res?.data, access_token: token, refreshToken })
+        );
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết người dùng:", error);
       }
@@ -63,12 +64,11 @@ const SignIn = ({ toggleAuthMode, closeModal }) => {
         navigate("/");
       }
       localStorage.setItem("access_token", JSON.stringify(data?.access_token));
-      //28/11
-      // localStorage.setItem(
-      //   "refresh_token",
-      //   JSON.stringify(data?.refresh_token)
-      // );
-      //28/11
+      localStorage.setItem(
+        "refresh_token",
+        JSON.stringify(data?.refresh_token)
+      );
+
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
         if (decoded?.id) {
