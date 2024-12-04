@@ -189,6 +189,9 @@ const Dashboard = () => {
           colors: "#9C9C9C",
           fontSize: "14px",
         },
+        formatter: function (value) {
+          return value.toLocaleString("vi-VN");
+        },
       },
     },
 
