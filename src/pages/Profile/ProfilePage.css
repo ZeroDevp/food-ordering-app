@@ -14,7 +14,6 @@
 }
 
 .custom-logout-modal .ant-modal-body {
-  /* background-image: url("../../assets/img/logout.png");  */
   background-size: cover;
   display: flex;
   flex-direction: column;

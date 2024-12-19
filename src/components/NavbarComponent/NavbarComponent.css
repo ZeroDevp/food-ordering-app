@@ -1,6 +1,4 @@
 .category {
-  /* background-color: #ffece8;
-  border-radius: 10px; */
   display: flex;
   font-size: 18px;
   justify-content: center;
@@ -9,7 +7,6 @@
   text-transform: uppercase;
   margin-bottom: 20px;
   color: #a87f7f;
-  /* border-bottom: 1px solid #a87f7f; */
 }
 
 .list-cate {

@@ -1,11 +1,11 @@
 * {
-  box-sizing: border-box; /* Đảm bảo mọi phần tử không vượt quá màn hình */
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  overflow-x: hidden; /* Ngăn việc tràn ngang */
+  overflow-x: hidden;
 }
 
 .menu-bar {
@@ -19,7 +19,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .main-content {
-  width: 100%; /* Đảm bảo rằng nội dung chính chiếm đủ chiều rộng */
+  width: 100%;
 }
 
 .menu-item {
@@ -42,11 +42,9 @@ body {
   font-weight: bold;
 }
 
-/* Change color on hover */
 .menu-item:hover {
   color: #ac1a08;
-  /* background-color: #ff585d; */
-  /* padding: 20px; */
+
   border-radius: 10px;
 }
 
@@ -69,7 +67,7 @@ body {
 }
 
 .menu-item:last-child::after {
-  display: none; /* No separator after the last item */
+  display: none;
 }
 
 .separator {
@@ -144,8 +142,8 @@ body {
 }
 
 .container {
-  max-width: 100%; /* Giới hạn chiều rộng của container */
-  margin: 0 auto; /* Căn giữa container */
+  max-width: 100%;
+  margin: 0 auto;
   padding-top: 40px;
   padding-bottom: 40px;
   min-height: 300px;
@@ -169,7 +167,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Footer của card với thông tin giá và nút thêm */
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -182,7 +179,6 @@ body {
   flex-direction: column;
 }
 
-/* Custom lại màu sắc của chữ delete */
 .ant-typography-delete {
   color: #999;
 }
@@ -207,7 +203,7 @@ body {
 }
 
 .custom-pagination .dot.active {
-  background-color: #ff5b6a; /* Màu cà chua cho dot đang được chọn */
+  background-color: #ff5b6a;
 }
 
 /* CSS cho nút Previous và Next */
