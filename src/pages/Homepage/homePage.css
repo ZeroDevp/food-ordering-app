@@ -223,7 +223,6 @@ body {
 }
 
 .bg-img {
-  background-image: url("/public/assets/img/banner-1.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;

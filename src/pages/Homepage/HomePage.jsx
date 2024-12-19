@@ -224,7 +224,12 @@ const HomePage = () => {
           )}
         </div>
       </div>
-      <div className="bg-img d-flex align-items-center">
+      <div
+        className="bg-img d-flex align-items-center"
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/img/banner-1.jpg)`,
+        }}
+      >
         <div className="container">
           <div className="row d-flex justify-content-center align-items-center text-center">
             <div className="col-lg-8">
