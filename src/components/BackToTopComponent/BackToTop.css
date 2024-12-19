@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000; /* Đảm bảo nút luôn ở trên các phần tử khác */
+  z-index: 1000;
 }
 
 .back-to-top-btn {

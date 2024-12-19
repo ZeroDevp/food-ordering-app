@@ -28,8 +28,8 @@
 }
 
 .logo-header {
-  width: 90px; /* Adjust the logo size */
-  height: 90px; /* Adjust the height */
+  width: 90px;
+  height: 90px;
   margin-left: 100px;
 }
 
@@ -41,44 +41,41 @@
 
 .nav-link {
   text-decoration: none;
-  color: #333; /* Màu mặc định là đen */
+  color: #333;
   font-weight: 600;
   position: relative;
-  transition: color 0.3s ease; /* Hiệu ứng chuyển màu */
+  transition: color 0.3s ease;
 }
 
 .nav-link::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -5px; /* Khoảng cách của gạch dưới */
+  bottom: -5px;
   width: 0;
   height: 2px;
-  background-color: #e74c3c; /* Màu của gạch dưới */
+  background-color: #e74c3c;
   transition: width 0.3s ease;
 }
 
-/* Hover vào các mục chưa active */
 .nav-link:not(.active):hover {
-  color: #e74c3c; /* Màu đỏ khi hover */
+  color: #e74c3c;
 }
 
 .nav-link:not(.active):hover::after {
-  width: 100%; /* Hiển thị gạch dưới khi hover */
+  width: 100%;
 }
 
-/* Mục active */
 .nav-link.active {
-  color: #e74c3c; /* Màu đỏ cho mục active */
+  color: #e74c3c;
 }
 
 .nav-link.active::after {
-  width: 100%; /* Gạch dưới cho mục active */
+  width: 100%;
 }
 
-/* Đảm bảo rằng khi hover vào mục active, nó không thay đổi */
 .nav-link.active:hover {
-  color: #e74c3c; /* Giữ nguyên màu đỏ khi hover vào mục active */
+  color: #e74c3c;
 }
 
 .header-right {
@@ -133,7 +130,6 @@
   background-color: #ddd;
 }
 
-/* Dropdown container */
 .dropdown-content {
   display: none;
   position: absolute;
@@ -141,10 +137,9 @@
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  right: 0; /* Align to the right of the button */
+  right: 0;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -152,21 +147,19 @@
   display: block;
 }
 
-/* Change color of dropdown links on hover */
 .dropdown-content a:hover {
   background-color: #f1f1f1;
 }
 
 .modal-content {
   border: none;
-  /* -webkit-border-radius: 20px;
-    -moz-border-radius: 20px; */
+
   border-radius: 20px;
 
   position: relative;
-  /* display: -ms-flexbox; */
+
   display: flex;
-  /* -ms-flex-direction: column; */
+
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
@@ -193,7 +186,6 @@
 }
 
 .custom-logout-modal .ant-modal-body {
-  /* background-image: url("../../assets/img/logout.png");  */
   background-size: cover;
   display: flex;
   flex-direction: column;

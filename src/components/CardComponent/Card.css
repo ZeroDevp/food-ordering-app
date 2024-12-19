@@ -1,14 +1,13 @@
 * {
-  box-sizing: border-box; /* Đảm bảo mọi phần tử không vượt quá màn hình */
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  overflow-x: hidden; /* Ngăn việc tràn ngang */
+  overflow-x: hidden;
 }
 
-/* Footer của card với thông tin giá và nút thêm */
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -22,8 +21,8 @@ body {
 }
 
 .truncated-title {
-  overflow: hidden; /* Hide overflow */
-  white-space: nowrap; /* Prevent text from wrapping */
-  text-overflow: ellipsis; /* Show ellipsis when text is too long */
-  max-width: 100%; /* Ensure it doesn't exceed the container width */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }

@@ -1,4 +1,23 @@
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
 module.exports = {
+    optimization: {
+        minimize: true,
+        minimizer: [
+            '...', // Để các plugin khác như TerserPlugin hoạt động bình thường
+            new CssMinimizerPlugin({
+                minimizerOptions: {
+                    preset: [
+                        'default',
+                        {
+                            discardComments: { removeAll: true }, // Xóa toàn bộ comment
+                            normalizeUrl: false, // Ngăn chặn lỗi xử lý URL
+                        },
+                    ],
+                },
+            }),
+        ],
+    },
     module: {
         rules: [
             {
@@ -8,7 +27,7 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            url: false, // Tắt xử lý URL để tránh lỗi với các đường dẫn chứa '/'
+                            url: false, // Vẫn giữ `url: false`
                         },
                     },
                 ],
